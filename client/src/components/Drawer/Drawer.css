@@ -1,0 +1,11 @@
+.drawer {
+  position: fixed;
+  top: calc(100vh - 70px);
+  left: 0;
+  width: 100%;
+  transition: top 0.3s ease-in-out;
+}
+
+.drawer--active {
+  top: 30%;
+}
