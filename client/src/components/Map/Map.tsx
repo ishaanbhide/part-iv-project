@@ -1,81 +1,56 @@
-import { Box } from "@mui/material";
-import {
-  CircleF,
-  GoogleMap,
-  MarkerF,
-  useLoadScript,
-} from "@react-google-maps/api";
-import { useContext, useEffect, useState } from "react";
 import "./Map.css";
+import { Box } from "@mui/material";
+import { GoogleMap, useLoadScript } from "@react-google-maps/api";
+import { useContext, useEffect, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
+import { UserLocationMarker } from "./MapComponents/UserLocation";
+import { CenterContext } from "../../contexts/CenterContext";
+import { mapOptions } from "../../utils/mapOptions";
+import { Oval } from "react-loader-spinner";
+import { Coordinates } from "../../models/Coordinates";
+import { getUserLocation } from "../../utils/getUserLocation";
 
 export function Map() {
   const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
+  const { center, updateCenter } = useContext(CenterContext);
+  const [loading, setLoading] = useState(true);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyBVMfNn5ls36xpl3z_2CL19GD__JwkZR1M",
   });
 
-  const [center, setCenter] = useState({ lat: 0, lng: 0 });
-
-  const options = {
-    disableDefaultUI: true,
-    clickableIcons: false,
-    center: center,
-    zoom: 15,
-    minZoom: 10,
-    styles: [
-      {
-        featureType: "poi",
-        elementType: "labels",
-        stylers: [
-          {
-            visibility: "off",
-          },
-        ],
-      },
-    ],
-  };
-
-  const yourLocationMarkerOptions = {
-    icon: {
-      url: "../../../public/your-location.png",
-      anchor: { x: 60, y: 60 },
-      scaledSize: { height: 120, width: 120 },
-    },
-  };
-
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-    } else {
-      console.log("Geolocation is not supported by this browser.");
+    async function fetchUserLocation() {
+      const userLocation: Coordinates | null = await getUserLocation();
+      userLocation && updateCenter(userLocation);
     }
+    fetchUserLocation();
   }, []);
 
-  function successCallback(position: GeolocationPosition) {
-    setCenter({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    });
-  }
-
-  function errorCallback(error: GeolocationPositionError) {
-    console.log("Error:", error.message);
-  }
+  useEffect(() => {
+    if (center.lat != 0) {
+      setLoading(false);
+    }
+  }, [center]);
 
   return (
     <Box className={`map ${!isDrawerOpen && "full-width"}`}>
-      {!isLoaded ? (
-        <h1>Loading...</h1>
+      {!isLoaded || loading ? (
+        <Oval
+          height={80}
+          width={80}
+          color="#5182ff"
+          secondaryColor="#fffff"
+          strokeWidth={4}
+          strokeWidthSecondary={4}
+        />
       ) : (
-        <GoogleMap mapContainerClassName="map-container" options={options}>
-          <MarkerF position={center} options={yourLocationMarkerOptions} />
-          <CircleF
-            center={center}
-            radius={1000}
-            options={{ fillOpacity: 0, strokeColor: "red" }}
-          />
+        <GoogleMap
+          mapContainerClassName="map-container"
+          center={center}
+          options={mapOptions}
+        >
+          <UserLocationMarker />
         </GoogleMap>
       )}
     </Box>
