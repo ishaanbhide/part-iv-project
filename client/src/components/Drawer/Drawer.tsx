@@ -1,20 +1,17 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./Drawer.css";
+import { DrawerContext } from "../../contexts/DrawerContext";
 
 export function Drawer() {
-  const [open, setOpen] = useState<boolean>(false);
-
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
 
   return (
     <Box
-      className={`drawer ${open && "drawer--active"}`}
-      sx={{ backgroundColor: "red", height: "80vh" }}
+      className={`drawer ${isDrawerOpen && "drawer--active"}`}
+      sx={{ backgroundColor: "red" }}
     >
       <Box
         sx={{
@@ -30,7 +27,7 @@ export function Drawer() {
         <Typography variant="h1" color="white">
           RECENT STORIES
         </Typography>
-        {open ? (
+        {isDrawerOpen ? (
           <IconButton onClick={toggleDrawer}>
             <KeyboardArrowDownIcon fontSize="large" sx={{ color: "white" }} />
           </IconButton>

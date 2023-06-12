@@ -1,7 +1,12 @@
 .map {
-  height: calc(100vh - 140px);
+  height: 20vh;
   width: 100%;
   box-sizing: border-box;
+  transition: height 0.3s ease-in-out;
+}
+
+.full-width {
+  height: calc(100vh - 140px);
 }
 
 .map-container {
