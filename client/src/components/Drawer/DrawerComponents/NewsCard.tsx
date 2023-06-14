@@ -1,33 +1,31 @@
 import { Box, Typography } from "@mui/material";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
+import { NewsItem } from "../../../models/NewsItem";
+import { useContext } from "react";
+import { CenterContext } from "../../../contexts/CenterContext";
+import { SelectedNewsContext } from "../../../contexts/SelectedNewsContext";
 
 type NewsCardProps = {
-  id: string;
-  title: string;
-  image: string;
-  selectedNewsCard: string | null;
-  setSelectedNewsCard: (id: string | null) => void;
+  newsMarker: NewsItem;
   setReadMoreClicked: (clicked: boolean) => void;
 };
 
-export function NewsCard({
-  id,
-  title,
-  selectedNewsCard,
-  setSelectedNewsCard,
-  setReadMoreClicked,
-}: NewsCardProps) {
+export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
+  const { updateCenter } = useContext(CenterContext);
+  const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
+
   const handleSelectedNewsCard = () => {
-    if (id == selectedNewsCard) {
-      setSelectedNewsCard(null);
+    if (newsMarker.id == selectedNews?.id) {
+      updateSelectedNews(null);
     } else {
-      setSelectedNewsCard(id);
+      updateSelectedNews(newsMarker);
+      updateCenter(newsMarker.location);
     }
   };
 
   const handleReadMoreClick = (event: React.MouseEvent<SVGSVGElement>) => {
     event.stopPropagation(); // Stop the event from propagating to the parent container
-    setSelectedNewsCard(id);
+    updateSelectedNews(newsMarker);
     setReadMoreClicked(true);
   };
 
@@ -42,14 +40,16 @@ export function NewsCard({
         boxSizing: "border-box",
         width: "100%",
         border:
-          selectedNewsCard == id ? "4px #5182ff solid" : "4px #ffffff solid",
+          selectedNews?.id == newsMarker.id
+            ? "4px #5182ff solid"
+            : "4px #ffffff solid",
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
       }}
     >
       <img
         style={{ width: "100%", height: "200px", objectFit: "cover" }}
-        src="https://rnz-ressh.cloudinary.com/image/upload/s--94wj79Rj--/ar_16:10,c_fill,f_auto,g_auto,q_auto,w_1050/v1683600881/4L99UKY_MicrosoftTeams_image_21_png"
+        src={newsMarker.image}
       />
       <Box
         sx={{
@@ -58,7 +58,7 @@ export function NewsCard({
           paddingTop: "8px",
         }}
       >
-        <Typography variant="h2">{title}</Typography>
+        <Typography variant="h2">{newsMarker.title}</Typography>
         <ReadMoreIcon
           onClick={handleReadMoreClick}
           sx={{ marginLeft: "auto" }}

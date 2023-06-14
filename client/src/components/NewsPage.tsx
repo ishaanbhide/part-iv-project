@@ -1,15 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import ReadMoreIcon from "@mui/icons-material/ReadMore";
+import { NewsItem } from "../models/NewsItem";
 
 type NewsCardProps = {
-  id: string;
-  title: string;
-  source: string;
-  description: string;
-  image: string;
+  newsMarker: NewsItem | null;
 };
 
-export function NewsPage({ title, source, description }: NewsCardProps) {
+export function NewsPage({ newsMarker }: NewsCardProps) {
   return (
     <Box>
       <img
@@ -24,11 +20,15 @@ export function NewsPage({ title, source, description }: NewsCardProps) {
           boxSizing: "border-box",
         }}
       >
-        <Typography variant="h2">{title}</Typography>
-        <Typography fontSize="12px">{source}</Typography>
-        <Typography paragraph paddingTop="6px">
-          {description}
-        </Typography>
+        {newsMarker && (
+          <>
+            <Typography variant="h2">{newsMarker.title}</Typography>
+            <Typography fontSize="12px">{newsMarker.source}</Typography>
+            <Typography paragraph paddingTop="6px">
+              {newsMarker.description}
+            </Typography>
+          </>
+        )}
       </Box>
     </Box>
   );

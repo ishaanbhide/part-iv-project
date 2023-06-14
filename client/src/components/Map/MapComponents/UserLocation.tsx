@@ -1,9 +1,21 @@
 import { MarkerF } from "@react-google-maps/api";
-import { useContext } from "react";
-import { CenterContext } from "../../../contexts/CenterContext";
+import { getUserLocation } from "../../../utils/getUserLocation";
+import { Coordinates } from "../../../models/Coordinates";
+import { useEffect, useState } from "react";
 
 export function UserLocationMarker() {
-  const { center, updateCenter } = useContext(CenterContext);
+  const [userLocation, setUserLocation] = useState<Coordinates>({
+    lat: 0,
+    lng: 0,
+  });
+
+  useEffect(() => {
+    async function fetchUserLocation() {
+      const location = await getUserLocation();
+      location && setUserLocation(location);
+    }
+    fetchUserLocation();
+  }, []);
 
   const userLocationMarkerOptions = {
     icon: {
@@ -13,5 +25,7 @@ export function UserLocationMarker() {
     },
   };
 
-  return <MarkerF position={center} options={userLocationMarkerOptions} />;
+  return (
+    <MarkerF position={userLocation} options={userLocationMarkerOptions} />
+  );
 }

@@ -1,8 +1,10 @@
 import { Coordinates } from "./Coordinates";
 
-export interface NewsMarker {
+export interface NewsItem {
   id: string;
   location: Coordinates;
   title: string;
   description: string;
+  source: string;
+  image: string;
 }

@@ -1,4 +1,4 @@
-import { NewsMarker } from "../models/NewsMarker";
+import { NewsMarker } from "../models/NewsItem";
 
 export const newsMarkers: NewsMarker[] = [
   {
@@ -9,6 +9,9 @@ export const newsMarkers: NewsMarker[] = [
     },
     title: "Heavy Flooding",
     description: "Lorem ipsum",
+    source: "MetService",
+    image:
+      "https://rnz-ressh.cloudinary.com/image/upload/s--94wj79Rj--/ar_16:10,c_fill,f_auto,g_auto,q_auto,w_1050/v1683600881/4L99UKY_MicrosoftTeams_image_21_png",
   },
   {
     id: "2",
@@ -18,6 +21,9 @@ export const newsMarkers: NewsMarker[] = [
     },
     title: "Landslide",
     description: "Lorem ipsum",
+    source: "MetService",
+    image:
+      "https://rnz-ressh.cloudinary.com/image/upload/s--94wj79Rj--/ar_16:10,c_fill,f_auto,g_auto,q_auto,w_1050/v1683600881/4L99UKY_MicrosoftTeams_image_21_png",
   },
   {
     id: "3",
@@ -27,6 +33,9 @@ export const newsMarkers: NewsMarker[] = [
     },
     title: "Flooding",
     description: "Lorem ipsum",
+    source: "MetService",
+    image:
+      "https://rnz-ressh.cloudinary.com/image/upload/s--94wj79Rj--/ar_16:10,c_fill,f_auto,g_auto,q_auto,w_1050/v1683600881/4L99UKY_MicrosoftTeams_image_21_png",
   },
   {
     id: "4",
@@ -36,5 +45,8 @@ export const newsMarkers: NewsMarker[] = [
     },
     title: "Slip",
     description: "Lorem ipsum",
+    source: "MetService",
+    image:
+      "https://rnz-ressh.cloudinary.com/image/upload/s--94wj79Rj--/ar_16:10,c_fill,f_auto,g_auto,q_auto,w_1050/v1683600881/4L99UKY_MicrosoftTeams_image_21_png",
   },
 ];

@@ -6,10 +6,12 @@ import { useContext, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { NewsCard } from "./DrawerComponents/NewsCard";
 import { NewsPage } from "../NewsPage";
+import { newsMarkers } from "../../utils/dummy-data";
+import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 
 export function Drawer() {
   const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
-  const [selectedNewsCard, setSelectedNewsCard] = useState<string | null>(null);
+  const { selectedNews } = useContext(SelectedNewsContext);
   const [readMoreClicked, setReadMoreClicked] = useState<boolean>(false);
 
   return (
@@ -67,13 +69,7 @@ export function Drawer() {
             transition: "right 0.3s ease-in-out",
           }}
         >
-          <NewsPage
-            id="1"
-            title="Title"
-            source="Source"
-            description="Description"
-            image="image"
-          />
+          <NewsPage newsMarker={selectedNews} />
         </Box>
 
         <Box
@@ -84,30 +80,15 @@ export function Drawer() {
             padding: "16px",
           }}
         >
-          <NewsCard
-            id="1"
-            title="Title"
-            image="image"
-            selectedNewsCard={selectedNewsCard}
-            setSelectedNewsCard={setSelectedNewsCard}
-            setReadMoreClicked={setReadMoreClicked}
-          />
-          <NewsCard
-            id="2"
-            title="Title"
-            image="image"
-            selectedNewsCard={selectedNewsCard}
-            setSelectedNewsCard={setSelectedNewsCard}
-            setReadMoreClicked={setReadMoreClicked}
-          />
-          <NewsCard
-            id="3"
-            title="Title"
-            image="image"
-            selectedNewsCard={selectedNewsCard}
-            setSelectedNewsCard={setSelectedNewsCard}
-            setReadMoreClicked={setReadMoreClicked}
-          />
+          {newsMarkers.map((marker) => {
+            return (
+              <NewsCard
+                key={marker.id}
+                newsMarker={marker}
+                setReadMoreClicked={setReadMoreClicked}
+              />
+            );
+          })}
         </Box>
       </Box>
     </Box>

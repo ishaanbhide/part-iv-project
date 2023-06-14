@@ -93,7 +93,7 @@ export function Map() {
 
           {newsMarkers.map((marker) => {
             if (visibleMarkers.includes(marker.id)) {
-              return <NewsMarker key={marker.id} location={marker.location} />;
+              return <NewsMarker key={marker.id} newsMarker={marker} />;
             }
             return null;
           })}
