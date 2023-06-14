@@ -1,12 +1,13 @@
-import "./NewsCard.css";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import ReadMoreIcon from "@mui/icons-material/ReadMore";
 
 type NewsCardProps = {
   id: string;
   title: string;
+  image: string;
   selectedNewsCard: string | null;
   setSelectedNewsCard: (id: string | null) => void;
+  setReadMoreClicked: (clicked: boolean) => void;
 };
 
 export function NewsCard({
@@ -14,6 +15,7 @@ export function NewsCard({
   title,
   selectedNewsCard,
   setSelectedNewsCard,
+  setReadMoreClicked,
 }: NewsCardProps) {
   const handleSelectedNewsCard = () => {
     if (id == selectedNewsCard) {
@@ -21,6 +23,12 @@ export function NewsCard({
     } else {
       setSelectedNewsCard(id);
     }
+  };
+
+  const handleReadMoreClick = (event: React.MouseEvent<SVGSVGElement>) => {
+    event.stopPropagation(); // Stop the event from propagating to the parent container
+    setSelectedNewsCard(id);
+    setReadMoreClicked(true);
   };
 
   return (
@@ -40,7 +48,7 @@ export function NewsCard({
       }}
     >
       <img
-        className="newsCard-image"
+        style={{ width: "100%", height: "200px", objectFit: "cover" }}
         src="https://rnz-ressh.cloudinary.com/image/upload/s--94wj79Rj--/ar_16:10,c_fill,f_auto,g_auto,q_auto,w_1050/v1683600881/4L99UKY_MicrosoftTeams_image_21_png"
       />
       <Box
@@ -51,7 +59,10 @@ export function NewsCard({
         }}
       >
         <Typography variant="h2">{title}</Typography>
-        <ReadMoreIcon sx={{ marginLeft: "auto", cursor: "pointer" }} />
+        <ReadMoreIcon
+          onClick={handleReadMoreClick}
+          sx={{ marginLeft: "auto" }}
+        />
       </Box>
     </Box>
   );

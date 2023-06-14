@@ -1,4 +1,3 @@
-import "./App.css";
 import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 import { Map } from "./components/Map/Map";
 import { Drawer } from "./components/Drawer/Drawer";
