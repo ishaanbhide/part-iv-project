@@ -5,11 +5,17 @@ export const theme = createTheme({
     primary: {
       main: "#5182ff",
     },
+    secondary: {
+      main: "#D9D9D9",
+    },
   },
   typography: {
     h1: {
       fontWeight: 600,
       fontSize: "20px",
+    },
+    h2: {
+      fontSize: "18px",
     },
     h5: {
       fontSize: "16px",

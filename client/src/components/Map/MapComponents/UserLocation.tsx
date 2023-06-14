@@ -8,8 +8,8 @@ export function UserLocationMarker() {
   const userLocationMarkerOptions = {
     icon: {
       url: "../../../public/your-location.png",
-      anchor: { x: 60, y: 60 },
-      scaledSize: { height: 120, width: 120 },
+      anchor: new google.maps.Point(60, 60),
+      scaledSize: new google.maps.Size(120, 120),
     },
   };
 
