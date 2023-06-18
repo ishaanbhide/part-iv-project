@@ -38,6 +38,10 @@ export function Map() {
   }, [center]);
 
   useEffect(() => {
+    map && map.panTo(center);
+  }, [center]);
+
+  useEffect(() => {
     handleCenterReset();
   }, [isDrawerOpen]);
 

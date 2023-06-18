@@ -1,6 +1,6 @@
-import { NewsMarker } from "../models/NewsItem";
+import { NewsItem } from "../models/NewsItem";
 
-export const newsMarkers: NewsMarker[] = [
+export const newsMarkers: NewsItem[] = [
   {
     id: "1",
     location: {
