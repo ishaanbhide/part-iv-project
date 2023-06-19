@@ -32,6 +32,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
   return (
     <Box
       onClick={handleSelectedNewsCard}
+      id={newsMarker.id}
       sx={{
         display: "flex",
         flexDirection: "column",
