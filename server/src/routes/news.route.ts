@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { News, INews } from "../models";
+import { News } from "../models";
 
 const router = express.Router();
 
@@ -7,6 +7,36 @@ router.get("/", async (req: Request, res: Response) => {
     try {
         const news = await News.find();
         res.send(news);
+    } catch (e) {
+        console.error(e);
+    }
+});
+
+router.get("/near", async (req: Request, res: Response) => {
+    const { longitude, latitude, proximity } = req.query;
+
+    if (!longitude || !latitude) {
+        res.status(400).send("Invalid query parameters");
+        return;
+    }
+
+    try {
+        const news = await News.find({
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [
+                            parseFloat(longitude as string),
+                            parseFloat(latitude as string),
+                        ],
+                    },
+                    $maxDistance: parseInt(proximity as string) || 10000,
+                },
+            },
+        }).limit(100);
+
+        res.json(news);
     } catch (e) {
         console.error(e);
     }
