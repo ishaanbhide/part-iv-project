@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface INews extends Document {
+export interface INews extends Document {
     title: string;
     body: string;
     source: string;
