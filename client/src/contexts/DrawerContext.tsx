@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 type DrawerContextType = {
   isDrawerOpen: boolean;
-  toggleDrawer: () => void;
+  toggleDrawer: (isOpen: boolean) => void;
 };
 
 export const DrawerContext = createContext<DrawerContextType>({
@@ -17,8 +17,8 @@ type DrawerProviderProps = {
 export const DrawerProvider: React.FC<DrawerProviderProps> = ({ children }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleDrawer = () => {
-    setDrawerOpen(!isDrawerOpen);
+  const toggleDrawer = (isOpen: boolean) => {
+    setDrawerOpen(isOpen);
   };
 
   return (

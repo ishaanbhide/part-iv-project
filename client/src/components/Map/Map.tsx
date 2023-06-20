@@ -1,7 +1,7 @@
 import "./Map.css";
 import { Box } from "@mui/material";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { UserLocationMarker } from "./MapComponents/UserLocation";
 import { CenterContext } from "../../contexts/CenterContext";
@@ -14,7 +14,8 @@ import { NewsMarker } from "./MapComponents/NewsMarker";
 
 export function Map() {
   const { isDrawerOpen } = useContext(DrawerContext);
-  const { center, updateCenter } = useContext(CenterContext);
+  const { center, updateCenter, updateUserLocation, homeButtonClicked } =
+    useContext(CenterContext);
   const [loading, setLoading] = useState(true);
   const [visibleMarkers, setVisibleMarkers] = useState<string[]>([]);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -25,8 +26,9 @@ export function Map() {
 
   useEffect(() => {
     async function fetchUserLocation() {
-      const userLocation: Coordinates | null = await getUserLocation();
-      userLocation && updateCenter(userLocation);
+      const location: Coordinates | null = await getUserLocation();
+      location && updateCenter(location);
+      location && updateUserLocation(location);
     }
     fetchUserLocation();
   }, []);
@@ -39,7 +41,7 @@ export function Map() {
 
   useEffect(() => {
     map && map.panTo(center);
-  }, [center]);
+  }, [center, homeButtonClicked]);
 
   useEffect(() => {
     handleCenterReset();

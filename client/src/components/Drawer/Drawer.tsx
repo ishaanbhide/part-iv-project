@@ -52,11 +52,11 @@ export function Drawer() {
             <ArrowBackIcon fontSize="large" sx={{ color: "white" }} />
           </IconButton>
         ) : isDrawerOpen ? (
-          <IconButton onClick={toggleDrawer}>
+          <IconButton onClick={() => toggleDrawer(false)}>
             <KeyboardArrowDownIcon fontSize="large" sx={{ color: "white" }} />
           </IconButton>
         ) : (
-          <IconButton onClick={toggleDrawer}>
+          <IconButton onClick={() => toggleDrawer(true)}>
             <KeyboardArrowUpIcon fontSize="large" sx={{ color: "white" }} />
           </IconButton>
         )}
