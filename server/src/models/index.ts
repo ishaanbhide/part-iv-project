@@ -1,3 +1,3 @@
-import News from "./news.model";
+import News, { INews } from "./news.model";
 
-export { News };
+export { News, INews };

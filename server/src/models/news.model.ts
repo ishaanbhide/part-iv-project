@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface INews extends Document {
+export interface INews extends Document {
     title: string;
-    description: string;
+    body: string;
     source: string;
     image: string;
     location: {
@@ -26,7 +26,7 @@ const PointSchema: Schema = new mongoose.Schema({
 const NewsSchema: Schema = new Schema(
     {
         title: { type: String, required: true },
-        description: { type: String, required: true },
+        body: { type: String, required: true },
         source: { type: String, required: true },
         image: { type: String, required: false },
         location: {
