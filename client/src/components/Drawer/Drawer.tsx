@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography, useMediaQuery } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -6,14 +6,19 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { NewsCard } from "./DrawerComponents/NewsCard";
 import { NewsPage } from "../NewsPage";
-import { newsMarkers } from "../../utils/dummy-data";
 import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
+import { NewsItem } from "../../models/NewsItem";
 
-export function Drawer() {
+type DrawerPropsType = {
+  news: NewsItem[];
+};
+
+export function Drawer({ news }: DrawerPropsType) {
   const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
   const { selectedNews } = useContext(SelectedNewsContext);
   const [readMoreClicked, setReadMoreClicked] = useState<boolean>(false);
   const cardsContainerRef = useRef(null);
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   const scrollToCard = (cardId: any) => {
     const cardElement = document.getElementById(cardId);
@@ -89,13 +94,14 @@ export function Drawer() {
         <Box
           ref={cardsContainerRef}
           sx={{
-            display: "flex",
+            display: isMobile ? "flex" : "grid",
+            gridTemplateColumns: "auto auto auto",
             flexDirection: "column",
             gap: "8px",
             padding: "16px",
           }}
         >
-          {newsMarkers.map((marker) => {
+          {news.map((marker) => {
             return (
               <NewsCard
                 key={marker.id}

@@ -5,6 +5,9 @@ import App from "./App";
 import "./index.css";
 import { ThemeProvider } from "@emotion/react";
 import { theme } from "./utils/theme";
+import { CenterProvider } from "./contexts/CenterContext";
+import { DrawerProvider } from "./contexts/DrawerContext";
+import { SelectedNewsProvider } from "./contexts/SelectedNewsContext";
 
 declare global {
   interface Window {
@@ -15,7 +18,13 @@ declare global {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <App />
+      <DrawerProvider>
+        <SelectedNewsProvider>
+          <CenterProvider>
+            <App />
+          </CenterProvider>
+        </SelectedNewsProvider>
+      </DrawerProvider>
     </ThemeProvider>
   </BrowserRouter>
 );

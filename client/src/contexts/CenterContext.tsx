@@ -4,7 +4,7 @@ import { Coordinates } from "../models/Coordinates";
 type CenterContextType = {
   center: Coordinates;
   updateCenter: (newCenter: Coordinates) => void;
-  userLocation: Coordinates;
+  userLocation: Coordinates | null;
   updateUserLocation: (newLocation: Coordinates) => void;
   homeButtonClicked: boolean;
   toggleHomeClicked: () => void;
@@ -13,7 +13,7 @@ type CenterContextType = {
 export const CenterContext = createContext<CenterContextType>({
   center: { lat: 0, lng: 0 },
   updateCenter: () => {},
-  userLocation: { lat: 0, lng: 0 },
+  userLocation: null,
   updateUserLocation: () => {},
   homeButtonClicked: false,
   toggleHomeClicked: () => {},
@@ -25,7 +25,7 @@ type CenterProviderProps = {
 
 export const CenterProvider: React.FC<CenterProviderProps> = ({ children }) => {
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
-  const [userLocation, setUserLocation] = useState({ lat: 0, lng: 0 });
+  const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
   const [homeButtonClicked, setHomeButtonClicked] = useState(false);
 
   const updateCenter = (newCenter: Coordinates) => {

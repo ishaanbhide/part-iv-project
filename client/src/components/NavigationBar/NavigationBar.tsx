@@ -13,7 +13,7 @@ export function NavigationBar() {
     useContext(CenterContext);
 
   const handleHomeClick = async () => {
-    updateCenter(userLocation);
+    userLocation && updateCenter(userLocation);
     updateSelectedNews(null);
     toggleDrawer(false);
     toggleHomeClicked();

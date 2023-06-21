@@ -9,10 +9,14 @@ import { mapOptions } from "../../utils/mapOptions";
 import { Oval } from "react-loader-spinner";
 import { Coordinates } from "../../models/Coordinates";
 import { getUserLocation } from "../../utils/getUserLocation";
-import { newsMarkers } from "../../utils/dummy-data";
 import { NewsMarker } from "./MapComponents/NewsMarker";
+import { NewsItem } from "../../models/NewsItem";
 
-export function Map() {
+type MapPropsType = {
+  news: NewsItem[];
+};
+
+export function Map({ news }: MapPropsType) {
   const { isDrawerOpen } = useContext(DrawerContext);
   const { center, updateCenter, updateUserLocation, homeButtonClicked } =
     useContext(CenterContext);
@@ -48,7 +52,7 @@ export function Map() {
   }, [isDrawerOpen]);
 
   const updateVisibleMarkers = () => {
-    const visibleMarkerIds: string[] = newsMarkers
+    const visibleMarkerIds: string[] = news
       .filter((marker) =>
         map
           ?.getBounds()
@@ -63,7 +67,7 @@ export function Map() {
     setMap(map);
 
     map.addListener("tilesloaded", () => {
-      const visibleMarkerIds: string[] = newsMarkers
+      const visibleMarkerIds: string[] = news
         .filter((marker) => map.getBounds().contains(marker.location))
         .map((marker) => marker.id);
 
@@ -77,7 +81,7 @@ export function Map() {
 
   return (
     <Box className={`map ${!isDrawerOpen && "full-width"}`}>
-      {!isLoaded || loading ? (
+      {!isLoaded || loading || !news.length ? (
         <Oval
           height={80}
           width={80}
@@ -97,7 +101,7 @@ export function Map() {
         >
           <UserLocationMarker />
 
-          {newsMarkers.map((marker) => {
+          {news.map((marker) => {
             if (visibleMarkers.includes(marker.id)) {
               return <NewsMarker key={marker.id} newsMarker={marker} />;
             }
