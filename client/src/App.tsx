@@ -41,7 +41,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <NavigationBar />
+      <NavigationBar news={news} />
       <Map news={news} />
       <Drawer news={news} />
     </div>

@@ -1,22 +1,36 @@
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Box, IconButton } from "@mui/material";
-import { useContext } from "react";
+import { Badge, Box, IconButton } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { CenterContext } from "../../contexts/CenterContext";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
+import { NewsItem } from "../../models/NewsItem";
 
-export function NavigationBar() {
+type NavigationBarPropsType = {
+  news: NewsItem[];
+};
+
+export function NavigationBar({ news }: NavigationBarPropsType) {
   const { toggleDrawer } = useContext(DrawerContext);
   const { updateSelectedNews } = useContext(SelectedNewsContext);
   const { updateCenter, userLocation, toggleHomeClicked } =
     useContext(CenterContext);
+  const [notificationCount, setNotificationCount] = useState<number>(0);
+
+  useEffect(() => {
+    setNotificationCount(news.length);
+  }, [news]);
 
   const handleHomeClick = async () => {
     userLocation && updateCenter(userLocation);
     updateSelectedNews(null);
     toggleDrawer(false);
     toggleHomeClicked();
+  };
+
+  const handleNotificationClick = () => {
+    toggleDrawer(true);
   };
 
   return (
@@ -34,8 +48,10 @@ export function NavigationBar() {
       <IconButton onClick={handleHomeClick}>
         <HomeIcon fontSize="large" sx={{ color: "white" }} />
       </IconButton>
-      <IconButton>
-        <NotificationsIcon fontSize="large" sx={{ color: "white" }} />
+      <IconButton onClick={handleNotificationClick}>
+        <Badge badgeContent={notificationCount} color="error">
+          <NotificationsIcon fontSize="large" sx={{ color: "white" }} />
+        </Badge>
       </IconButton>
     </Box>
   );
