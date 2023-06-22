@@ -6,11 +6,23 @@ type NewsCardProps = {
 };
 
 export function NewsPage({ newsMarker }: NewsCardProps) {
+  function parseStringDate(dateString: string) {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    });
+  }
+
   return (
     <Box>
       <img
         style={{ width: "100%", height: "200px", objectFit: "cover" }}
-        src="https://rnz-ressh.cloudinary.com/image/upload/s--94wj79Rj--/ar_16:10,c_fill,f_auto,g_auto,q_auto,w_1050/v1683600881/4L99UKY_MicrosoftTeams_image_21_png"
+        src={newsMarker?.image}
       />
       <Box
         sx={{
@@ -23,9 +35,14 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
         {newsMarker && (
           <>
             <Typography variant="h2">{newsMarker.title}</Typography>
-            <Typography fontSize="12px">{newsMarker.source}</Typography>
+            <Typography variant="h4" paddingTop="3px">
+              {newsMarker.source}
+            </Typography>
             <Typography paragraph paddingTop="6px">
               {newsMarker.description}
+            </Typography>
+            <Typography variant="h3" paddingTop="6px" color={"#6b6b6b"}>
+              {parseStringDate(newsMarker.createdAt)}
             </Typography>
           </>
         )}

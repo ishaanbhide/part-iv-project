@@ -17,8 +17,12 @@ export const theme = createTheme({
     h2: {
       fontSize: "18px",
     },
-    h5: {
-      fontSize: "16px",
+    h3: {
+      fontSize: "14px",
+    },
+    h4: {
+      fontSize: "12px",
+      fontWeight: "500",
     },
   },
 });

@@ -7,4 +7,5 @@ export interface NewsItem {
   description: string;
   source: string;
   image: string;
+  createdAt: string;
 }

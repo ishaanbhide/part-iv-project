@@ -18,7 +18,7 @@ export default function App() {
         10000
       );
 
-      const modifiedNews = disasterNews.map((news: any) => {
+      const modifiedNews: NewsItem[] = disasterNews.map((news: any) => {
         return {
           id: news._id,
           title: news.title,
@@ -29,8 +29,10 @@ export default function App() {
             lat: news.location.coordinates[1],
             lng: news.location.coordinates[0],
           },
+          createdAt: news.createdAt,
         };
       });
+
       setNews(modifiedNews);
     }
 
