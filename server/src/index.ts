@@ -12,8 +12,6 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-
-// routes
 app.use("/api", api);
 
 // serve static files in production
@@ -25,12 +23,10 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // mongodb connection
-console.log("Connecting to database...");
 mongoose
-    .connect(process.env.MONGODB_CONNECTION_STRING + "disastermap" || "")
+    .connect(process.env.MONGODB_CONNECTION_STRING + "disastermap")
     .then(() => {
         console.log("Database connected!");
-        app.listen(PORT, () =>
-            console.log(`App server listening on port ${PORT}`)
-        );
     });
+
+app.listen(PORT, () => console.log(`App server listening on port ${PORT}`));
