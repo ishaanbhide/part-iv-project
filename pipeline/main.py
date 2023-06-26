@@ -1,4 +1,5 @@
 import feedparser
+import openai
 import requests
 import spacy
 from bs4 import BeautifulSoup
@@ -6,6 +7,7 @@ from bs4 import BeautifulSoup
 NZ_HERALD_RSS = "https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/nz/?outputType=xml&_website=nzh"
 TEST_LINK = "https://www.nzherald.co.nz/nz/power-lines-strewn-across-road-after-mount-maunganui-crash/JXOQDEMLHZDG3P7XCXTY64HAUY/"
 
+openai.api_key = "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"
 nlp = spacy.load("en_core_web_sm")
 
 
@@ -18,16 +20,22 @@ def extract(link: str):
     for paragraph in text:
         article += paragraph.text + " "
 
-    doc = nlp(article)
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user",
+             "content": f"Extract addresses, streets, locations from '{article}' and return as a python array"},
+        ]
+    )
 
-    for entity in doc.ents:
-        if entity.label_ == "GPE" or entity.label_ == "LOC" or entity.label_ == "FAC" or entity.label_ == "NORP":
-            print(entity.text)
+    try:
+        locations = eval(completion.choices[0].message.content)
+        print(locations)
+    except Exception as e:
+        print("Error occurred while converting chatgpt content to array", str(e))
 
 
 def main():
-    nlp = spacy.load("en_core_web_sm")
-
     feed = feedparser.parse(NZ_HERALD_RSS)
     for entry in feed.entries:
         print('Post Title :', entry.title)
