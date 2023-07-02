@@ -1,4 +1,5 @@
 import re
+import time
 
 import feedparser
 import openai
@@ -10,9 +11,10 @@ from geopy.geocoders import Nominatim
 NZ_HERALD_RSS = "https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/nz/?outputType=xml&_website=nzh"
 openai.api_key = "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"
 nlp = spacy.load("en_core_web_sm")
-geocoder = Nominatim(user_agent="my_app")
+geocoder = Nominatim(user_agent="wouy448@aucklanduni.ac.nz")
 
 ARTICLE_WORD_LIMIT = 100
+LOCATIONS_LIMIT = 5
 
 
 def get_disasters():
@@ -45,16 +47,20 @@ def get_disasters():
     return disasters
 
 
-def extract_locations(title: str, link: str):
+def scrape_article(link: str):
     r = requests.get(link)
     soup = BeautifulSoup(r.text, 'html.parser')
 
     text = soup.find_all('p')
-    article_raw = title + " ".join([paragraph.text for paragraph in text])
+    article_raw = " ".join([paragraph.text for paragraph in text])
     article_truncated = " ".join(article_raw.split()[:ARTICLE_WORD_LIMIT])
-    clean_article = re.sub(r"[^a-zA-Z0-9\s]", "", article_truncated)
+    article = re.sub(r"[^a-zA-Z0-9\s]", "", article_truncated)
 
-    prompt = f'"""{clean_article}""" extract location data from text as bullet points'
+    return article
+
+
+def extract_potential_locations(article: str):
+    prompt = f'"""{article}""" extract location data from text as bullet points'
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
@@ -68,25 +74,27 @@ def extract_locations(title: str, link: str):
     print("Total tokens used:", completion.usage.total_tokens)
     print(locations)
 
-    return locations
+    return locations[:LOCATIONS_LIMIT]
+
+
+def geocode(location: str):
+    response = geocoder.geocode(f"{location} New Zealand")
+    time.sleep(1)
+    return response.raw if response else None
 
 
 def main():
     disasters = get_disasters()
     for title, link in disasters:
-        locations = extract_locations(title, link)
-        # TODO: Geocode locations
-
-
-def test():
-    locations = extract_locations(
-        "Auckland commuters warned to take ‘extra care’ on Harbour Bridge due to strong wind gusts ",
-        "https://www.nzherald.co.nz/nz/auckland-traffic-builds-as-school-holidays-begin-significant-road-works-in-waikato-continue/3TE4RVBKD5FXLILW6AHXDHXVFM/")
-
-    # TODO geocode using Nominatim HTTP API
-    # This is because geopy doesn't provide address rank
+        article = scrape_article(link)
+        locations = extract_potential_locations(article)
+        geocoded_locations = list(filter(None, (geocode(location) for location in locations)))
+        if geocoded_locations:
+            best_location = min(geocoded_locations, key=lambda loc: loc['importance'])
+            print(best_location['display_name'])
+        else:
+            print("No locations found")
 
 
 if __name__ == "__main__":
-    # main()
-    test()
+    main()
