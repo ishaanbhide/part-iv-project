@@ -8,12 +8,18 @@ import requests
 import spacy
 from bs4 import BeautifulSoup
 from geopy.geocoders import Nominatim
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 SERVER_NEWS_API = "http://localhost:3001/api/news"
 NZ_HERALD_RSS = "https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/nz/?outputType=xml&_website=nzh"
 openai.api_key = "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"
 nlp = spacy.load("en_core_web_sm")
 geocoder = Nominatim(user_agent="jameswood@gmail.com")
+
+options = Options()
+options.add_argument('--headless')
+driver = webdriver.Firefox(options=options)
 
 
 def get_disasters():
@@ -46,19 +52,26 @@ def get_disasters():
     return disasters
 
 
-def scrape_article(link: str, word_limit=100) -> str:
-    r = requests.get(link)
-    soup = BeautifulSoup(r.text, 'html.parser')
+def scrape_article(link: str, word_limit=100) -> (str, str):
+    driver.get(link)
 
-    text = soup.find_all('p')
-    article_raw = " ".join([paragraph.text for paragraph in text])
-    article_truncated = " ".join(article_raw.split()[:word_limit])
-    article = re.sub(r"[^a-zA-Z0-9\s]", "", article_truncated)
-    print(article)
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+    article = image = ""
 
-    # TODO: scrape images, from dynamic website using selenium
+    section = soup.find('section', attrs={"data-ref-group": "body"})
+    if section:
+        p_tags = section.find_all('p')
+        article_raw = " ".join([p.text for p in p_tags])
+        article_truncated = " ".join(article_raw.split()[:word_limit])
+        article = re.sub(r"[^a-zA-Z0-9\s]", "", article_truncated)
+        print(article)
 
-    return article
+    figure = soup.find("figure", class_="header__figure")
+    if figure:
+        image = figure.img["src"]
+        print(image)
+
+    return article, image
 
 
 def extract_locations(article: str, limit=1) -> List[str]:
@@ -89,17 +102,19 @@ def geocode_locations(locations: List[str]):
     return res
 
 
-def post_news(title: str, article: str, longitude: float, latitude: float) -> None:
+def post_news(title: str, article: str, image: str, longitude: float, latitude: float) -> None:
     news = {
         "title": title,
         "body": article,
         "source": "NZ Herald",
-        "image": "null",
+        "image": image,
         "location": {
             "type": "Point",
             "coordinates": [longitude, latitude]
         }
     }
+
+    print(news)
 
     response = requests.post(SERVER_NEWS_API, json=news)
     if response.status_code in [200, 201]:
@@ -111,18 +126,12 @@ def post_news(title: str, article: str, longitude: float, latitude: float) -> No
 def main():
     disasters = get_disasters()
     for title, link in disasters:
-        article = scrape_article(link)
+        article, image = scrape_article(link)
         locations = extract_locations(article)
         geocoded_locations = geocode_locations(locations)
         for geocoded_location in geocoded_locations:
-            post_news(title, article, geocoded_location.longitude, geocoded_location.latitude)
-
-
-def test():
-    scrape_article(
-        "https://www.nzherald.co.nz/talanoa/warning-of-more-cyclones-for-parts-of-pacific-as-el-nino-threatens/QZU7IQLZ2ZF4DD3EGEBOOXAPDY/")
+            post_news(title, article, image, geocoded_location.longitude, geocoded_location.latitude)
 
 
 if __name__ == "__main__":
-    # main()
-    test()
+    main()
