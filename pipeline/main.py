@@ -1,60 +1,84 @@
 import re
 import time
-from typing import List
+from typing import List, Tuple
 
 import feedparser
 import openai
 import requests
-import spacy
 from bs4 import BeautifulSoup
 from geopy.geocoders import Nominatim
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
+# constants
 SERVER_NEWS_API = "http://localhost:3001/api/news"
 NZ_HERALD_RSS = "https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/nz/?outputType=xml&_website=nzh"
+DISASTER_KEYWORDS = ['flood', 'earthquake', 'storm', 'disaster', 'hurricane', 'tornado', 'wildfire']
+
+# openai and nominatim setup
 openai.api_key = "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"
-nlp = spacy.load("en_core_web_sm")
 geocoder = Nominatim(user_agent="jameswood@gmail.com")
 
+# selenium webdriver setup
 options = Options()
 options.add_argument('--headless')
 driver = webdriver.Firefox(options=options)
 
 
-def get_disasters():
+def is_disaster_related(title: str) -> bool:
+    """
+    Check if the title is disaster related.
+    :param title: headline of the news article
+    :return: True if the title is disaster related, False otherwise
+    """
+    return any(keyword in title.lower() for keyword in DISASTER_KEYWORDS)
+
+
+def is_disaster_related_gpt(title: str) -> bool:
+    """
+    Use openai GPT-3 to classify if the title is disaster related.
+    :param title: headline of the news article
+    :return: True if the title is disaster related, False otherwise
+    """
+    prompt = f'"""{title}""" classify news headline into NATURAL DISASTER, WEATHER or OTHER'
+    completion = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=10,
+        temperature=0,
+    )
+
+    response = completion.choices[0].message.content.upper()
+    print(title, ":", completion.choices[0].message.content)
+
+    return True if "NATURAL DISASTER" in response or "WEATHER" in response else False
+
+
+def get_disasters_rss() -> List[Tuple[str, str]]:
+    """
+    Get the list of disasters from NZ Herald RSS feed.
+    :return: list of algorithmically classified disasters
+    """
     feed = feedparser.parse(NZ_HERALD_RSS)
     disasters = []
-    tokens = 0
 
     for entry in feed.entries:
-        clean_title = re.sub(r"[^a-zA-Z0-9\s]", "", entry.title)
-
-        prompt = f'"""{clean_title}""" classify news headline into NATURAL DISASTER, WEATHER or OTHER'
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=10,
-            temperature=0,
-        )
-
-        response = completion.choices[0].message.content.upper()
-        tokens += completion.usage.total_tokens
-
-        if "NATURAL DISASTER" in response or "WEATHER" in response:
+        title = re.sub(r"[^a-zA-Z0-9\s]", "", entry.title)
+        if is_disaster_related(title):
             disasters.append((entry.title, entry.link))
 
-        print(clean_title, ":", completion.choices[0].message.content)
-
-    print("Total tokens used:", tokens)
     print(disasters)
-
     return disasters
 
 
-def scrape_article(link: str, word_limit=100) -> (str, str):
+def scrape_article(link: str, word_limit=100) -> Tuple[str, str]:
+    """
+    Scrape the article and header image from the link using selenium to overcome dynamic loading.
+    :param link: link to the news article
+    :param word_limit: limit the number of words in the article
+    :return: cleaned article text and header image url tuple pair
+    """
     driver.get(link)
-
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     article = image = ""
 
@@ -64,17 +88,21 @@ def scrape_article(link: str, word_limit=100) -> (str, str):
         article_raw = " ".join([p.text for p in p_tags])
         article_truncated = " ".join(article_raw.split()[:word_limit])
         article = re.sub(r"[^a-zA-Z0-9\s]", "", article_truncated)
-        print(article)
 
     figure = soup.find("figure", class_="header__figure")
     if figure:
         image = figure.img["src"]
-        print(image)
 
     return article, image
 
 
 def extract_locations(article: str, limit=1) -> List[str]:
+    """
+    Extract locations from the article using openai GPT-3. An alternative is to classical NLP NER.
+    :param article: string of the article
+    :param limit: limit the number of locations extracted
+    :return: list of locations extracted
+    """
     prompt = f'"""{article}""" extract searchable locations from text as bullet points. Direct answer.'
     completion = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -90,7 +118,12 @@ def extract_locations(article: str, limit=1) -> List[str]:
     return locations[:limit]
 
 
-def geocode_locations(locations: List[str]):
+def geocode_locations(locations: List[str]) -> List:
+    """
+    Geocode the locations using geopy Nominatim, respecting usage frequency limit.
+    :param locations: list of locations to geocode
+    :return: list of geocoded geopy location objects
+    """
     res = []
     for location in locations:
         response = geocoder.geocode(f"{location} New Zealand")
@@ -102,10 +135,19 @@ def geocode_locations(locations: List[str]):
     return res
 
 
-def post_news(title: str, article: str, image: str, longitude: float, latitude: float) -> None:
+def post_news(title: str, body: str, image: str, longitude: float, latitude: float) -> None:
+    """
+    Post the news article to the news API.
+    :param title: title of the article
+    :param body: body of the article
+    :param image: header image of the article
+    :param longitude: longitude of the article
+    :param latitude: latitude of the article
+    :return: None
+    """
     news = {
         "title": title,
-        "body": article,
+        "body": body,
         "source": "NZ Herald",
         "image": image,
         "location": {
@@ -123,14 +165,16 @@ def post_news(title: str, article: str, image: str, longitude: float, latitude: 
         print('Post unsuccessful:', response.text)
 
 
-def main():
-    disasters = get_disasters()
+def main() -> None:
+    disasters = get_disasters_rss()
     for title, link in disasters:
         article, image = scrape_article(link)
         locations = extract_locations(article)
         geocoded_locations = geocode_locations(locations)
         for geocoded_location in geocoded_locations:
             post_news(title, article, image, geocoded_location.longitude, geocoded_location.latitude)
+
+    driver.quit()
 
 
 if __name__ == "__main__":
