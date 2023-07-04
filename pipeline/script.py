@@ -49,7 +49,7 @@ def is_disaster_related_gpt(title: str) -> bool:
     )
 
     response = completion.choices[0].message.content.upper()
-    print(title, ":", completion.choices[0].message.content)
+    print("Disasters found:", title, ":", completion.choices[0].message.content)
 
     return True if "NATURAL DISASTER" in response or "WEATHER" in response else False
 
@@ -59,6 +59,7 @@ def get_disasters_rss() -> List[Tuple[str, str]]:
     Get the list of disasters from NZ Herald RSS feed.
     :return: list of algorithmically classified disasters
     """
+    print("Scanning rss feeds...")
     feed = feedparser.parse(NZ_HERALD_RSS)
     disasters = []
 
@@ -67,7 +68,8 @@ def get_disasters_rss() -> List[Tuple[str, str]]:
         if is_disaster_related(title):
             disasters.append((entry.title, entry.link))
 
-    print(disasters)
+    print("Disasters found:", disasters)
+
     return disasters
 
 
@@ -78,6 +80,7 @@ def scrape_article(link: str, word_limit=100) -> Tuple[str, str]:
     :param word_limit: limit the number of words in the article
     :return: cleaned article text and header image url tuple pair
     """
+    print("Scraping article:", link)
     driver.get(link)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     article = image = ""
@@ -96,7 +99,7 @@ def scrape_article(link: str, word_limit=100) -> Tuple[str, str]:
     return article, image
 
 
-def extract_locations(article: str, limit=1) -> List[str]:
+def extract_locations(article: str, limit=5) -> List[str]:
     """
     Extract locations from the article using openai GPT-3. An alternative is to classical NLP NER.
     :param article: string of the article
@@ -112,27 +115,26 @@ def extract_locations(article: str, limit=1) -> List[str]:
     )
 
     locations = re.findall(r'- (.+)', completion.choices[0].message.content)
-    print(locations)
-    print("Total tokens used:", completion.usage.total_tokens)
+    print("Possible locations:", locations)
+    print("Tokens used in extraction:", completion.usage.total_tokens)
 
     return locations[:limit]
 
 
-def geocode_locations(locations: List[str]) -> List:
+def try_geocode_locations(locations: List[str]):
     """
     Geocode the locations using geopy Nominatim, respecting usage frequency limit.
     :param locations: list of locations to geocode
     :return: list of geocoded geopy location objects
     """
-    res = []
     for location in locations:
         response = geocoder.geocode(f"{location} New Zealand")
         if response:
-            res.append(response)
+            return response
 
         time.sleep(1)
 
-    return res
+    return None
 
 
 def post_news(title: str, body: str, image: str, longitude: float, latitude: float) -> None:
@@ -156,7 +158,7 @@ def post_news(title: str, body: str, image: str, longitude: float, latitude: flo
         }
     }
 
-    print(news)
+    print("POSTing:", news)
 
     response = requests.post(SERVER_NEWS_API, json=news)
     if response.status_code in [200, 201]:
@@ -168,11 +170,15 @@ def post_news(title: str, body: str, image: str, longitude: float, latitude: flo
 def main() -> None:
     disasters = get_disasters_rss()
     for title, link in disasters:
+        print("Processing disaster:", title)
+
         article, image = scrape_article(link)
         locations = extract_locations(article)
-        geocoded_locations = geocode_locations(locations)
-        for geocoded_location in geocoded_locations:
+        geocoded_location = try_geocode_locations(locations)
+        if geocoded_location:
             post_news(title, article, image, geocoded_location.longitude, geocoded_location.latitude)
+        else:
+            print("No geocodable location")
 
     driver.quit()
 

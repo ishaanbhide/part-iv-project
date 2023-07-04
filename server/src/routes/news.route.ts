@@ -9,6 +9,7 @@ router.get("/", async (req: Request, res: Response) => {
         res.send(news);
     } catch (e) {
         console.error(e);
+        return res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -39,6 +40,7 @@ router.get("/near", async (req: Request, res: Response) => {
         res.json(news);
     } catch (e) {
         console.error(e);
+        return res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -46,6 +48,13 @@ router.post("/", async (req: Request, res: Response) => {
     const { title, body, source, image, location } = req.body;
 
     try {
+        const existingNews = await News.findOne({ title });
+        if (existingNews) {
+            return res
+                .status(400)
+                .json({ message: "News article already exists" });
+        }
+
         const news = new News({
             title,
             body,
@@ -55,9 +64,10 @@ router.post("/", async (req: Request, res: Response) => {
         });
 
         await news.save();
-        res.send(news);
+        return res.status(201).json(news);
     } catch (e) {
         console.error(e);
+        return res.status(500).json({ error: "Server error" });
     }
 });
 
@@ -75,9 +85,10 @@ router.post("/list", async (req: Request, res: Response) => {
             await newsDocument.save();
         }
 
-        res.send(req.body);
+        return res.status(201).json(req.body);
     } catch (e) {
         console.error(e);
+        return res.status(500).json({ error: "Server error" });
     }
 });
 

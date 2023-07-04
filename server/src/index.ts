@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import api from "./routes";
 import mongoose from "mongoose";
 import path from "path";
-import startCronJobs from "./cron";
 
 const cors = require("cors");
 
@@ -32,7 +31,5 @@ mongoose
     .catch(error => {
         console.log(`Failed to connect to database: ${error}`);
     });
-
-startCronJobs();
 
 app.listen(PORT, () => console.log(`App server listening on port ${PORT}`));
