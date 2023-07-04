@@ -80,7 +80,7 @@ def scrape_article(link: str, word_limit=100) -> Tuple[str, str]:
     :param word_limit: limit the number of words in the article
     :return: cleaned article text and header image url tuple pair
     """
-    print("Scraping article:", link)
+    print("Scraping article...", link)
     driver.get(link)
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     article = image = ""
@@ -158,7 +158,7 @@ def post_news(title: str, body: str, image: str, longitude: float, latitude: flo
         }
     }
 
-    print("POSTing:", news)
+    print("Posting...", news)
 
     response = requests.post(SERVER_NEWS_API, json=news)
     if response.status_code in [200, 201]:
@@ -170,7 +170,7 @@ def post_news(title: str, body: str, image: str, longitude: float, latitude: flo
 def main() -> None:
     disasters = get_disasters_rss()
     for title, link in disasters:
-        print("Processing disaster:", title)
+        print("Processing disaster...", title)
 
         article, image = scrape_article(link)
         locations = extract_locations(article)

@@ -1,3 +1,4 @@
+import atexit
 import re
 import time
 from typing import List, Tuple
@@ -184,11 +185,13 @@ def main() -> None:
         else:
             print("No geocodable location")
 
+
+@atexit.register
+def cleanup():
     driver.quit()
 
 
-scheduler.add_job(func=main, trigger="interval", seconds=30)
-scheduler.start()
-
 if __name__ == "__main__":
+    scheduler.add_job(func=main, trigger="interval", seconds=30)
+    scheduler.start()
     app.run(host="localhost", port=5000)
