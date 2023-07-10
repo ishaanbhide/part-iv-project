@@ -16,7 +16,7 @@ from selenium.webdriver.firefox.options import Options
 # constants
 SERVER_NEWS_API = "http://localhost:3001/api/news"
 NZ_HERALD_RSS = "https://www.nzherald.co.nz/arc/outboundfeeds/rss/section/nz/?outputType=xml&_website=nzh"
-DISASTER_KEYWORDS = ['flood', 'earthquake', 'storm', 'disaster', 'hurricane', 'tornado', 'wildfire']
+DISASTER_KEYWORDS = ['flood', 'quake', 'storm', 'disaster', 'hurricane', 'tornado', 'fire', 'cyclone', 'caution']
 
 app = Flask(__name__)
 scheduler = BackgroundScheduler()
@@ -164,12 +164,18 @@ def post_news(title: str, body: str, image: str, longitude: float, latitude: flo
     }
 
     print("Posting...", news)
-
-    response = requests.post(SERVER_NEWS_API, json=news)
-    if response.status_code in [200, 201]:
-        print('Post successful:', response.json())
-    else:
-        print('Post unsuccessful:', response.text)
+    for i in range(5):
+        try:
+            response = requests.post(SERVER_NEWS_API, json=news)
+            if response.status_code in [200, 201]:
+                print('Post successful:', response.json())
+                break
+            else:
+                print('Post unsuccessful:', response.text)
+                break
+        except ConnectionRefusedError:
+            print(f"Failed to connect to {SERVER_NEWS_API}, attempt number {i + 1}")
+            time.sleep(5)
 
 
 def main() -> None:
@@ -192,6 +198,7 @@ def cleanup():
 
 
 if __name__ == "__main__":
-    scheduler.add_job(func=main, trigger="interval", seconds=30)
+    scheduler.add_job(func=main, trigger="interval", minutes=60)
     scheduler.start()
+    main()
     app.run(host="localhost", port=5000)
