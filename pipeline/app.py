@@ -135,6 +135,7 @@ def try_geocode_locations(locations: List[str]):
     for location in locations:
         response = geocoder.geocode(f"{location} New Zealand")
         if response:
+            print(f"Valid location found: {location} -> {response}")
             return response
 
         time.sleep(1)
@@ -164,18 +165,14 @@ def post_news(title: str, body: str, image: str, longitude: float, latitude: flo
     }
 
     print("Posting...", news)
-    for i in range(5):
-        try:
-            response = requests.post(SERVER_NEWS_API, json=news)
-            if response.status_code in [200, 201]:
-                print('Post successful:', response.json())
-                break
-            else:
-                print('Post unsuccessful:', response.text)
-                break
-        except ConnectionRefusedError:
-            print(f"Failed to connect to {SERVER_NEWS_API}, attempt number {i + 1}")
-            time.sleep(5)
+    try:
+        response = requests.post(SERVER_NEWS_API, json=news)
+        if response.status_code in [200, 201]:
+            print('Post successful:', response.json())
+        else:
+            print('Post unsuccessful:', response.text)
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to connect to {SERVER_NEWS_API}: {str(e)}")
 
 
 def main() -> None:
