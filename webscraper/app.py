@@ -7,7 +7,7 @@ from geopy.geocoders import Nominatim
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-from tools import Pipeline, RSSFeed, NewsSite
+from pipeline import Pipeline, RSSFeed, NewsSite
 
 NEWS_POST_HTTP = "http://localhost:3001/api/news"
 OPENAI_API_KEY = "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"

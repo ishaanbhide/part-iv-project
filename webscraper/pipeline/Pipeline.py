@@ -34,8 +34,8 @@ class Pipeline:
             print("Processing disaster...", title)
 
             article, image = self.scraper.scrape(link)
-            locations = self.extract_locations(article)
-            geocoded_location = self.try_geocode_locations(locations)
+            location = self.extract_location(title + article)  # self.extract_locations(article)
+            geocoded_location = self.try_geocode_locations(list(location))
             if geocoded_location:
                 self.post_news(title, article, image, geocoded_location.longitude, geocoded_location.latitude)
             else:
@@ -71,7 +71,7 @@ class Pipeline:
 
     def extract_locations(self, article: str, limit=5) -> List[str]:
         """
-        Extract locations from the article using openai GPT-3. An alternative is to classical NLP NER.
+        Extract locations from the article using openai GPT-3.5. An alternative is to classical NLP NER.
         :param article: string of the article
         :param limit: limit the number of locations extracted
         :return: list of locations extracted
@@ -90,6 +90,26 @@ class Pipeline:
 
         return locations[:limit]
 
+    def extract_location(self, article: str) -> List[str]:
+        """
+        Extract single location from the article using openai GPT-3.5. An alternative is to classical NLP NER.
+        :param article: string of the article
+        :return: location extracted in list
+        """
+        prompt = f'"""{article}""" Extract just the address mentioned in this article, searchable by a geocoder, single line:'
+        completion = self.openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=30,
+            temperature=0,
+        )
+
+        location = completion.choices[0].message.content
+        print("Possible location:", location)
+        print("Tokens used in extraction:", completion.usage.total_tokens)
+
+        return [location]
+
     def try_geocode_locations(self, locations: List[str]):
         """
         Grab the first geocoded location from the list of locations.
@@ -97,7 +117,7 @@ class Pipeline:
         :return: geocoded geopy location
         """
         for location in locations:
-            response = self.geocoder.geocode(f"{location} New Zealand")
+            response = self.geocoder.geocode(location)
             if response:
                 print(f"Valid location found: {location} -> {response}")
                 return response
