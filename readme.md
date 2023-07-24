@@ -24,7 +24,8 @@ $ npm run dev
 ### Server
 
 1. Open the `./server` folder in the terminal.
-2. Install npm dependencies
+2. Acquire `.env` file from us.
+3. Install npm dependencies
 
 ```bash
 $ npm install
@@ -39,7 +40,8 @@ $ npm run dev
 ### Webscraper
 
 1. Navigate into `./webscraper`
-2. Setup python virtual environment
+2. Acquire `.env` file from us.
+3. Setup python virtual environment
 
 ```bash
 $ python -m venv venv
