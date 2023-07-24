@@ -1,6 +1,6 @@
 import openai
 from dotenv import dotenv_values
-from geopy.geocoders import Nominatim
+from geopy.geocoders import MapBox
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
@@ -14,7 +14,7 @@ def main():
     options.add_argument('--headless')
     driver = webdriver.Firefox(options=options)
     openai.api_key = env_vars["OPENAI_API_KEY"]
-    geocoder = Nominatim(user_agent="john@gmail.com")
+    geocoder = MapBox(env_vars["MAPBOX_API_KEY"])
 
     pipeline = Pipeline(openai=openai,
                         webdriver=driver,

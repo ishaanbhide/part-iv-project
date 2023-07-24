@@ -117,7 +117,7 @@ class Pipeline:
         :return: geocoded geopy location
         """
         for location in locations:
-            response = self.geocoder.geocode(location)
+            response = self.geocoder.geocode(location, country="NZ")
             if response:
                 print(f"Valid location found: {location} -> {response}")
                 return response
