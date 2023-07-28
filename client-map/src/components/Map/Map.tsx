@@ -45,6 +45,7 @@ export function Map({ news }: MapPropsType) {
 
   useEffect(() => {
     map && map.panTo(center);
+    updateVisibleMarkers();
   }, [center, homeButtonClicked]);
 
   useEffect(() => {

@@ -12,12 +12,16 @@ type NavigationBarPropsType = {
   news: NewsItem[];
   readMoreClicked: boolean;
   setReadMoreClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  pageRef: React.MutableRefObject<null>;
+  firstArticle: NewsItem | null;
 };
 
 export function NavigationBar({
   news,
   readMoreClicked,
   setReadMoreClicked,
+  pageRef,
+  firstArticle,
 }: NavigationBarPropsType) {
   const { toggleDrawer } = useContext(DrawerContext);
   const { updateSelectedNews } = useContext(SelectedNewsContext);
@@ -25,15 +29,20 @@ export function NavigationBar({
     useContext(CenterContext);
   const [notificationCount, setNotificationCount] = useState<number>(0);
 
+  const scrollToCard = (cardId: any) => {
+    const cardElement = document.getElementById(cardId);
+    if (cardElement) {
+      cardElement.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     setNotificationCount(news.length);
   }, [news]);
 
   const handleHomeClick = async () => {
-    userLocation && updateCenter(userLocation);
-    updateSelectedNews(null);
-    toggleDrawer(false);
-    toggleHomeClicked();
+    setReadMoreClicked(false);
+    scrollToCard(firstArticle?.id);
   };
 
   const handleNotificationClick = () => {
@@ -62,8 +71,7 @@ export function NavigationBar({
       ) : (
         <IconButton
           onClick={() => {
-            setReadMoreClicked(false);
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            handleHomeClick();
           }}
         >
           <HomeIcon fontSize="large" sx={{ color: "white" }} />
