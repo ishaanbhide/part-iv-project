@@ -1,6 +1,6 @@
 import re
 from abc import ABC, abstractmethod
-from typing import Tuple
+from typing import Dict
 
 from bs4 import BeautifulSoup
 
@@ -11,32 +11,38 @@ class Scraper(ABC):
         self.webdriver = webdriver
 
     @abstractmethod
-    def scrape(self, link: str, word_limit=100) -> Tuple[str, str]:
+    def scrape(self, link: str) -> Dict[str, str]:
         pass
 
 
+class ScraperFactory:
+    @staticmethod
+    def create_scraper(site: str, webdriver) -> Scraper:
+        if site == 'nzherald':
+            return NZHeraldScraper(webdriver)
+        else:
+            raise ValueError(f"No scraper available for site: {site}")
+
+
 class NZHeraldScraper(Scraper):
-    def scrape(self, link: str, word_limit=100) -> Tuple[str, str]:
-        """
-        Scrape the article and header image from the link using selenium to overcome dynamic loading.
-        :param link: link to the news article
-        :param word_limit: limit the number of words in the article
-        :return: cleaned article text and header image url tuple pair
-        """
-        print("Scraping article...", link)
+    def scrape(self, link: str, word_count=500) -> Dict[str, str]:
         self.webdriver.get(link)
         soup = BeautifulSoup(self.webdriver.page_source, 'html.parser')
-        article = image = ""
+        article = {'title': '', 'body': '', 'image': ''}
+
+        h1 = soup.find("h1", class_="article__heading")
+        if h1:
+            article['title'] = h1.text
 
         section = soup.find('section', attrs={"data-ref-group": "body"})
         if section:
             p_tags = section.find_all('p')
-            article_raw = " ".join([p.text for p in p_tags])
-            article_truncated = " ".join(article_raw.split()[:word_limit])
-            article = re.sub(r"[^a-zA-Z0-9\s]", "", article_truncated)
+            body_raw = " ".join([p.text for p in p_tags])
+            body_truncated = " ".join(body_raw.split()[:word_count])
+            article['body'] = re.sub(r"[^a-zA-Z0-9\s]", "", body_truncated)
 
         figure = soup.find("figure", class_="header__figure")
         if figure:
-            image = figure.img["src"]
+            article['image'] = figure.img["src"]
 
-        return article, image
+        return article

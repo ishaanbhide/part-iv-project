@@ -44,3 +44,5 @@ Werkzeug==2.3.6
 wsproto==1.2.0
 yarl==1.9.2
 python-dotenv~=1.0.0
+pandas~=2.0.3
+spacy~=3.5.3

@@ -48,13 +48,6 @@ router.post("/", async (req: Request, res: Response) => {
     const { title, body, source, image, location } = req.body;
 
     try {
-        const existingNews = await News.findOne({ title });
-        if (existingNews) {
-            return res
-                .status(400)
-                .json({ message: "News article already exists" });
-        }
-
         const news = new News({
             title,
             body,
@@ -65,27 +58,6 @@ router.post("/", async (req: Request, res: Response) => {
 
         await news.save();
         return res.status(201).json(news);
-    } catch (e) {
-        console.error(e);
-        return res.status(500).json({ error: "Server error" });
-    }
-});
-
-router.post("/list", async (req: Request, res: Response) => {
-    try {
-        for (let news of req.body) {
-            const { title, body, source, image, location } = news;
-            const newsDocument = new News({
-                title,
-                body,
-                source,
-                image,
-                location,
-            });
-            await newsDocument.save();
-        }
-
-        return res.status(201).json(req.body);
     } catch (e) {
         console.error(e);
         return res.status(500).json({ error: "Server error" });

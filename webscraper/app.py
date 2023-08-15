@@ -2,32 +2,36 @@ import atexit
 
 import openai
 from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import dotenv_values
 from flask import Flask
-from geopy.geocoders import Nominatim
+from geopy.geocoders import MapBox
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-from pipeline import Pipeline, RSSFeed, NewsSite
+from pipeline import Pipeline, ExtractorFactory, ScraperFactory, SourceFactory, Api
 
-NEWS_POST_HTTP = "http://localhost:3001/api/news"
-OPENAI_API_KEY = "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"
+env_vars = dotenv_values()
 
 app = Flask(__name__)
 scheduler = BackgroundScheduler()
 
 options = Options()
 options.add_argument('--headless')
-options.add_argument('--log-level=0')
 driver = webdriver.Firefox(options=options)
-openai.api_key = OPENAI_API_KEY
-geocoder = Nominatim(user_agent="john@gmail.com")
+openai.api_key = env_vars["OPENAI_API_KEY"]
 
-pipeline = Pipeline(openai=openai,
-                    webdriver=driver,
+source = SourceFactory.create_source("csv", "./dataset/nzhearld.csv")
+scraper = ScraperFactory.create_scraper("nzherald", driver)
+# extractor = ExtractorFactory.create_extractor("spacy", spacy.load("en_core_web_sm"))
+extractor = ExtractorFactory.create_extractor("openai", openai)
+geocoder = MapBox(env_vars["MAPBOX_API_KEY"])
+api = Api(env_vars["NEWS_POST_HTTP"])
+
+pipeline = Pipeline(source=source,
+                    scraper=scraper,
+                    extractor=extractor,
                     geocoder=geocoder,
-                    rss_feed=RSSFeed.NZHERALD_NEW_ZEALAND,
-                    news_site=NewsSite.NZHERALD,
-                    news_post_http=NEWS_POST_HTTP)
+                    api=api)
 
 
 @atexit.register
