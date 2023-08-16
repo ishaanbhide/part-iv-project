@@ -19,7 +19,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
       updateSelectedNews(null);
     } else {
       updateSelectedNews(newsMarker);
-      updateCenter(newsMarker.location);
+      //updateCenter(newsMarker.location);
     }
   };
 

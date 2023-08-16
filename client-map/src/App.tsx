@@ -3,20 +3,16 @@ import { Map } from "./components/Map/Map";
 import { Drawer } from "./components/Drawer/Drawer";
 import { CenterContext } from "./contexts/CenterContext";
 import { useContext, useEffect, useState } from "react";
-import { getNearbyDisasterNews } from "./api/news";
+import { getMapAreaDisasterNews, getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
 
 export default function App() {
-  const { userLocation } = useContext(CenterContext);
+  const { userLocation, mapBounds } = useContext(CenterContext);
   const [news, setNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
     async function fetchDisasterNews() {
-      const disasterNews = await getNearbyDisasterNews(
-        userLocation!.lat,
-        userLocation!.lng,
-        10000
-      );
+      const disasterNews = await getMapAreaDisasterNews(mapBounds);
 
       const modifiedNews: NewsItem[] = disasterNews.map((news: any) => {
         return {
@@ -39,7 +35,7 @@ export default function App() {
     if (userLocation) {
       fetchDisasterNews();
     }
-  }, [userLocation]);
+  }, [mapBounds]);
 
   return (
     <div className="App">

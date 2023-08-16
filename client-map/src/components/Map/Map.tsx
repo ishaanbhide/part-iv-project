@@ -18,10 +18,14 @@ type MapPropsType = {
 
 export function Map({ news }: MapPropsType) {
   const { isDrawerOpen } = useContext(DrawerContext);
-  const { center, updateCenter, updateUserLocation, homeButtonClicked } =
-    useContext(CenterContext);
+  const {
+    center,
+    updateCenter,
+    updateUserLocation,
+    homeButtonClicked,
+    updateMapBounds,
+  } = useContext(CenterContext);
   const [loading, setLoading] = useState(true);
-  const [visibleMarkers, setVisibleMarkers] = useState<string[]>([]);
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
   const { isLoaded } = useLoadScript({
@@ -43,37 +47,13 @@ export function Map({ news }: MapPropsType) {
     }
   }, [center]);
 
-  useEffect(() => {
-    map && map.panTo(center);
-    updateVisibleMarkers();
-  }, [center, homeButtonClicked]);
-
-  useEffect(() => {
-    handleCenterReset();
-  }, [isDrawerOpen]);
-
-  const updateVisibleMarkers = () => {
-    const visibleMarkerIds: string[] = news
-      .filter((marker) =>
-        map
-          ?.getBounds()
-          .contains({ lat: marker.location.lat, lng: marker.location.lng })
-      )
-      .map((marker) => marker.id);
-
-    setVisibleMarkers(visibleMarkerIds);
+  const handleMapBoundsChanged = async () => {
+    const mapBounds: any = map?.getBounds()?.toJSON();
+    mapBounds && updateMapBounds(mapBounds);
   };
 
   const handleMapLoad = (map: google.maps.Map) => {
     setMap(map);
-
-    map.addListener("tilesloaded", () => {
-      const visibleMarkerIds: string[] = news
-        .filter((marker) => map.getBounds().contains(marker.location))
-        .map((marker) => marker.id);
-
-      setVisibleMarkers(visibleMarkerIds);
-    });
   };
 
   const handleCenterReset = () => {
@@ -82,7 +62,7 @@ export function Map({ news }: MapPropsType) {
 
   return (
     <Box className={`map ${!isDrawerOpen && "full-width"}`}>
-      {!isLoaded || loading || !news.length ? (
+      {!isLoaded || loading ? (
         <Oval
           height={80}
           width={80}
@@ -97,16 +77,13 @@ export function Map({ news }: MapPropsType) {
           onLoad={handleMapLoad}
           center={center}
           options={mapOptions}
-          onDragEnd={updateVisibleMarkers}
-          onZoomChanged={updateVisibleMarkers}
+          onCenterChanged={handleMapBoundsChanged}
+          onBoundsChanged={handleMapBoundsChanged}
         >
           <UserLocationMarker />
 
           {news.map((marker) => {
-            if (visibleMarkers.includes(marker.id)) {
-              return <NewsMarker key={marker.id} newsMarker={marker} />;
-            }
-            return null;
+            return <NewsMarker key={marker.id} newsMarker={marker} />;
           })}
         </GoogleMap>
       )}

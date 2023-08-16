@@ -3,9 +3,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Badge, Box, IconButton } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { CenterContext } from "../../contexts/CenterContext";
 import { DrawerContext } from "../../contexts/DrawerContext";
-import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 import { NewsItem } from "../../models/NewsItem";
 
 type NavigationBarPropsType = {
@@ -24,9 +22,6 @@ export function NavigationBar({
   firstArticle,
 }: NavigationBarPropsType) {
   const { toggleDrawer } = useContext(DrawerContext);
-  const { updateSelectedNews } = useContext(SelectedNewsContext);
-  const { updateCenter, userLocation, toggleHomeClicked } =
-    useContext(CenterContext);
   const [notificationCount, setNotificationCount] = useState<number>(0);
 
   const scrollToCard = (cardId: any) => {
