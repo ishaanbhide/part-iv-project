@@ -9,7 +9,7 @@ import { DrawerContext } from "./contexts/DrawerContext";
 
 export default function App() {
   const { userLocation, mapBounds } = useContext(CenterContext);
-  const { loading, updateLoading } = useContext(DrawerContext);
+  const { loading, updateLoading, isDrawerOpen } = useContext(DrawerContext);
   const [news, setNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function App() {
     if (userLocation) {
       fetchDisasterNews();
     }
-  }, [mapBounds]);
+  }, [mapBounds, isDrawerOpen]);
 
   return (
     <div className="App">
