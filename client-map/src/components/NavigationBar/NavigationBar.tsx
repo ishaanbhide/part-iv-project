@@ -8,7 +8,7 @@ import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 import { NewsItem } from "../../models/NewsItem";
 
 type NavigationBarPropsType = {
-  news: NewsItem[];
+  news: NewsItem[][];
 };
 
 export function NavigationBar({ news }: NavigationBarPropsType) {

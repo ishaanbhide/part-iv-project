@@ -10,7 +10,7 @@ import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 import { NewsItem } from "../../models/NewsItem";
 
 type DrawerPropsType = {
-  news: NewsItem[];
+  news: NewsItem[][];
 };
 
 export function Drawer({ news }: DrawerPropsType) {
@@ -102,14 +102,16 @@ export function Drawer({ news }: DrawerPropsType) {
             padding: "16px",
           }}
         >
-          {news.map((marker) => {
-            return (
-              <NewsCard
-                key={marker.id}
-                newsMarker={marker}
-                setReadMoreClicked={setReadMoreClicked}
-              />
-            );
+          {news.map((markerArray) => {
+            if (markerArray.length == 1) {
+              return (
+                <NewsCard
+                  key={markerArray[0].id}
+                  newsMarker={markerArray[0]}
+                  setReadMoreClicked={setReadMoreClicked}
+                />
+              );
+            }
           })}
         </Box>
       </Box>

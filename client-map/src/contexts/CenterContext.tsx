@@ -11,6 +11,8 @@ type CenterContextType = {
   toggleHomeClicked: () => void;
   mapBounds: MapBounds;
   updateMapBounds: (newMapBounds: MapBounds) => void;
+  zoom: number;
+  updateZoom: (newZoom: number) => void;
 };
 
 export const CenterContext = createContext<CenterContextType>({
@@ -27,6 +29,8 @@ export const CenterContext = createContext<CenterContextType>({
     east: 0,
   },
   updateMapBounds: () => {},
+  zoom: 0,
+  updateZoom: () => {},
 });
 
 type CenterProviderProps = {
@@ -43,6 +47,7 @@ export const CenterProvider: React.FC<CenterProviderProps> = ({ children }) => {
     north: 0,
     east: 0,
   });
+  const [zoom, setZoom] = useState(0);
 
   const updateCenter = (newCenter: Coordinates) => {
     setCenter(newCenter);
@@ -60,6 +65,10 @@ export const CenterProvider: React.FC<CenterProviderProps> = ({ children }) => {
     setMapBounds(newMapBounds);
   };
 
+  const updateZoom = (newZoom: number) => {
+    setZoom(newZoom);
+  };
+
   return (
     <CenterContext.Provider
       value={{
@@ -71,6 +80,8 @@ export const CenterProvider: React.FC<CenterProviderProps> = ({ children }) => {
         toggleHomeClicked,
         mapBounds,
         updateMapBounds,
+        zoom,
+        updateZoom,
       }}
     >
       {children}

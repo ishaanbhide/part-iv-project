@@ -5,18 +5,20 @@ import { useContext, useEffect, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { UserLocationMarker } from "./MapComponents/UserLocation";
 import { CenterContext } from "../../contexts/CenterContext";
-import { mapOptions } from "../../utils/mapOptions";
+import { defaultRadius, mapOptions } from "../../utils/mapOptions";
 import { Oval } from "react-loader-spinner";
 import { Coordinates } from "../../models/Coordinates";
 import { getUserLocation } from "../../utils/getUserLocation";
 import { NewsMarker } from "./MapComponents/NewsMarker";
 import { NewsItem } from "../../models/NewsItem";
+import ClusterMarker from "./MapComponents/ClusterMarker";
 
 type MapPropsType = {
-  news: NewsItem[];
+  news: NewsItem[][];
+  setNews: (modifiedNews: NewsItem[][]) => void;
 };
 
-export function Map({ news }: MapPropsType) {
+export function Map({ news, setNews }: MapPropsType) {
   const { isDrawerOpen } = useContext(DrawerContext);
   const { loading, updateLoading } = useContext(DrawerContext);
   const {
@@ -25,6 +27,7 @@ export function Map({ news }: MapPropsType) {
     updateUserLocation,
     homeButtonClicked,
     updateMapBounds,
+    updateZoom,
   } = useContext(CenterContext);
   const [mapLoading, setMapLoading] = useState(true);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -50,6 +53,7 @@ export function Map({ news }: MapPropsType) {
 
   const handleMapBoundsChanged = async () => {
     updateLoading(true);
+    updateZoom(map?.getZoom()!);
     const mapBounds: any = map?.getBounds()?.toJSON();
     mapBounds && updateMapBounds(mapBounds);
   };
@@ -84,8 +88,24 @@ export function Map({ news }: MapPropsType) {
         >
           <UserLocationMarker />
 
-          {news.map((marker) => {
-            return <NewsMarker key={marker.id} newsMarker={marker} />;
+          {news.map((markerArray) => {
+            if (markerArray.length == 1) {
+              return (
+                <NewsMarker
+                  key={markerArray[0].id}
+                  newsMarker={markerArray[0]}
+                />
+              );
+            } else {
+              return (
+                <ClusterMarker
+                  key={markerArray[0].id}
+                  position={markerArray[0].location}
+                  text={markerArray.length.toString()}
+                  radius={defaultRadius}
+                />
+              );
+            }
           })}
         </GoogleMap>
       )}

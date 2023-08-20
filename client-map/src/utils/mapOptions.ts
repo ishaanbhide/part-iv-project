@@ -41,3 +41,5 @@ export const mapOptions = {
     },
   ],
 };
+
+export const defaultRadius = 1;
