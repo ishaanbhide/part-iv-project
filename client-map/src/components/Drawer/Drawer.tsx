@@ -14,7 +14,8 @@ type DrawerPropsType = {
 };
 
 export function Drawer({ news }: DrawerPropsType) {
-  const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
+  const { isDrawerOpen, toggleDrawer, loading, updateLoading } =
+    useContext(DrawerContext);
   const { selectedNews } = useContext(SelectedNewsContext);
   const [readMoreClicked, setReadMoreClicked] = useState<boolean>(false);
   const cardsContainerRef = useRef(null);
@@ -28,10 +29,10 @@ export function Drawer({ news }: DrawerPropsType) {
   };
 
   useEffect(() => {
-    if (selectedNews) {
+    if (!loading && selectedNews) {
       scrollToCard(selectedNews.id);
     }
-  }, [selectedNews]);
+  }, [loading, selectedNews]);
 
   return (
     <Box>

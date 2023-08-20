@@ -15,8 +15,8 @@ export function NewsMarker({ newsMarker }: NewsMarkerProps) {
   const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
 
   const handleMarkerClick = () => {
-    !isDrawerOpen && updateCenter(newsMarker.location);
     updateSelectedNews(newsMarker);
+    !isDrawerOpen && updateCenter(newsMarker.location);
     toggleDrawer(true);
   };
 

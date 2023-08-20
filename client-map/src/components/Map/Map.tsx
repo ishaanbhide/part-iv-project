@@ -18,6 +18,7 @@ type MapPropsType = {
 
 export function Map({ news }: MapPropsType) {
   const { isDrawerOpen } = useContext(DrawerContext);
+  const { loading, updateLoading } = useContext(DrawerContext);
   const {
     center,
     updateCenter,
@@ -25,7 +26,7 @@ export function Map({ news }: MapPropsType) {
     homeButtonClicked,
     updateMapBounds,
   } = useContext(CenterContext);
-  const [loading, setLoading] = useState(true);
+  const [mapLoading, setMapLoading] = useState(true);
   const [map, setMap] = useState<google.maps.Map | null>(null);
 
   const { isLoaded } = useLoadScript({
@@ -43,11 +44,12 @@ export function Map({ news }: MapPropsType) {
 
   useEffect(() => {
     if (center.lat != 0) {
-      setLoading(false);
+      setMapLoading(false);
     }
   }, [center]);
 
   const handleMapBoundsChanged = async () => {
+    updateLoading(true);
     const mapBounds: any = map?.getBounds()?.toJSON();
     mapBounds && updateMapBounds(mapBounds);
   };
@@ -62,7 +64,7 @@ export function Map({ news }: MapPropsType) {
 
   return (
     <Box className={`map ${!isDrawerOpen && "full-width"}`}>
-      {!isLoaded || loading ? (
+      {!isLoaded || mapLoading ? (
         <Oval
           height={80}
           width={80}
@@ -77,8 +79,8 @@ export function Map({ news }: MapPropsType) {
           onLoad={handleMapLoad}
           center={center}
           options={mapOptions}
-          onCenterChanged={handleMapBoundsChanged}
-          onBoundsChanged={handleMapBoundsChanged}
+          onDragEnd={handleMapBoundsChanged}
+          onZoomChanged={handleMapBoundsChanged}
         >
           <UserLocationMarker />
 

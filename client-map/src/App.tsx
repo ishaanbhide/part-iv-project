@@ -5,9 +5,11 @@ import { CenterContext } from "./contexts/CenterContext";
 import { useContext, useEffect, useState } from "react";
 import { getMapAreaDisasterNews, getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
+import { DrawerContext } from "./contexts/DrawerContext";
 
 export default function App() {
   const { userLocation, mapBounds } = useContext(CenterContext);
+  const { loading, updateLoading } = useContext(DrawerContext);
   const [news, setNews] = useState<NewsItem[]>([]);
 
   useEffect(() => {
@@ -30,6 +32,7 @@ export default function App() {
       });
 
       setNews(modifiedNews);
+      updateLoading(false);
     }
 
     if (userLocation) {
