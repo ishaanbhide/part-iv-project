@@ -5,13 +5,15 @@ import { useContext, useEffect, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { UserLocationMarker } from "./MapComponents/UserLocation";
 import { CenterContext } from "../../contexts/CenterContext";
-import { defaultRadius, mapOptions } from "../../utils/mapOptions";
+import { mapOptions } from "../../utils/mapOptions";
 import { Oval } from "react-loader-spinner";
 import { Coordinates } from "../../models/Coordinates";
 import { getUserLocation } from "../../utils/getUserLocation";
 import { NewsMarker } from "./MapComponents/NewsMarker";
 import { NewsItem } from "../../models/NewsItem";
 import ClusterMarker from "./MapComponents/ClusterMarker";
+import CircleMarkerWithText from "./MapComponents/CircleMarkerWithText";
+import { calculateProximityValue } from "../../utils/calculateProximityValue";
 
 type MapPropsType = {
   news: NewsItem[][];
@@ -28,6 +30,9 @@ export function Map({ news, setNews }: MapPropsType) {
     homeButtonClicked,
     updateMapBounds,
     updateZoom,
+    zoom,
+    proximity,
+    updateProximity,
   } = useContext(CenterContext);
   const [mapLoading, setMapLoading] = useState(true);
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -44,6 +49,11 @@ export function Map({ news, setNews }: MapPropsType) {
     }
     fetchUserLocation();
   }, []);
+
+  useEffect(() => {
+    updateProximity(calculateProximityValue(zoom));
+    handleMapBoundsChanged();
+  }, [zoom]);
 
   useEffect(() => {
     if (center.lat != 0) {
@@ -98,12 +108,19 @@ export function Map({ news, setNews }: MapPropsType) {
               );
             } else {
               return (
-                <ClusterMarker
-                  key={markerArray[0].id}
-                  position={markerArray[0].location}
-                  text={markerArray.length.toString()}
-                  radius={defaultRadius}
-                />
+                <>
+                  {/*<ClusterMarker
+                    key={markerArray[0].id}
+                    position={markerArray[0].location}
+                    text={markerArray.length.toString()}
+                    radius={proximity}
+              />*/}
+                  <CircleMarkerWithText
+                    key={markerArray[0].id + 1}
+                    position={markerArray[0].location}
+                    text={markerArray.length.toString()}
+                  />
+                </>
               );
             }
           })}

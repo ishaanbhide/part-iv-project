@@ -2,7 +2,8 @@ export const mapOptions = {
   disableDefaultUI: true,
   clickableIcons: false,
   zoom: 15,
-  minZoom: 10,
+  minZoom: 5,
+  maxZoom: 15,
   styles: [
     {
       featureType: "poi",
@@ -41,5 +42,3 @@ export const mapOptions = {
     },
   ],
 };
-
-export const defaultRadius = 1;
