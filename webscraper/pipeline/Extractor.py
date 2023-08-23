@@ -43,4 +43,4 @@ class SpacyExtractor(Extractor):
 
     def get_locations(self, article: str) -> List[str]:
         doc = self.nlp(article)
-        return [ent.text for ent in doc.ents if ent.label_ == "GPE"]
+        return list(set(ent.text for ent in doc.ents if ent.label_ in ["GPE", "LOC", "FAC"]))
