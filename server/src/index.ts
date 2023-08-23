@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 import api from "./routes";
 import mongoose from "mongoose";
 import path from "path";
-
-const cors = require("cors");
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -16,9 +15,11 @@ app.use("/api", api);
 
 // serve static files in production
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../../client/build")));
+    app.use(express.static(path.join(__dirname, "../../client-map/dist")));
     app.get("*", (req, res) => {
-        res.sendFile(path.resolve(__dirname, "../../client/build/index.html"));
+        res.sendFile(
+            path.resolve(__dirname, "../../client-map/dist/index.html")
+        );
     });
 }
 
