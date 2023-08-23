@@ -1,0 +1,9 @@
+services:
+  app:
+    image: part-iv-project-image:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    container_name: part-iv-project
