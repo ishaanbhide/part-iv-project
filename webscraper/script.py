@@ -1,4 +1,5 @@
 import openai
+import spacy
 from dotenv import dotenv_values
 from geopy.geocoders import MapBox
 from selenium import webdriver
@@ -18,8 +19,8 @@ def main():
 
     source = SourceFactory.create_source("csv", "./dataset/nzhearld.csv")
     scraper = ScraperFactory.create_scraper("nzherald", driver)
-    # extractor = ExtractorFactory.create_extractor("spacy", spacy.load("en_core_web_sm"))
-    extractor = ExtractorFactory.create_extractor("openai", openai)
+    extractor = ExtractorFactory.create_extractor("spacy", spacy.load("en_core_web_trf"))
+    # extractor = ExtractorFactory.create_extractor("openai", openai)
     geocoder = MapBox(env_vars["MAPBOX_API_KEY"])
     api = Api(env_vars["NEWS_POST_HTTP"])
 

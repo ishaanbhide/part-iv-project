@@ -18,6 +18,7 @@ $ venv\Scripts\activate
 
 ```bash
 $ pip install -r requirements.txt
+$ python -m spacy download en_core_web_trf
 ```
 
 4. Run flask app
@@ -27,6 +28,7 @@ $ python app.py
 ```
 
 ## TODO
+
 - [ ] Swap Nominatim geocoder for one which handles fuzzy addresses
 - [ ] Add support for more websites
 - [ ] Acquire a labelled dataset of articles

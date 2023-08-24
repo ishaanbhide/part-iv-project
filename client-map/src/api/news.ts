@@ -1,13 +1,15 @@
 import axios from "axios";
 import { MapBounds } from "../models/MapBounds";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3001';
+
 export async function getNearbyDisasterNews(
   latitude: any,
   longitude: any,
   proximity: any
 ) {
   try {
-    const response = await axios.get("http://localhost:3001/api/news/near", {
+    const response = await axios.get(`${API_BASE_URL}/api/news/near`, {
       params: {
         longitude: longitude,
         latitude: latitude,
@@ -27,7 +29,7 @@ export async function getMapAreaDisasterNews({
   east,
 }: MapBounds) {
   try {
-    const response = await axios.get("http://localhost:3001/api/news/map", {
+    const response = await axios.get(`${API_BASE_URL}/api/news/map`, {
       params: {
         south: south,
         west: west,

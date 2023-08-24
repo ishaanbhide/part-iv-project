@@ -1,0 +1,17 @@
+services:
+  map:
+    image: mouyang2001/part-iv-project-map:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.map
+    ports:
+      - "5001:3001"
+    container_name: map
+  newsfeed:
+    image: mouyang2001/part-iv-project-newsfeed:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.newsfeed
+    ports:
+      - "5002:3001"
+    container_name: newsfeed

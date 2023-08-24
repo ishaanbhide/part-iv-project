@@ -1,0 +1,23 @@
+FROM node:20-alpine as build-client
+WORKDIR /usr/src/app
+COPY client-newsfeed/package*.json ./
+RUN npm install
+COPY client-newsfeed/ ./
+RUN npm run build
+
+FROM node:20-alpine as build-server
+WORKDIR /usr/src/app/server
+COPY server/package*.json ./
+RUN npm install
+COPY server/ ./
+RUN npm run build
+
+WORKDIR /usr/src/app/
+COPY --from=build-client /usr/src/app/dist ./client-newsfeed/dist
+
+EXPOSE 3001
+
+WORKDIR /usr/src/app/server
+ENV NODE_ENV production
+ENV CLIENT_FOLDER client-newsfeed
+CMD ["npm", "start"]
