@@ -1,6 +1,5 @@
-import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Badge, Box, IconButton } from "@mui/material";
+import { Badge, Box, IconButton, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { CenterContext } from "../../contexts/CenterContext";
 import { DrawerContext } from "../../contexts/DrawerContext";
@@ -22,13 +21,6 @@ export function NavigationBar({ news }: NavigationBarPropsType) {
     setNotificationCount(news.length);
   }, [news]);
 
-  const handleHomeClick = async () => {
-    userLocation && updateCenter(userLocation);
-    updateSelectedNews(null);
-    toggleDrawer(false);
-    toggleHomeClicked();
-  };
-
   const handleNotificationClick = () => {
     toggleDrawer(true);
   };
@@ -45,10 +37,24 @@ export function NavigationBar({ news }: NavigationBarPropsType) {
         boxSizing: "border-box",
       }}
     >
-      <IconButton onClick={handleHomeClick}>
-        <HomeIcon fontSize="large" sx={{ color: "white" }} />
-      </IconButton>
-      <IconButton onClick={handleNotificationClick}>
+      <Box
+        sx={{
+          height: "100%",
+          padding: "8px",
+          paddingLeft: "6px",
+          boxSizing: "border-box",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          cursor: "pointer",
+        }}
+      >
+        <img src="./logo.png" style={{ height: "100%" }} />
+        <Typography variant="h1" color="white">
+          GEOHUB
+        </Typography>
+      </Box>
+      <IconButton onClick={handleNotificationClick} sx={{ marginRight: "6px" }}>
         <Badge badgeContent={notificationCount} color="error">
           <NotificationsIcon fontSize="large" sx={{ color: "white" }} />
         </Badge>

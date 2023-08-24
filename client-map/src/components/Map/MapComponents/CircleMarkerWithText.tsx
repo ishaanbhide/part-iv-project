@@ -19,16 +19,16 @@ const CircleMarkerWithText: React.FC<CircleMarkerWithTextProps> = ({
         <div
           style={{
             position: "absolute",
-            width: "35px",
-            height: "35px",
+            width: "45px",
+            height: "45px",
             textAlign: "center",
             transform: "translate(-50%, -50%)",
           }}
         >
           <div
             style={{
-              width: "35px",
-              height: "35px",
+              width: "45px",
+              height: "45px",
               backgroundColor: "red",
               borderRadius: "100%",
               opacity: 0.5,

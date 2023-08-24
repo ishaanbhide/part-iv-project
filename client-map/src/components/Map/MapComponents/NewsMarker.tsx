@@ -10,14 +10,14 @@ type NewsMarkerProps = {
 };
 
 export function NewsMarker({ newsMarker }: NewsMarkerProps) {
-  const { center, updateCenter } = useContext(CenterContext);
+  const { updateCenter } = useContext(CenterContext);
   const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
   const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
 
   const handleMarkerClick = () => {
-    updateSelectedNews(newsMarker);
     !isDrawerOpen && updateCenter(newsMarker.location);
     toggleDrawer(true);
+    updateSelectedNews(newsMarker);
   };
 
   const isSelected = selectedNews?.id === newsMarker.id;
@@ -29,7 +29,7 @@ export function NewsMarker({ newsMarker }: NewsMarkerProps) {
       onClick={handleMarkerClick}
       icon={{
         path: "M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z",
-        fillColor: isSelected ? "blue" : "red",
+        fillColor: isSelected ? "#000000" : "#f7726d",
         fillOpacity: 1,
       }}
     />

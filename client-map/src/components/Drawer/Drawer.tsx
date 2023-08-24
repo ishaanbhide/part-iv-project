@@ -50,7 +50,7 @@ export function Drawer({ news }: DrawerPropsType) {
           zIndex: "10",
         }}
       >
-        <Typography variant="h1" color="white">
+        <Typography variant="h1" color="white" sx={{ marginLeft: "6px" }}>
           {readMoreClicked ? "DETAILS" : "LATEST STORIES"}
         </Typography>
         {readMoreClicked ? (
@@ -71,7 +71,7 @@ export function Drawer({ news }: DrawerPropsType) {
       <Box
         sx={{
           bottom: "0",
-          height: isDrawerOpen ? "calc(100vh - 70px - 20vh - 70px)" : "0px",
+          height: isDrawerOpen ? "calc(100vh - 70px - 25vh - 70px)" : "0px",
           transition: "height 0.3s ease-in-out",
           overflow: "auto",
           position: "fixed",
@@ -102,6 +102,11 @@ export function Drawer({ news }: DrawerPropsType) {
             padding: "16px",
           }}
         >
+          {news.length == 0 && <Typography>Nothing to see here</Typography>}
+
+          {news.every((markerArray) => markerArray.length > 1) &&
+            news.length > 0 && <Typography>Zoom in</Typography>}
+
           {news.map((markerArray) => {
             if (markerArray.length == 1) {
               return (

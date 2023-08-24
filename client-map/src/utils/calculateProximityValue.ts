@@ -1,11 +1,11 @@
 export const calculateProximityValue = (zoom: number) => {
   // Adjust the following values based on your desired behavior
   const minZoom = 6;
-  const maxZoom = 12;
+  const maxZoom = 11;
   const minValue = 1;
-  const maxValue = 10;
+  const maxValue = 15;
 
-  if (zoom < 6) {
+  if (zoom < 6.5) {
     return maxValue * 10;
   }
 

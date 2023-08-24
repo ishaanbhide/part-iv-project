@@ -11,7 +11,6 @@ import { Coordinates } from "../../models/Coordinates";
 import { getUserLocation } from "../../utils/getUserLocation";
 import { NewsMarker } from "./MapComponents/NewsMarker";
 import { NewsItem } from "../../models/NewsItem";
-import ClusterMarker from "./MapComponents/ClusterMarker";
 import CircleMarkerWithText from "./MapComponents/CircleMarkerWithText";
 import { calculateProximityValue } from "../../utils/calculateProximityValue";
 
@@ -82,7 +81,7 @@ export function Map({ news, setNews }: MapPropsType) {
         <Oval
           height={80}
           width={80}
-          color="#5182ff"
+          color="#000000"
           secondaryColor="#fffff"
           strokeWidth={4}
           strokeWidthSecondary={4}
@@ -93,8 +92,8 @@ export function Map({ news, setNews }: MapPropsType) {
           onLoad={handleMapLoad}
           center={center}
           options={mapOptions}
-          onDragEnd={handleMapBoundsChanged}
           onZoomChanged={handleMapBoundsChanged}
+          onDragEnd={handleMapBoundsChanged}
         >
           <UserLocationMarker />
 
@@ -108,19 +107,11 @@ export function Map({ news, setNews }: MapPropsType) {
               );
             } else {
               return (
-                <>
-                  {/*<ClusterMarker
-                    key={markerArray[0].id}
-                    position={markerArray[0].location}
-                    text={markerArray.length.toString()}
-                    radius={proximity}
-              />*/}
-                  <CircleMarkerWithText
-                    key={markerArray[0].id + 1}
-                    position={markerArray[0].location}
-                    text={markerArray.length.toString()}
-                  />
-                </>
+                <CircleMarkerWithText
+                  key={markerArray[0].id}
+                  position={markerArray[0].location}
+                  text={markerArray.length.toString()}
+                />
               );
             }
           })}

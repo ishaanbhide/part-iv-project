@@ -42,10 +42,11 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         width: "100%",
         border:
           selectedNews?.id == newsMarker.id
-            ? "4px #5182ff solid"
-            : "4px #ffffff solid",
+            ? "3px #000000 solid"
+            : "3px #ffffff solid",
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
+        borderRadius: "0.8rem",
       }}
     >
       <img

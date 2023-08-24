@@ -3,7 +3,7 @@ import { Map } from "./components/Map/Map";
 import { Drawer } from "./components/Drawer/Drawer";
 import { CenterContext } from "./contexts/CenterContext";
 import { useContext, useEffect, useState } from "react";
-import { getMapAreaDisasterNews, getNearbyDisasterNews } from "./api/news";
+import { getMapAreaDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
 import { DrawerContext } from "./contexts/DrawerContext";
 import { groupObjectsByProximity } from "./utils/groupObjectsByProximity";
@@ -11,7 +11,7 @@ import { groupObjectsByProximity } from "./utils/groupObjectsByProximity";
 export default function App() {
   const { userLocation, mapBounds, zoom, proximity } =
     useContext(CenterContext);
-  const { loading, updateLoading, isDrawerOpen } = useContext(DrawerContext);
+  const { updateLoading } = useContext(DrawerContext);
   const [news, setNews] = useState<NewsItem[][]>([]);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function App() {
     if (userLocation) {
       fetchDisasterNews();
     }
-  }, [mapBounds, isDrawerOpen]);
+  }, [mapBounds]);
 
   return (
     <div className="App">
