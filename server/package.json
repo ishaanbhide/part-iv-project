@@ -7,7 +7,9 @@
         "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\"",
         "build": "tsc",
         "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,css,scss,json,md}\"",
-        "start": "cross-env NODE_ENV=production node dist/index.js"
+        "start": "node dist/index.js",
+        "map": "cross-env NODE_ENV=production CLIENT_FOLDER=client-map node dist/index.js",
+        "newsfeed": "cross-env NODE_ENV=production CLIENT_FOLDER=client-newsfeed node dist/index.js"
     },
     "keywords": [],
     "author": "",

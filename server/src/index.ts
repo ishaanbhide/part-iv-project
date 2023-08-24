@@ -8,6 +8,7 @@ import cors from "cors";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
+const CLIENT_FOLDER = process.env.CLIENT_FOLDER || "client-map";
 
 app.use(cors());
 app.use(express.json());
@@ -15,10 +16,12 @@ app.use("/api", api);
 
 // serve static files in production
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../../client-map/dist")));
+    app.use(
+        express.static(path.join(__dirname, `../../${CLIENT_FOLDER}/dist`))
+    );
     app.get("*", (req, res) => {
         res.sendFile(
-            path.resolve(__dirname, "../../client-map/dist/index.html")
+            path.resolve(__dirname, `../../${CLIENT_FOLDER}/dist/index.html`)
         );
     });
 }
