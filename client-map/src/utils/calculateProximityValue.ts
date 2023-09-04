@@ -4,7 +4,6 @@ export const calculateProximityValue = (zoom: number) => {
   const maxZoom = 11;
   const minValue = 1;
   const maxValue = 15;
-  console.log(zoom);
 
   if (zoom < 7 && zoom >= 5) {
     return maxValue * 5;
