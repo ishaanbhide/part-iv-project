@@ -46,8 +46,10 @@ export function Drawer({ news }: DrawerPropsType) {
           backgroundColor: "primary.main",
           height: "70px",
           boxSizing: "border-box",
-          position: "fixed",
           zIndex: "10",
+          position: "fixed",
+          bottom: isDrawerOpen ? "calc(100% - 70px - 70px - 25vh)" : "0%",
+          transition: "bottom 0.3s ease-in-out",
         }}
       >
         <Typography variant="h1" color="white" sx={{ marginLeft: "6px" }}>
@@ -70,8 +72,8 @@ export function Drawer({ news }: DrawerPropsType) {
 
       <Box
         sx={{
-          bottom: "0",
-          height: isDrawerOpen ? "calc(100vh - 70px - 25vh - 70px)" : "0px",
+          height: isDrawerOpen ? "calc(100% - 70px - 70px - 25vh)" : "0px",
+          bottom: "0%",
           transition: "height 0.3s ease-in-out",
           overflow: "auto",
           position: "fixed",
