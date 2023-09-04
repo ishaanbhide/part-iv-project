@@ -31,9 +31,10 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         backgroundColor: "secondary.main",
         boxSizing: "border-box",
         width: "100%",
-        border: "4px #ffffff solid",
+        border: "3px #ffffff solid",
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
+        borderRadius: "0.8rem",
       }}
     >
       <img

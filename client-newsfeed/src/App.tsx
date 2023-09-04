@@ -3,7 +3,7 @@ import { CenterContext } from "./contexts/CenterContext";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
-import { Box, TextField, useMediaQuery } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery } from "@mui/material";
 import { NewsCard } from "./components/NewsCard";
 import { Coordinates } from "./models/Coordinates";
 import { getUserLocation } from "./utils/getUserLocation";
@@ -21,6 +21,8 @@ export default function App() {
   const { updateUserLocation } = useContext(CenterContext);
   const { selectedNews } = useContext(SelectedNewsContext);
   const pageRef = useRef(null);
+  const [selectedLocation, setSelectedLocation] = useState<String>("");
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     async function fetchUserLocation() {
@@ -29,6 +31,40 @@ export default function App() {
     }
     fetchUserLocation();
   }, []);
+
+  const handleWellingtonClicked = async () => {
+    if (selectedLocation !== "Wellington") {
+      const wellingtonNews = await getNearbyDisasterNews(
+        -41.2924,
+        174.7787,
+        50000
+      );
+
+      setNews(wellingtonNews);
+      setSearchResults(wellingtonNews);
+      setSelectedLocation("Wellington");
+    } else {
+      setSelectedLocation("");
+      setRefresh(!refresh);
+    }
+  };
+
+  const handleAucklandClicked = async () => {
+    if (selectedLocation !== "Auckland") {
+      const aucklandNews = await getNearbyDisasterNews(
+        -36.8509,
+        174.7645,
+        50000
+      );
+
+      setNews(aucklandNews);
+      setSearchResults(aucklandNews);
+      setSelectedLocation("Auckland");
+    } else {
+      setSelectedLocation("");
+      setRefresh(!refresh);
+    }
+  };
 
   useEffect(() => {
     async function fetchDisasterNews() {
@@ -60,7 +96,7 @@ export default function App() {
     if (userLocation) {
       fetchDisasterNews();
     }
-  }, [userLocation]);
+  }, [userLocation, refresh]);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const tempSearchResults = news.filter(
@@ -116,30 +152,180 @@ export default function App() {
         <TextField
           id="filled-basic"
           label="Search"
-          variant="filled"
           onChange={handleSearchChange}
         />
 
-        {!news.length && (
+        <Box>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Northland
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor:
+                selectedLocation == "Auckland" ? "#193a8c" : "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+            onClick={handleAucklandClicked}
+          >
+            Auckland
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Waikato
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Bay of Plenty
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Gisborne
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Hawke's Bay
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Taranaki
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor:
+                selectedLocation == "Wellington" ? "#193a8c" : "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+            onClick={handleWellingtonClicked}
+          >
+            Wellington
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Nelson
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Canterbury
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            Otago
+          </Button>
+
+          <Button
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "#333333",
+              marginBottom: "5px",
+              marginRight: "5px",
+            }}
+          >
+            West Coast
+          </Button>
+        </Box>
+
+        {news.length > 0 ? (
+          searchResults.map((marker) => {
+            return (
+              <NewsCard
+                key={marker.id}
+                newsMarker={marker}
+                setReadMoreClicked={setReadMoreClicked}
+              />
+            );
+          })
+        ) : (
           <Box>
             <TailSpin
               height="80"
               width="80"
-              color="#5182ff"
+              color="#000000"
               ariaLabel="tail-spin-loading"
               radius="1"
             />
           </Box>
         )}
-        {searchResults.map((marker) => {
-          return (
-            <NewsCard
-              key={marker.id}
-              newsMarker={marker}
-              setReadMoreClicked={setReadMoreClicked}
-            />
-          );
-        })}
       </Box>
     </Box>
   );

@@ -35,7 +35,7 @@ router.get("/near", async (req: Request, res: Response) => {
                     $maxDistance: parseInt(proximity as string) || 10000,
                 },
             },
-        }).limit(100);
+        });
 
         res.json(news);
     } catch (e) {
@@ -85,7 +85,7 @@ router.get("/map", async (req: Request, res: Response) => {
                     },
                 },
             },
-        }).limit(100);
+        });
 
         res.json(news);
     } catch (e) {

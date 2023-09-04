@@ -1,7 +1,7 @@
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Badge, Box, IconButton } from "@mui/material";
+import { Badge, Box, IconButton, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { NewsItem } from "../../models/NewsItem";
@@ -64,13 +64,23 @@ export function NavigationBar({
           <ArrowBackIcon fontSize="large" sx={{ color: "white" }} />
         </IconButton>
       ) : (
-        <IconButton
-          onClick={() => {
-            handleHomeClick();
+        <Box
+          sx={{
+            height: "100%",
+            padding: "8px",
+            paddingLeft: "6px",
+            boxSizing: "border-box",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            cursor: "pointer",
           }}
         >
-          <HomeIcon fontSize="large" sx={{ color: "white" }} />
-        </IconButton>
+          <img src="./logo.png" style={{ height: "100%" }} />
+          <Typography variant="h1" color="white">
+            GEOHUB
+          </Typography>
+        </Box>
       )}
 
       <IconButton onClick={handleNotificationClick}>
