@@ -46,8 +46,23 @@ export default function App() {
         50000
       );
 
-      setNews(wellingtonNews);
-      setSearchResults(wellingtonNews);
+      const modifiedNews: NewsItem[] = wellingtonNews.map((news: any) => {
+        return {
+          id: news._id,
+          title: news.title,
+          description: news.body,
+          source: news.source,
+          image: news.image,
+          location: {
+            lat: news.location.coordinates[1],
+            lng: news.location.coordinates[0],
+          },
+          createdAt: news.createdAt,
+        };
+      });
+
+      setNews(modifiedNews);
+      setSearchResults(modifiedNews);
       setSelectedLocation("Wellington");
     } else {
       setSelectedLocation("");
@@ -63,8 +78,23 @@ export default function App() {
         50000
       );
 
-      setNews(aucklandNews);
-      setSearchResults(aucklandNews);
+      const modifiedNews: NewsItem[] = aucklandNews.map((news: any) => {
+        return {
+          id: news._id,
+          title: news.title,
+          description: news.body,
+          source: news.source,
+          image: news.image,
+          location: {
+            lat: news.location.coordinates[1],
+            lng: news.location.coordinates[0],
+          },
+          createdAt: news.createdAt,
+        };
+      });
+
+      setNews(modifiedNews);
+      setSearchResults(modifiedNews);
       setSelectedLocation("Auckland");
     } else {
       setSelectedLocation("");
