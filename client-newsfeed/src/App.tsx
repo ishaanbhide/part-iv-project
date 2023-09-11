@@ -3,7 +3,13 @@ import { CenterContext } from "./contexts/CenterContext";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import { getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
-import { Box, Button, TextField, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { NewsCard } from "./components/NewsCard";
 import { Coordinates } from "./models/Coordinates";
 import { getUserLocation } from "./utils/getUserLocation";
@@ -99,8 +105,8 @@ export default function App() {
   }, [userLocation, refresh]);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const tempSearchResults = news.filter(
-      (n) =>
+    const tempSearchResults: NewsItem[] = news.filter(
+      (n: NewsItem) =>
         n.title.toLowerCase().includes(e.target.value) ||
         n.description.toLowerCase().includes(e.target.value)
     );
@@ -304,6 +310,12 @@ export default function App() {
             West Coast
           </Button>
         </Box>
+
+        <Typography
+          sx={{ color: "gray", fontWeight: "100", textAlign: "center" }}
+        >
+          NEAR YOU
+        </Typography>
 
         {news.length > 0 ? (
           searchResults.map((marker) => {
