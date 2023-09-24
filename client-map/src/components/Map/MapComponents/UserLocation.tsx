@@ -19,7 +19,7 @@ export function UserLocationMarker() {
 
   const userLocationMarkerOptions = {
     icon: {
-      url: "../../../public/your-location.png",
+      url: "./your-location.png",
       anchor: new google.maps.Point(60, 60),
       scaledSize: new google.maps.Size(120, 120),
     },
