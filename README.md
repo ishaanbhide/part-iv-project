@@ -11,3 +11,13 @@ Effective information delivery is crucial, particularly in high-stress disaster 
 - `./server` folder contains the Express repository for the backend API consumed by both client apps
 - `./webscraper` folder contains the Python microservice pipeline for webscraping and processing news data from the internet
 - `./statistics` folder contains the Jupyter notebook for the statistical analysis of our research results
+
+## Docker
+
+To build `newsfeed` and `map` app images, ensure you have docker desktop install. Then run
+
+```bash
+$ docker-compose up --build
+```
+
+
