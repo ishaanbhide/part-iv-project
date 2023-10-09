@@ -14,6 +14,12 @@ Install the necessary requirements provided by the text file.
 $ pip install -r requirements.txt
 ```
 
+Or you can install from scratch
+
+```bash
+$ pip install numpy scipy matplotlib
+```
+
 ## Run
 
 Run the cells within the jupyter notebook. However, everything is already pregenerated.
