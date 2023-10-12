@@ -10,6 +10,7 @@ import { NewsPage } from "../NewsPage";
 import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 import { NewsItem } from "../../models/NewsItem";
 import { CenterContext } from "../../contexts/CenterContext";
+import { useSwipeable } from "react-swipeable";
 
 type DrawerPropsType = {
   news: NewsItem[][];
@@ -36,6 +37,15 @@ export function Drawer({ news }: DrawerPropsType) {
       scrollToCard(selectedNews.id);
     }
   }, [loading, selectedNews]);
+
+  const handlers = useSwipeable({
+    onSwipedUp: () => {
+      toggleDrawer(true);
+    },
+    onSwipedDown: () => {
+      toggleDrawer(false);
+    },
+  });
 
   return (
     <Box
@@ -89,6 +99,7 @@ export function Drawer({ news }: DrawerPropsType) {
           bottom: isDrawerOpen ? "calc(100% - 70px - 70px - 25vh)" : "0%",
           transition: "bottom 0.3s ease-in-out",
         }}
+        {...handlers}
       >
         <Typography variant="h1" color="white" sx={{ marginLeft: "6px" }}>
           {readMoreClicked ? "DETAILS" : "LATEST STORIES"}
