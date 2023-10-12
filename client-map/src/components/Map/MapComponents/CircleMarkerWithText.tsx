@@ -1,5 +1,6 @@
 import { OverlayView, OverlayViewF } from "@react-google-maps/api";
-import React from "react";
+import React, { useContext } from "react";
+import { CenterContext } from "../../../contexts/CenterContext";
 
 interface CircleMarkerWithTextProps {
   position: google.maps.LatLngLiteral;
@@ -10,6 +11,13 @@ const CircleMarkerWithText: React.FC<CircleMarkerWithTextProps> = ({
   position,
   text,
 }) => {
+  const { updateZoom, updateCenter } = useContext(CenterContext);
+
+  function handleClusterClick() {
+    updateCenter(position);
+    updateZoom(15);
+  }
+
   return (
     <>
       <OverlayViewF
@@ -17,8 +25,10 @@ const CircleMarkerWithText: React.FC<CircleMarkerWithTextProps> = ({
         mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
       >
         <div
+          onClick={handleClusterClick}
           style={{
             position: "absolute",
+            cursor: "pointer",
             width: "45px",
             height: "45px",
             textAlign: "center",

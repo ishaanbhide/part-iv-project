@@ -24,6 +24,7 @@ export function NewsMarker({ newsMarker }: NewsMarkerProps) {
 
   return (
     <MarkerF
+      zIndex={isSelected ? 1000 : 10}
       key={isSelected ? "selected" : "not-selected"}
       position={newsMarker.location}
       onClick={handleMarkerClick}

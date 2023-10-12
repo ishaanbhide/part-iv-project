@@ -62,18 +62,15 @@ export function Map({ news, setNews }: MapPropsType) {
 
   const handleMapBoundsChanged = async () => {
     updateLoading(true);
-    updateZoom(map?.getZoom()!);
+    //updateZoom(map?.getZoom()!);
     const mapBounds: any = map?.getBounds()?.toJSON();
     mapBounds && updateMapBounds(mapBounds);
     map && updateCenter(map?.getCenter()?.toJSON()!);
+    map && updateZoom(map?.getZoom()!);
   };
 
   const handleMapLoad = (map: google.maps.Map) => {
     setMap(map);
-  };
-
-  const handleCenterReset = () => {
-    map && map.setCenter(center);
   };
 
   return (
@@ -92,6 +89,7 @@ export function Map({ news, setNews }: MapPropsType) {
           mapContainerClassName="map-container"
           onLoad={handleMapLoad}
           center={center}
+          zoom={zoom}
           options={mapOptions}
           onZoomChanged={handleMapBoundsChanged}
           onDragEnd={handleMapBoundsChanged}
