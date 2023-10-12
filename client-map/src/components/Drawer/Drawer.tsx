@@ -52,15 +52,17 @@ export function Drawer({ news }: DrawerPropsType) {
           alignItems: "center",
           backgroundColor: "primary.main",
           opacity: "70%",
-          height: "50px",
+          height: "45px",
           boxSizing: "border-box",
           zIndex: "15",
           position: "fixed",
           borderRadius: "100%",
           aspectRatio: "1",
-          bottom: isDrawerOpen ? "calc(112% - 70px - 70px - 25vh)" : "12%",
+          bottom: isDrawerOpen
+            ? "calc(100% - 70px - 70px - 25vh + 90px)"
+            : "90px",
           transition: "bottom 0.3s ease-in-out",
-          marginRight: "20px",
+          marginRight: "10px",
         }}
       >
         <IconButton
@@ -69,7 +71,7 @@ export function Drawer({ news }: DrawerPropsType) {
             updateCenter(userLocation!);
           }}
         >
-          <HomeIcon fontSize="large" sx={{ color: "white" }} />
+          <HomeIcon fontSize="medium" sx={{ color: "white" }} />
         </IconButton>
       </Box>
       <Box
