@@ -26,7 +26,7 @@ export function Map({ news, setNews }: MapPropsType) {
     center,
     updateCenter,
     updateUserLocation,
-    homeButtonClicked,
+    userLocation,
     updateMapBounds,
     updateZoom,
     zoom,
@@ -65,6 +65,7 @@ export function Map({ news, setNews }: MapPropsType) {
     updateZoom(map?.getZoom()!);
     const mapBounds: any = map?.getBounds()?.toJSON();
     mapBounds && updateMapBounds(mapBounds);
+    map && updateCenter(map?.getCenter()?.toJSON()!);
   };
 
   const handleMapLoad = (map: google.maps.Map) => {

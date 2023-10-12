@@ -1,6 +1,7 @@
 import { Box, IconButton, Typography, useMediaQuery } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import HomeIcon from "@mui/icons-material/Home";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useContext, useEffect, useRef, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
@@ -8,6 +9,7 @@ import { NewsCard } from "./DrawerComponents/NewsCard";
 import { NewsPage } from "../NewsPage";
 import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 import { NewsItem } from "../../models/NewsItem";
+import { CenterContext } from "../../contexts/CenterContext";
 
 type DrawerPropsType = {
   news: NewsItem[][];
@@ -20,6 +22,7 @@ export function Drawer({ news }: DrawerPropsType) {
   const [readMoreClicked, setReadMoreClicked] = useState<boolean>(false);
   const cardsContainerRef = useRef(null);
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const { userLocation, updateCenter } = useContext(CenterContext);
 
   const scrollToCard = (cardId: any) => {
     const cardElement = document.getElementById(cardId);
@@ -35,7 +38,40 @@ export function Drawer({ news }: DrawerPropsType) {
   }, [loading, selectedNews]);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "primary.main",
+          opacity: "70%",
+          height: "50px",
+          boxSizing: "border-box",
+          zIndex: "15",
+          position: "fixed",
+          borderRadius: "100%",
+          aspectRatio: "1",
+          bottom: isDrawerOpen ? "calc(112% - 70px - 70px - 25vh)" : "12%",
+          transition: "bottom 0.3s ease-in-out",
+          marginRight: "20px",
+        }}
+      >
+        <IconButton
+          onClick={() => {
+            toggleDrawer(false);
+            updateCenter(userLocation!);
+          }}
+        >
+          <HomeIcon fontSize="large" sx={{ color: "white" }} />
+        </IconButton>
+      </Box>
       <Box
         sx={{
           width: "100%",
