@@ -145,7 +145,9 @@ export function Drawer({ news }: DrawerPropsType) {
           {news.length == 0 && <Typography>Nothing to see here</Typography>}
 
           {news.every((markerArray) => markerArray.length > 1) &&
-            news.length > 0 && <Typography>Zoom in</Typography>}
+            news.length > 0 && (
+              <Typography>Zoom in or click on the clusters</Typography>
+            )}
 
           {news.map((markerArray) => {
             if (markerArray.length == 1) {
