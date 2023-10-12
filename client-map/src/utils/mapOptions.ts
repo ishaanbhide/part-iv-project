@@ -1,8 +1,7 @@
 export const mapOptions = {
   disableDefaultUI: true,
   clickableIcons: false,
-  zoom: 15,
-  minZoom: 3,
+  minZoom: 6,
   maxZoom: 15,
   styles: [
     {

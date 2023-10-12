@@ -31,7 +31,7 @@ export const CenterContext = createContext<CenterContextType>({
     east: 0,
   },
   updateMapBounds: () => {},
-  zoom: 0,
+  zoom: 15,
   updateZoom: () => {},
   proximity: 1,
   updateProximity: () => {},

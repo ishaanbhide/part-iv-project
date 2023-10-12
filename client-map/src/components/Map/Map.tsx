@@ -45,6 +45,7 @@ export function Map({ news, setNews }: MapPropsType) {
       const location: Coordinates | null = await getUserLocation();
       location && updateCenter(location);
       location && updateUserLocation(location);
+      location && updateZoom(15);
     }
     fetchUserLocation();
   }, []);
@@ -62,7 +63,6 @@ export function Map({ news, setNews }: MapPropsType) {
 
   const handleMapBoundsChanged = async () => {
     updateLoading(true);
-    //updateZoom(map?.getZoom()!);
     const mapBounds: any = map?.getBounds()?.toJSON();
     mapBounds && updateMapBounds(mapBounds);
     map && updateCenter(map?.getCenter()?.toJSON()!);
@@ -74,7 +74,10 @@ export function Map({ news, setNews }: MapPropsType) {
   };
 
   return (
-    <Box className={`map ${!isDrawerOpen && "full-width"}`}>
+    <Box
+      className={`map ${!isDrawerOpen && "full-width"}`}
+      sx={{ position: "fixed", top: "70px" }}
+    >
       {!isLoaded || mapLoading ? (
         <Oval
           height={80}
