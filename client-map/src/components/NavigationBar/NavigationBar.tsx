@@ -18,7 +18,14 @@ export function NavigationBar({ news }: NavigationBarPropsType) {
   const [notificationCount, setNotificationCount] = useState<number>(0);
 
   useEffect(() => {
-    setNotificationCount(news.length);
+    let count = 0;
+    for (let i = 0; i < news.length; i++) {
+      if (i > 99) {
+        break;
+      }
+      count = count + news[i].length;
+    }
+    setNotificationCount(count);
   }, [news]);
 
   const handleNotificationClick = () => {
