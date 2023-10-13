@@ -51,7 +51,7 @@ export function Drawer({ news }: DrawerPropsType) {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "flex-end",
+        flexDirection: "column",
         alignItems: "center",
       }}
     >
@@ -65,14 +65,13 @@ export function Drawer({ news }: DrawerPropsType) {
           height: "45px",
           boxSizing: "border-box",
           zIndex: "15",
-          position: "fixed",
           borderRadius: "100%",
           aspectRatio: "1",
           bottom: isDrawerOpen
             ? "calc(100% - 70px - 70px - 25vh + 90px)"
             : "90px",
           transition: "bottom 0.3s ease-in-out",
-          marginRight: "10px",
+          position: "absolute",
         }}
       >
         <IconButton
@@ -84,6 +83,7 @@ export function Drawer({ news }: DrawerPropsType) {
           <HomeIcon fontSize="medium" sx={{ color: "white" }} />
         </IconButton>
       </Box>
+
       <Box
         sx={{
           width: "100%",
@@ -95,9 +95,6 @@ export function Drawer({ news }: DrawerPropsType) {
           height: "70px",
           boxSizing: "border-box",
           zIndex: "10",
-          position: "fixed",
-          bottom: isDrawerOpen ? "calc(100% - 70px - 70px - 25vh)" : "0%",
-          transition: "bottom 0.3s ease-in-out",
         }}
         {...handlers}
       >
@@ -121,28 +118,13 @@ export function Drawer({ news }: DrawerPropsType) {
 
       <Box
         sx={{
-          height: isDrawerOpen ? "calc(100% - 70px - 70px - 25vh)" : "0px",
-          bottom: "0%",
+          height: isDrawerOpen ? "calc(100vh - 70px - 70px - 25vh)" : "0px",
+          overflow: "hidden",
           transition: "height 0.3s ease-in-out",
-          overflow: "auto",
-          position: "fixed",
           boxSizing: "border-box",
           width: "100%",
         }}
       >
-        <Box
-          sx={{
-            background: "white",
-            width: "100%",
-            height: "100%",
-            position: "fixed",
-            right: readMoreClicked ? "0" : "-100%",
-            transition: "right 0.3s ease-in-out",
-          }}
-        >
-          <NewsPage newsMarker={selectedNews} />
-        </Box>
-
         <Box
           ref={cardsContainerRef}
           sx={{
@@ -150,7 +132,10 @@ export function Drawer({ news }: DrawerPropsType) {
             gridTemplateColumns: "auto auto auto",
             flexDirection: "column",
             gap: "8px",
+            boxSizing: "border-box",
             padding: "16px",
+            height: "100%",
+            overflow: "scroll",
           }}
         >
           {news.length == 0 && <Typography>Nothing to see here</Typography>}
@@ -172,6 +157,22 @@ export function Drawer({ news }: DrawerPropsType) {
             }
           })}
         </Box>
+      </Box>
+
+      <Box
+        sx={{
+          backgroundColor: "white",
+          height: isDrawerOpen ? "calc(100vh - 70px - 25vh)" : "0px",
+          width: "100%",
+          right: readMoreClicked ? "0" : "-100%",
+          transition: "right 0.3s ease-in-out",
+          boxSizing: "border-box",
+          overflow: "scroll",
+          position: "absolute",
+        }}
+      >
+        <div className="placeholder" style={{ height: "70px" }}></div>
+        <NewsPage newsMarker={selectedNews} />
       </Box>
     </Box>
   );

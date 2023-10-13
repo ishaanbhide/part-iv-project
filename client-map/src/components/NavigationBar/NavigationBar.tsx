@@ -43,7 +43,6 @@ export function NavigationBar({ news }: NavigationBarPropsType) {
         height: "70px",
         width: "100%",
         boxSizing: "border-box",
-        position: "fixed",
       }}
     >
       <Box

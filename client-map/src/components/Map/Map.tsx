@@ -41,14 +41,19 @@ export function Map({ news, setNews }: MapPropsType) {
   });
 
   useEffect(() => {
-    async function fetchUserLocation() {
-      const location: Coordinates | null = await getUserLocation();
-      location && updateCenter(location);
-      location && updateUserLocation(location);
-      location && updateZoom(15);
-    }
-    fetchUserLocation();
+    initialLoad();
   }, []);
+
+  async function initialLoad() {
+    await fetchUserLocation();
+  }
+
+  async function fetchUserLocation() {
+    const location: Coordinates | null = await getUserLocation();
+    location && updateCenter(location);
+    location && updateUserLocation(location);
+    location && updateZoom(15);
+  }
 
   useEffect(() => {
     updateProximity(calculateProximityValue(zoom));
@@ -58,6 +63,7 @@ export function Map({ news, setNews }: MapPropsType) {
   useEffect(() => {
     if (center.lat != 0) {
       setMapLoading(false);
+      handleMapBoundsChanged();
     }
   }, [center]);
 
@@ -69,15 +75,12 @@ export function Map({ news, setNews }: MapPropsType) {
     map && updateZoom(map?.getZoom()!);
   };
 
-  const handleMapLoad = (map: google.maps.Map) => {
+  const handleMapLoad = async (map: google.maps.Map) => {
     setMap(map);
   };
 
   return (
-    <Box
-      className={`map ${!isDrawerOpen && "full-width"}`}
-      sx={{ position: "fixed", top: "70px" }}
-    >
+    <Box className={`map ${!isDrawerOpen && "full-width"}`}>
       {!isLoaded || mapLoading ? (
         <Oval
           height={80}
