@@ -52,7 +52,7 @@ export function Drawer({ news }: DrawerPropsType) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+        alignItems: "flex-end",
       }}
     >
       <Box
@@ -68,10 +68,11 @@ export function Drawer({ news }: DrawerPropsType) {
           borderRadius: "100%",
           aspectRatio: "1",
           bottom: isDrawerOpen
-            ? "calc(100% - 70px - 70px - 25vh + 90px)"
+            ? "calc(100% - 70px - 70px - 25svh + 90px)"
             : "90px",
           transition: "bottom 0.3s ease-in-out",
           position: "absolute",
+          marginRight: "20px",
         }}
       >
         <IconButton
@@ -118,7 +119,7 @@ export function Drawer({ news }: DrawerPropsType) {
 
       <Box
         sx={{
-          height: isDrawerOpen ? "calc(100svh - 70px - 70px - 25vh)" : "0px",
+          height: isDrawerOpen ? "calc(100svh - 70px - 70px - 25svh)" : "0px",
           overflow: "hidden",
           transition: "height 0.3s ease-in-out",
           boxSizing: "border-box",
@@ -162,7 +163,7 @@ export function Drawer({ news }: DrawerPropsType) {
       <Box
         sx={{
           backgroundColor: "white",
-          height: isDrawerOpen ? "calc(100svh - 70px - 25vh)" : "0px",
+          height: isDrawerOpen ? "calc(100svh - 70px - 25svh)" : "0px",
           width: "100%",
           right: readMoreClicked ? "0" : "-100%",
           transition: "right 0.3s ease-in-out",
