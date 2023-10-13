@@ -110,7 +110,6 @@ export function Map({ news, setNews }: MapPropsType) {
           options={mapOptions}
           onZoomChanged={() => {
             if (map) {
-              setFirstLoad(true);
               handleMapBoundsChanged();
             }
           }}
