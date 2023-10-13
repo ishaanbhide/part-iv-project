@@ -13,6 +13,8 @@ import { NewsMarker } from "./MapComponents/NewsMarker";
 import { NewsItem } from "../../models/NewsItem";
 import CircleMarkerWithText from "./MapComponents/CircleMarkerWithText";
 import { calculateProximityValue } from "../../utils/calculateProximityValue";
+import { getMapAreaDisasterNews } from "../../api/news";
+import { mapNewsArticles } from "../../utils/mapNewsArticles";
 
 type MapPropsType = {
   news: NewsItem[][];
@@ -26,7 +28,6 @@ export function Map({ news, setNews }: MapPropsType) {
     center,
     updateCenter,
     updateUserLocation,
-    userLocation,
     updateMapBounds,
     updateZoom,
     zoom,
@@ -34,30 +35,27 @@ export function Map({ news, setNews }: MapPropsType) {
     updateProximity,
   } = useContext(CenterContext);
   const [mapLoading, setMapLoading] = useState(true);
+  const [firstLoad, setFirstLoad] = useState(true);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyBVMfNn5ls36xpl3z_2CL19GD__JwkZR1M",
   });
 
   useEffect(() => {
-    initialLoad();
+    async function fetchUserLocation() {
+      const location: Coordinates | null = await getUserLocation();
+      location && updateUserLocation(location);
+      location && updateCenter(location);
+      location?.lat != 0 && setMapLoading(false);
+    }
+    fetchUserLocation();
   }, []);
 
-  async function initialLoad() {
-    await fetchUserLocation();
-  }
-
-  async function fetchUserLocation() {
-    const location: Coordinates | null = await getUserLocation();
-    location && updateCenter(location);
-    location && updateUserLocation(location);
-    location && updateZoom(15);
-  }
-
   useEffect(() => {
-    updateProximity(calculateProximityValue(zoom));
-    handleMapBoundsChanged();
+    if (map) {
+      updateProximity(calculateProximityValue(zoom));
+      handleMapBoundsChanged();
+    }
   }, [zoom]);
 
   useEffect(() => {
@@ -68,16 +66,29 @@ export function Map({ news, setNews }: MapPropsType) {
   }, [center]);
 
   const handleMapBoundsChanged = async () => {
-    updateLoading(true);
-    const mapBounds: any = map?.getBounds()?.toJSON();
-    mapBounds && updateMapBounds(mapBounds);
-    map && updateCenter(map?.getCenter()?.toJSON()!);
-    map && updateZoom(map?.getZoom()!);
+    if (map) {
+      updateLoading(true);
+      const mapBounds: any = map.getBounds()?.toJSON();
+      updateMapBounds(mapBounds);
+      updateZoom(map.getZoom()!);
+    }
   };
 
   const handleMapLoad = async (map: google.maps.Map) => {
     setMap(map);
   };
+
+  async function fetchInitialDisasterNews(mapBounds: any) {
+    const disasterNews = await getMapAreaDisasterNews(mapBounds);
+    mapNewsArticles({
+      disasterNews: disasterNews,
+      setNews: setNews,
+      zoom: zoom,
+      proximity: proximity,
+    });
+    updateLoading(false);
+    setFirstLoad(false);
+  }
 
   return (
     <Box className={`map ${!isDrawerOpen && "full-width"}`}>
@@ -97,8 +108,19 @@ export function Map({ news, setNews }: MapPropsType) {
           center={center}
           zoom={zoom}
           options={mapOptions}
-          onZoomChanged={handleMapBoundsChanged}
-          onDragEnd={handleMapBoundsChanged}
+          onZoomChanged={() => {
+            if (map) {
+              setFirstLoad(true);
+              handleMapBoundsChanged();
+            }
+          }}
+          onDragEnd={() => {
+            updateCenter(map?.getCenter()?.toJSON()!);
+            handleMapBoundsChanged();
+          }}
+          onBoundsChanged={() => {
+            firstLoad && fetchInitialDisasterNews(map?.getBounds()?.toJSON());
+          }}
         >
           <UserLocationMarker />
 

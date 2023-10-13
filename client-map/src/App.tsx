@@ -6,10 +6,10 @@ import { useContext, useEffect, useState } from "react";
 import { getMapAreaDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
 import { DrawerContext } from "./contexts/DrawerContext";
-import { groupObjectsByProximity } from "./utils/groupObjectsByProximity";
+import { mapNewsArticles } from "./utils/mapNewsArticles";
 
 export default function App() {
-  const { userLocation, mapBounds, zoom, proximity } =
+  const { userLocation, mapBounds, zoom, proximity, center } =
     useContext(CenterContext);
   const { updateLoading } = useContext(DrawerContext);
   const [news, setNews] = useState<NewsItem[][]>([]);
@@ -18,31 +18,12 @@ export default function App() {
     async function fetchDisasterNews() {
       const disasterNews = await getMapAreaDisasterNews(mapBounds);
 
-      const modifiedNews: NewsItem[] = disasterNews.map((news: any) => {
-        return {
-          id: news._id,
-          title: news.title,
-          description: news.body,
-          source: news.source,
-          image: news.image,
-          location: {
-            lat: news.location.coordinates[1],
-            lng: news.location.coordinates[0],
-          },
-          createdAt: news.createdAt,
-        };
+      mapNewsArticles({
+        disasterNews: disasterNews,
+        setNews: setNews,
+        zoom: zoom,
+        proximity: proximity,
       });
-
-      if (zoom > 14) {
-        const newsArr: NewsItem[][] = [];
-        modifiedNews.map((mNews) => {
-          newsArr.push([mNews]);
-        });
-        setNews(newsArr);
-      } else {
-        const groupedNews = groupObjectsByProximity(modifiedNews, proximity);
-        setNews(groupedNews);
-      }
 
       updateLoading(false);
     }

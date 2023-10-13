@@ -31,7 +31,7 @@ export const CenterContext = createContext<CenterContextType>({
     east: 0,
   },
   updateMapBounds: () => {},
-  zoom: 15,
+  zoom: 0,
   updateZoom: () => {},
   proximity: 1,
   updateProximity: () => {},
@@ -51,7 +51,7 @@ export const CenterProvider: React.FC<CenterProviderProps> = ({ children }) => {
     north: 0,
     east: 0,
   });
-  const [zoom, setZoom] = useState(0);
+  const [zoom, setZoom] = useState(14);
   const [proximity, setProximity] = useState(1);
 
   const updateCenter = (newCenter: Coordinates) => {
