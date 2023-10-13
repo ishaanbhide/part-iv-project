@@ -118,7 +118,7 @@ export function Drawer({ news }: DrawerPropsType) {
 
       <Box
         sx={{
-          height: isDrawerOpen ? "calc(100vh - 70px - 70px - 25vh)" : "0px",
+          height: isDrawerOpen ? "calc(100svh - 70px - 70px - 25vh)" : "0px",
           overflow: "hidden",
           transition: "height 0.3s ease-in-out",
           boxSizing: "border-box",
@@ -162,7 +162,7 @@ export function Drawer({ news }: DrawerPropsType) {
       <Box
         sx={{
           backgroundColor: "white",
-          height: isDrawerOpen ? "calc(100vh - 70px - 25vh)" : "0px",
+          height: isDrawerOpen ? "calc(100svh - 70px - 25vh)" : "0px",
           width: "100%",
           right: readMoreClicked ? "0" : "-100%",
           transition: "right 0.3s ease-in-out",
