@@ -96,7 +96,7 @@ export function Map({ news, setNews }: MapPropsType) {
         <Oval
           height={80}
           width={80}
-          color="#000000"
+          color="#ffffff"
           secondaryColor="#fffff"
           strokeWidth={4}
           strokeWidthSecondary={4}
