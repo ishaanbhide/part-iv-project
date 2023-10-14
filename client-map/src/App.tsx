@@ -34,7 +34,7 @@ export default function App() {
   }, [mapBounds]);
 
   return (
-    <div className="App" style={{ height: "100vh" }}>
+    <div className="App" style={{ height: "100svh" }}>
       <NavigationBar news={news} />
       <Map news={news} setNews={setNews} />
       <Drawer news={news} />
