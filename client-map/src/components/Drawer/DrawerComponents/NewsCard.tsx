@@ -11,7 +11,6 @@ type NewsCardProps = {
 };
 
 export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
-  const { updateCenter } = useContext(CenterContext);
   const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
 
   const handleSelectedNewsCard = () => {
@@ -19,7 +18,6 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
       updateSelectedNews(null);
     } else {
       updateSelectedNews(newsMarker);
-      //updateCenter(newsMarker.location);
     }
   };
 

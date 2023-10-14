@@ -34,9 +34,17 @@ export function Drawer({ news }: DrawerPropsType) {
 
   useEffect(() => {
     if (!loading && selectedNews) {
+      setTimeout(() => {
+        scrollToCard(selectedNews.id);
+      }, 300);
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (!loading && selectedNews) {
       scrollToCard(selectedNews.id);
     }
-  }, [loading, selectedNews]);
+  }, [selectedNews]);
 
   const handlers = useSwipeable({
     onSwipedUp: () => {

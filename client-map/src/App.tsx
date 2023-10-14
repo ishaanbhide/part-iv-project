@@ -17,7 +17,6 @@ export default function App() {
   useEffect(() => {
     async function fetchDisasterNews() {
       const disasterNews = await getMapAreaDisasterNews(mapBounds);
-
       mapNewsArticles({
         disasterNews: disasterNews,
         setNews: setNews,

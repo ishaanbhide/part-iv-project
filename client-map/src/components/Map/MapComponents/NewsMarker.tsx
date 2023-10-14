@@ -13,11 +13,13 @@ export function NewsMarker({ newsMarker }: NewsMarkerProps) {
   const { updateCenter } = useContext(CenterContext);
   const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
   const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
+  const { updateLoading } = useContext(DrawerContext);
 
   const handleMarkerClick = () => {
-    !isDrawerOpen && updateCenter(newsMarker.location);
-    toggleDrawer(true);
     updateSelectedNews(newsMarker);
+    !isDrawerOpen && toggleDrawer(true);
+    !isDrawerOpen && updateCenter(newsMarker.location);
+    !isDrawerOpen && updateLoading(true);
   };
 
   const isSelected = selectedNews?.id === newsMarker.id;
