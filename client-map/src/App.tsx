@@ -24,6 +24,8 @@ export default function App() {
         proximity: proximity,
       });
 
+      console.log(news);
+
       updateLoading(false);
     }
 

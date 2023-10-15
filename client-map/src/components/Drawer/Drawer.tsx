@@ -24,15 +24,33 @@ export function Drawer({ news }: DrawerPropsType) {
   const cardsContainerRef = useRef(null);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { userLocation, updateCenter } = useContext(CenterContext);
+  const [idMap, setIdMap] = useState(new Map<string, string>());
+  const [uniqueNews, setUniqueNews] = useState<NewsItem[]>([]);
 
   const scrollToCard = (cardId: any) => {
-    const cardElement = document.getElementById(cardId);
+    const cardElement = document.getElementById(idMap.get(cardId)!);
     if (cardElement) {
       cardElement.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   useEffect(() => {
+      const uniqueNews: NewsItem[] = [];
+      const titleToNewsMap = new Map<string, any>();
+      const idMap = new Map<string, string>();
+
+      // Reduce the news array to only unique news items in O(n) time.
+      news.forEach(([marker]) => {
+          if (!titleToNewsMap.has(marker.title)) {
+              uniqueNews.push(marker);
+              titleToNewsMap.set(marker.title, marker);
+          }
+          idMap.set(marker.id, titleToNewsMap.get(marker.title).id);
+      });
+
+      setIdMap(idMap);
+      setUniqueNews(uniqueNews);
+
     if (!loading && selectedNews) {
       setTimeout(() => {
         scrollToCard(selectedNews.id);
@@ -157,16 +175,14 @@ export function Drawer({ news }: DrawerPropsType) {
               <Typography>Zoom in or click on the clusters</Typography>
             )}
 
-          {news.map((markerArray) => {
-            if (markerArray.length == 1) {
+          {uniqueNews.map((news) => {
               return (
-                <NewsCard
-                  key={markerArray[0].id}
-                  newsMarker={markerArray[0]}
-                  setReadMoreClicked={setReadMoreClicked}
-                />
-              );
-            }
+                  <NewsCard
+                      key={news.id}
+                      newsMarker={news}
+                      setReadMoreClicked={setReadMoreClicked}
+                      idMap={idMap}
+                  />)
           })}
         </Box>
       </Box>

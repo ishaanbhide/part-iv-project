@@ -8,13 +8,14 @@ import { SelectedNewsContext } from "../../../contexts/SelectedNewsContext";
 type NewsCardProps = {
   newsMarker: NewsItem;
   setReadMoreClicked: (clicked: boolean) => void;
+  idMap: Map<string, string>;
 };
 
-export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
+export function NewsCard({ newsMarker, setReadMoreClicked, idMap }: NewsCardProps) {
   const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
 
   const handleSelectedNewsCard = () => {
-    if (newsMarker.id == selectedNews?.id) {
+    if (newsMarker.id == idMap.get(selectedNews?.id!)) {
       updateSelectedNews(null);
     } else {
       updateSelectedNews(newsMarker);
@@ -39,7 +40,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         boxSizing: "border-box",
         width: "100%",
         border:
-          selectedNews?.id == newsMarker.id
+          idMap.get(selectedNews?.id!) == newsMarker.id
             ? "3px #000000 solid"
             : "3px #ffffff solid",
         transition: "border 0.1s ease-in-out",
