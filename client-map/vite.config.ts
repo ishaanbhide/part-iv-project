@@ -10,7 +10,7 @@ export default defineConfig({
             manifest: {
                 // content of manifest file
                 name: "Geohub",
-                short_name: "Geobhub",
+                short_name: "Geohub",
                 start_url: "/",
                 display: "standalone",
                 background_color: "#000000",
