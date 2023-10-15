@@ -1,22 +1,22 @@
 .map {
-  height: 25svh;
-  width: 100%;
-  box-sizing: border-box;
-  transition: height 0.3s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 25svh;
+    width: 100%;
+    box-sizing: border-box;
+    transition: height 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .full-width {
-  height: calc(100svh - 70px - 70px);
+    height: calc(100svh - 70px - 70px);
 }
 
 .map-container {
-  height: 100%;
-  width: 100%;
+    height: 100%;
+    width: 100%;
 }
 
 .gm-style-iw button[title="Close"] {
-  display: none !important;
+    display: none !important;
 }

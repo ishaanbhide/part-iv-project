@@ -1,40 +1,40 @@
 import { createContext, useState } from "react";
 
 type DrawerContextType = {
-  isDrawerOpen: boolean;
-  toggleDrawer: (isOpen: boolean) => void;
-  loading: boolean;
-  updateLoading: (loading: boolean) => void;
+    isDrawerOpen: boolean;
+    toggleDrawer: (isOpen: boolean) => void;
+    loading: boolean;
+    updateLoading: (loading: boolean) => void;
 };
 
 export const DrawerContext = createContext<DrawerContextType>({
-  isDrawerOpen: false,
-  toggleDrawer: () => {},
-  loading: true,
-  updateLoading: () => {},
+    isDrawerOpen: false,
+    toggleDrawer: () => {},
+    loading: true,
+    updateLoading: () => {},
 });
 
 type DrawerProviderProps = {
-  children: React.ReactNode;
+    children: React.ReactNode;
 };
 
 export const DrawerProvider: React.FC<DrawerProviderProps> = ({ children }) => {
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+    const [isDrawerOpen, setDrawerOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-  const toggleDrawer = (isOpen: boolean) => {
-    setDrawerOpen(isOpen);
-  };
+    const toggleDrawer = (isOpen: boolean) => {
+        setDrawerOpen(isOpen);
+    };
 
-  const updateLoading = (newLoading: boolean) => {
-    setLoading(newLoading);
-  };
+    const updateLoading = (newLoading: boolean) => {
+        setLoading(newLoading);
+    };
 
-  return (
-    <DrawerContext.Provider
-      value={{ isDrawerOpen, toggleDrawer, loading, updateLoading }}
-    >
-      {children}
-    </DrawerContext.Provider>
-  );
+    return (
+        <DrawerContext.Provider
+            value={{ isDrawerOpen, toggleDrawer, loading, updateLoading }}
+        >
+            {children}
+        </DrawerContext.Provider>
+    );
 };
