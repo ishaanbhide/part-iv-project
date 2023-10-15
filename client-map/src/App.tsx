@@ -9,34 +9,36 @@ import { DrawerContext } from "./contexts/DrawerContext";
 import { mapNewsArticles } from "./utils/mapNewsArticles";
 
 export default function App() {
-  const { userLocation, mapBounds, zoom, proximity, center } =
-    useContext(CenterContext);
-  const { updateLoading } = useContext(DrawerContext);
-  const [news, setNews] = useState<NewsItem[][]>([]);
+    const { userLocation, mapBounds, zoom, proximity, center } =
+        useContext(CenterContext);
+    const { updateLoading } = useContext(DrawerContext);
+    const [news, setNews] = useState<NewsItem[][]>([]);
 
-  useEffect(() => {
-    async function fetchDisasterNews() {
-      const disasterNews = await getMapAreaDisasterNews(mapBounds);
-      mapNewsArticles({
-        disasterNews: disasterNews,
-        setNews: setNews,
-        zoom: zoom,
-        proximity: proximity,
-      });
+    useEffect(() => {
+        async function fetchDisasterNews() {
+            const disasterNews = await getMapAreaDisasterNews(mapBounds);
+            mapNewsArticles({
+                disasterNews: disasterNews,
+                setNews: setNews,
+                zoom: zoom,
+                proximity: proximity,
+            });
 
-      updateLoading(false);
-    }
+            console.log(news);
 
-    if (userLocation) {
-      fetchDisasterNews();
-    }
-  }, [mapBounds]);
+            updateLoading(false);
+        }
 
-  return (
-    <div className="App" style={{ height: "100svh" }}>
-      <NavigationBar news={news} />
-      <Map news={news} setNews={setNews} />
-      <Drawer news={news} />
-    </div>
-  );
+        if (userLocation) {
+            fetchDisasterNews();
+        }
+    }, [mapBounds]);
+
+    return (
+        <div className="App" style={{ height: "100svh" }}>
+            <NavigationBar news={news} />
+            <Map news={news} setNews={setNews} />
+            <Drawer news={news} />
+        </div>
+    );
 }

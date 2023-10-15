@@ -10,21 +10,21 @@ import { DrawerProvider } from "./contexts/DrawerContext";
 import { SelectedNewsProvider } from "./contexts/SelectedNewsContext";
 
 declare global {
-  interface Window {
-    google: typeof google;
-  }
+    interface Window {
+        google: typeof google;
+    }
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <BrowserRouter>
-    <ThemeProvider theme={theme}>
-      <DrawerProvider>
-        <SelectedNewsProvider>
-          <CenterProvider>
-            <App />
-          </CenterProvider>
-        </SelectedNewsProvider>
-      </DrawerProvider>
-    </ThemeProvider>
-  </BrowserRouter>
+    <BrowserRouter>
+        <ThemeProvider theme={theme}>
+            <DrawerProvider>
+                <SelectedNewsProvider>
+                    <CenterProvider>
+                        <App />
+                    </CenterProvider>
+                </SelectedNewsProvider>
+            </DrawerProvider>
+        </ThemeProvider>
+    </BrowserRouter>,
 );
