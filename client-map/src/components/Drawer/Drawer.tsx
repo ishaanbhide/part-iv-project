@@ -84,36 +84,6 @@ export function Drawer({ news }: DrawerPropsType) {
         >
             <Box
                 sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "primary.main",
-                    opacity: "70%",
-                    height: "45px",
-                    boxSizing: "border-box",
-                    zIndex: "15",
-                    borderRadius: "100%",
-                    aspectRatio: "1",
-                    bottom: isDrawerOpen
-                        ? "calc(100% - 70px - 70px - 25svh + 90px)"
-                        : "90px",
-                    transition: "bottom 0.3s ease-in-out",
-                    marginRight: "20px",
-                    position: "fixed",
-                }}
-            >
-                <IconButton
-                    onClick={() => {
-                        toggleDrawer(false);
-                        updateCenter(userLocation!);
-                    }}
-                >
-                    <HomeIcon fontSize="medium" sx={{ color: "white" }} />
-                </IconButton>
-            </Box>
-
-            <Box
-                sx={{
                     width: "100%",
                     display: "flex",
                     justifyContent: "space-between",

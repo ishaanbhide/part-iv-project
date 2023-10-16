@@ -369,7 +369,8 @@ export const mapOptions = {
             elementType: "geometry",
             stylers: [
                 {
-                    color: "#5f7e96",
+                    //color: "#5f7e96",
+                    color: "#435e73",
                 },
             ],
         },

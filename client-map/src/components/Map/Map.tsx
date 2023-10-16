@@ -1,5 +1,5 @@
 import "./Map.css";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { useContext, useEffect, useState } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
@@ -16,6 +16,7 @@ import { calculateProximityValue } from "../../utils/calculateProximityValue";
 import { getMapAreaDisasterNews } from "../../api/news";
 import { mapNewsArticles } from "../../utils/mapNewsArticles";
 import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
+import HomeIcon from "@mui/icons-material/Home";
 
 type MapPropsType = {
     news: NewsItem[][];
@@ -130,6 +131,42 @@ export function Map({ news, setNews }: MapPropsType) {
                     />
                 </Box>
             )}
+
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginRight: "25px",
+                    width: "100%",
+                    position: "absolute",
+                    zIndex: "10",
+                    bottom: "25px",
+                }}
+            >
+                <Box
+                    sx={{
+                        backgroundColor: "#000000",
+                        opacity: "85%",
+                        borderRadius: "100%",
+                        boxShadow: "0px 2px 14px -3px rgba(0,0,0,0.75)",
+                        height: "45px",
+                        width: "45px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }}
+                >
+                    <IconButton
+                        onClick={async () => {
+                            map?.panTo(userLocation!);
+                            //updateCenter(userLocation!);
+                        }}
+                    >
+                        <HomeIcon fontSize="medium" sx={{ color: "white" }} />
+                    </IconButton>
+                </Box>
+            </Box>
+
             <Box className={`map ${!isDrawerOpen && "full-width"}`}>
                 {!isLoaded || mapLoading ? (
                     <Oval
@@ -165,6 +202,17 @@ export function Map({ news, setNews }: MapPropsType) {
                                 fetchInitialDisasterNews(
                                     map?.getBounds()?.toJSON(),
                                 );
+
+                            if (
+                                map?.getCenter()?.toJSON()!.lat.toFixed(5) ==
+                                    userLocation?.lat.toFixed(5) &&
+                                map?.getCenter()?.toJSON()!.lng.toFixed(5) ==
+                                    userLocation?.lng.toFixed(5)
+                            ) {
+                                fetchInitialDisasterNews(
+                                    map?.getBounds()?.toJSON(),
+                                );
+                            }
                         }}
                     >
                         <UserLocationMarker />
