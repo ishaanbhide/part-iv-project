@@ -26,6 +26,7 @@ export function Drawer({ news }: DrawerPropsType) {
     const { userLocation, updateCenter } = useContext(CenterContext);
     const [idMap, setIdMap] = useState(new Map<string, string>());
     const [uniqueNews, setUniqueNews] = useState<NewsItem[]>([]);
+    const [newsProcessing, setNewsProcessing] = useState(true);
 
     const scrollToCard = (cardId: any) => {
         const cardElement = document.getElementById(idMap.get(cardId)!);
@@ -35,34 +36,32 @@ export function Drawer({ news }: DrawerPropsType) {
     };
 
     useEffect(() => {
-        const uniqueNews: NewsItem[] = [];
-        const titleToNewsMap = new Map<string, any>();
-        const idMap = new Map<string, string>();
+        setNewsProcessing(true);
+        if (!loading) {
+            const uniqueNews: NewsItem[] = [];
+            const titleToNewsMap = new Map<string, any>();
+            const idMap = new Map<string, string>();
 
-        // Reduce the news array to only unique news items in O(n) time.
-        news.forEach(([marker]) => {
-            if (!titleToNewsMap.has(marker.title)) {
-                uniqueNews.push(marker);
-                titleToNewsMap.set(marker.title, marker);
-            }
-            idMap.set(marker.id, titleToNewsMap.get(marker.title).id);
-        });
+            // Reduce the news array to only unique news items in O(n) time.
+            news.forEach(([marker]) => {
+                if (!titleToNewsMap.has(marker.title)) {
+                    uniqueNews.push(marker);
+                    titleToNewsMap.set(marker.title, marker);
+                }
+                idMap.set(marker.id, titleToNewsMap.get(marker.title).id);
+            });
 
-        setIdMap(idMap);
-        setUniqueNews(uniqueNews);
-
-        if (!loading && selectedNews) {
-            setTimeout(() => {
-                scrollToCard(selectedNews.id);
-            }, 300);
+            setIdMap(idMap);
+            setUniqueNews(uniqueNews);
+            setNewsProcessing(false);
         }
     }, [loading]);
 
     useEffect(() => {
-        if (!loading && selectedNews) {
+        if (!loading && selectedNews && !newsProcessing) {
             scrollToCard(selectedNews.id);
         }
-    }, [selectedNews]);
+    }, [selectedNews, newsProcessing]);
 
     const handlers = useSwipeable({
         onSwipedUp: () => {

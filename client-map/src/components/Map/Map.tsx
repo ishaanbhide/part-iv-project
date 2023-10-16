@@ -6,7 +6,7 @@ import { DrawerContext } from "../../contexts/DrawerContext";
 import { UserLocationMarker } from "./MapComponents/UserLocation";
 import { CenterContext } from "../../contexts/CenterContext";
 import { mapOptions } from "../../utils/mapOptions";
-import { Oval } from "react-loader-spinner";
+import { Oval, ThreeDots } from "react-loader-spinner";
 import { Coordinates } from "../../models/Coordinates";
 import { getUserLocation } from "../../utils/getUserLocation";
 import { NewsMarker } from "./MapComponents/NewsMarker";
@@ -15,6 +15,7 @@ import CircleMarkerWithText from "./MapComponents/CircleMarkerWithText";
 import { calculateProximityValue } from "../../utils/calculateProximityValue";
 import { getMapAreaDisasterNews } from "../../api/news";
 import { mapNewsArticles } from "../../utils/mapNewsArticles";
+import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 
 type MapPropsType = {
     news: NewsItem[][];
@@ -24,9 +25,11 @@ type MapPropsType = {
 export function Map({ news, setNews }: MapPropsType) {
     const { isDrawerOpen } = useContext(DrawerContext);
     const { loading, updateLoading } = useContext(DrawerContext);
+    const { selectedNews } = useContext(SelectedNewsContext);
     const {
         center,
         updateCenter,
+        userLocation,
         updateUserLocation,
         updateMapBounds,
         updateZoom,
@@ -59,8 +62,17 @@ export function Map({ news, setNews }: MapPropsType) {
     }, [zoom]);
 
     useEffect(() => {
-        if (center.lat != 0) {
-            setMapLoading(false);
+        if (
+            center.lat == userLocation?.lat &&
+            center.lng == userLocation?.lng
+        ) {
+            handleMapBoundsChanged();
+        }
+
+        if (
+            center.lat == selectedNews?.location.lat &&
+            center.lng == selectedNews?.location.lng
+        ) {
             handleMapBoundsChanged();
         }
     }, [center]);
@@ -91,61 +103,100 @@ export function Map({ news, setNews }: MapPropsType) {
     }
 
     return (
-        <Box className={`map ${!isDrawerOpen && "full-width"}`}>
-            {!isLoaded || mapLoading ? (
-                <Oval
-                    height={80}
-                    width={80}
-                    color="#ffffff"
-                    secondaryColor="#fffff"
-                    strokeWidth={4}
-                    strokeWidthSecondary={4}
-                />
-            ) : (
-                <GoogleMap
-                    mapContainerClassName="map-container"
-                    onLoad={handleMapLoad}
-                    center={center}
-                    zoom={zoom}
-                    options={mapOptions}
-                    onZoomChanged={() => {
-                        if (map) {
-                            handleMapBoundsChanged();
-                        }
-                    }}
-                    onDragEnd={() => {
-                        updateCenter(map?.getCenter()?.toJSON()!);
-                        handleMapBoundsChanged();
-                    }}
-                    onBoundsChanged={() => {
-                        firstLoad &&
-                            fetchInitialDisasterNews(
-                                map?.getBounds()?.toJSON(),
-                            );
+        <Box
+            sx={{
+                position: "relative",
+                display: "flex",
+                justifyContent: "center",
+            }}
+        >
+            {loading && !mapLoading && (
+                <Box
+                    sx={{
+                        backgroundColor: "#ededed",
+                        borderRadius: "1rem",
+                        boxShadow: "0px 2px 14px -3px rgba(0,0,0,0.75)",
+                        height: "30px",
+                        width: "70px",
+                        position: "absolute",
+                        zIndex: "10",
+                        top: "8%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                     }}
                 >
-                    <UserLocationMarker />
-
-                    {news.map((markerArray) => {
-                        if (markerArray.length == 1) {
-                            return (
-                                <NewsMarker
-                                    key={markerArray[0].id}
-                                    newsMarker={markerArray[0]}
-                                />
-                            );
-                        } else {
-                            return (
-                                <CircleMarkerWithText
-                                    key={markerArray[0].id}
-                                    position={markerArray[0].location}
-                                    text={markerArray.length.toString()}
-                                />
-                            );
-                        }
-                    })}
-                </GoogleMap>
+                    <ThreeDots
+                        height="40"
+                        width="55"
+                        radius="9"
+                        color="#fffff"
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        visible={true}
+                    />
+                </Box>
             )}
+            <Box className={`map ${!isDrawerOpen && "full-width"}`}>
+                {!isLoaded || mapLoading ? (
+                    <Oval
+                        height={80}
+                        width={80}
+                        color="#ffffff"
+                        secondaryColor="#fffff"
+                        strokeWidth={4}
+                        strokeWidthSecondary={4}
+                    />
+                ) : (
+                    <GoogleMap
+                        mapContainerClassName="map-container"
+                        onLoad={handleMapLoad}
+                        center={center}
+                        zoom={zoom}
+                        options={mapOptions}
+                        onZoomChanged={() => {
+                            if (map) {
+                                updateCenter(map?.getCenter()?.toJSON()!);
+                                updateProximity(
+                                    calculateProximityValue(map?.getZoom()!),
+                                );
+                                handleMapBoundsChanged();
+                            }
+                        }}
+                        onDragEnd={() => {
+                            updateCenter(map?.getCenter()?.toJSON()!);
+                            handleMapBoundsChanged();
+                        }}
+                        onBoundsChanged={() => {
+                            firstLoad &&
+                                fetchInitialDisasterNews(
+                                    map?.getBounds()?.toJSON(),
+                                );
+                        }}
+                    >
+                        <UserLocationMarker />
+
+                        {news.map((markerArray) => {
+                            if (markerArray.length == 1) {
+                                return (
+                                    <NewsMarker
+                                        key={markerArray[0].id}
+                                        newsMarker={markerArray[0]}
+                                    />
+                                );
+                            } else {
+                                return (
+                                    <CircleMarkerWithText
+                                        key={markerArray[0].id}
+                                        position={markerArray[0].location}
+                                        text={markerArray.length.toString()}
+                                    />
+                                );
+                            }
+                        })}
+                    </GoogleMap>
+                )}
+            </Box>
         </Box>
     );
 }
