@@ -55,13 +55,6 @@ export function Map({ news, setNews }: MapPropsType) {
     }, []);
 
     useEffect(() => {
-        if (map) {
-            updateProximity(calculateProximityValue(zoom));
-            handleMapBoundsChanged();
-        }
-    }, [zoom]);
-
-    useEffect(() => {
         if (
             center.lat == userLocation?.lat &&
             center.lng == userLocation?.lng
