@@ -30,15 +30,18 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         padding: "10px",
         backgroundColor: "secondary.main",
         boxSizing: "border-box",
-        width: "100%",
-        border: "3px #ffffff solid",
+        // minWidth: "50%",
+        width: "49%",
+        // border: "3px #ffffff solid",
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
         borderRadius: "0.8rem",
+        minHeight: "450px",
+        justifyContent: "space-evenly"
       }}
     >
       <img
-        style={{ width: "100%", height: "200px", objectFit: "cover" }}
+        style={{ width: "100%", height: "300px", objectFit: "cover" }}
         src={newsMarker.image}
       />
       <Box

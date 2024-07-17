@@ -170,7 +170,8 @@ export default function App() {
 
       <Box
         sx={{
-          display: isMobile ? "flex" : "grid",
+          // display: isMobile ? "flex" : "grid",
+          display: "flex",
           gridTemplateColumns: "auto auto auto",
           flexDirection: "column",
           gap: "8px",
@@ -348,26 +349,32 @@ export default function App() {
         </Typography>
 
         {news.length > 0 ? (
-          searchResults.map((marker) => {
-            return (
-              <NewsCard
-                key={marker.id}
-                newsMarker={marker}
-                setReadMoreClicked={setReadMoreClicked}
-              />
-            );
-          })
-        ) : (
-          <Box>
-            <TailSpin
-              height="80"
-              width="80"
-              color="#000000"
-              ariaLabel="tail-spin-loading"
-              radius="1"
-            />
-          </Box>
-        )}
+  <Box sx={{ 
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: '20px',
+    padding: '20px',
+    }}>
+    {searchResults.map((marker) => (
+      <NewsCard
+        key={marker.id}
+        newsMarker={marker}
+        setReadMoreClicked={setReadMoreClicked}
+      />
+    ))}
+  </Box>
+) : (
+  <Box>
+    <TailSpin
+      height="80"
+      width="80"
+      color="#000000"
+      ariaLabel="tail-spin-loading"
+      radius="1"
+    />
+  </Box>
+)}
       </Box>
     </Box>
   );
