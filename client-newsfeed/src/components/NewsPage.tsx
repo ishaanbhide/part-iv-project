@@ -48,7 +48,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
       >
         {newsMarker && (
           <>
-            <Typography variant="h2" sx={{textAlign: "center", paddingBottom: "10px"}}>{newsMarker.title}</Typography>
+            <Typography variant="h1" sx={{textAlign: "center", paddingBottom: "10px"}}>{newsMarker.title}</Typography>
             <Typography variant="h4" paddingTop="3px" sx={{textAlign: "center", paddingBottom: "10px"}}>
               {newsMarker.source}
             </Typography>
