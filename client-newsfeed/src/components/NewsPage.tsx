@@ -19,23 +19,37 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
   }
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        width: "100%",
+        flexDirection: "column"
+      }}
+    >
+      <Box
+        sx={{display: "flex", justifyContent: "center", paddingY: "20px"}}
+      >
       <img
-        style={{ width: "100%", height: "200px", objectFit: "cover" }}
+        style={{ width: "auto", height: "400px", objectFit: "contain" }}
         src={newsMarker?.image}
       />
+      </Box>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           padding: "8px 16px 16px 16px",
           boxSizing: "border-box",
+          width:"70%",
+          justifyContent: "center",
+          margin: "0 auto"
         }}
       >
         {newsMarker && (
           <>
-            <Typography variant="h2">{newsMarker.title}</Typography>
-            <Typography variant="h4" paddingTop="3px">
+            <Typography variant="h2" sx={{textAlign: "center", paddingBottom: "10px"}}>{newsMarker.title}</Typography>
+            <Typography variant="h4" paddingTop="3px" sx={{textAlign: "center", paddingBottom: "10px"}}>
               {newsMarker.source}
             </Typography>
             <Typography paragraph paddingTop="6px">

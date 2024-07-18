@@ -28,7 +28,8 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         display: "flex",
         flexDirection: "column",
         padding: "10px",
-        backgroundColor: "secondary.main",
+        // backgroundColor: "secondary.main",
+        backgroundColor:"black",
         boxSizing: "border-box",
         // minWidth: "50%",
         width: "49%",
@@ -41,7 +42,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
       }}
     >
       <img
-        style={{ width: "100%", height: "300px", objectFit: "cover" }}
+        style={{ width: "auto", maxHeight: "300px", objectFit: "contain" }}
         src={newsMarker.image}
       />
       <Box
@@ -51,7 +52,14 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
           paddingTop: "8px",
         }}
       >
-        <Typography variant="h2">{newsMarker.title}</Typography>
+        <Typography variant="h2" 
+          sx={{
+            padding: "0px 15px",
+            fontWeight:"bold",
+            color: "white",
+            textAlign: "center"
+          }}
+        >{newsMarker.title}</Typography>
       </Box>
     </Box>
   );
