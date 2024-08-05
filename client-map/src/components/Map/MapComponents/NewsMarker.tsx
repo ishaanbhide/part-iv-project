@@ -16,11 +16,30 @@ export function NewsMarker({ newsMarker }: NewsMarkerProps) {
     const { isDrawerOpen, toggleDrawer } = useContext(DrawerContext);
     const { updateLoading } = useContext(DrawerContext);
 
-    const handleMarkerClick = () => {
+    const handleMarkerClick = async () => {
         updateSelectedNews(newsMarker);
         !isDrawerOpen && toggleDrawer(true);
         !isDrawerOpen && updateCenter(newsMarker.location);
         !isDrawerOpen && updateLoading(true);
+
+        console.log(newsMarker.location)
+
+        
+        const MAPBOX_ACCESS_TOKEN
+
+        try {
+            const { lng, lat } = newsMarker.location;
+            const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_ACCESS_TOKEN}&types=place,locality,neighborhood`);
+            const data = await response.json();
+            const suburb = data.features[0]?.text || 'Unknown location';
+            const speech = new SpeechSynthesisUtterance(suburb);
+            window.speechSynthesis.speak(speech);
+
+        } catch (error) {
+            console.error('Error getting or speaking location:', error);
+        } finally {
+            updateLoading(false);
+        }
     };
 
     const isSelected = selectedNews?.id === newsMarker.id;
