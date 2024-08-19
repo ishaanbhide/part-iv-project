@@ -25,7 +25,7 @@ export function NewsMarker({ newsMarker }: NewsMarkerProps) {
         console.log(newsMarker.location)
 
         
-        const MAPBOX_ACCESS_TOKEN
+        const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1Ijoid291eTQ0OCIsImEiOiJja2RrdzJjcWowMncyMzJxaTFqeGV2ZHhpIn0.YKQ7KO8v1Yqm3AkhqVPcPw';
 
         try {
             const { lng, lat } = newsMarker.location;

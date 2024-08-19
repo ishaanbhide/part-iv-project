@@ -16,6 +16,7 @@ import { getUserLocation } from "./utils/getUserLocation";
 import { NewsPage } from "./components/NewsPage";
 import { SelectedNewsContext } from "./contexts/SelectedNewsContext";
 import { TailSpin } from "react-loader-spinner";
+import QuizModal from "./components/QuizModal";
 
 export default function App() {
   const { userLocation } = useContext(CenterContext);
@@ -347,6 +348,10 @@ export default function App() {
         >
           NEAR YOU
         </Typography>
+
+          <QuizModal>
+            
+          </QuizModal>
 
         {news.length > 0 ? (
   <Box sx={{ 

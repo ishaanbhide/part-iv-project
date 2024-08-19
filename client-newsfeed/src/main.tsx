@@ -8,6 +8,7 @@ import { theme } from "./utils/theme";
 import { CenterProvider } from "./contexts/CenterContext";
 import { DrawerProvider } from "./contexts/DrawerContext";
 import { SelectedNewsProvider } from "./contexts/SelectedNewsContext";
+import { QuizProvider } from './contexts/QuizContext';
 
 declare global {
   interface Window {
@@ -18,13 +19,15 @@ declare global {
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <DrawerProvider>
-        <SelectedNewsProvider>
-          <CenterProvider>
-            <App />
-          </CenterProvider>
-        </SelectedNewsProvider>
-      </DrawerProvider>
+      <QuizProvider>
+        <DrawerProvider>
+          <SelectedNewsProvider>
+            <CenterProvider>
+              <App />
+            </CenterProvider>
+          </SelectedNewsProvider>
+        </DrawerProvider>
+      </QuizProvider>
     </ThemeProvider>
   </BrowserRouter>
 );
