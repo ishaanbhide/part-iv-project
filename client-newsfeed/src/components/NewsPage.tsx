@@ -27,8 +27,8 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh", // Set the container to full viewport height
-        overflow: "hidden", // Hide overflow on the main container
+        height: "100vh",
+        overflow: "hidden",
       }}
     >
       <Box
@@ -36,7 +36,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
           display: "flex",
           justifyContent: "center",
           padding: "20px 0",
-          flexShrink: 0, // Prevent the image container from shrinking
+          flexShrink: 0,
         }}
       >
         <img

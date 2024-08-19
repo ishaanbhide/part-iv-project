@@ -23,6 +23,9 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
   };
 
   const isBiggerFont = answers[4] === "Yes";
+  const isHighContrast = answers[1] === "Yes";
+
+  console.log(answers[1])
 
   return (
     <Box
@@ -33,7 +36,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         flexDirection: "column",
         padding: "10px",
         // backgroundColor: "secondary.main",
-        backgroundColor:"black",
+        backgroundColor: isHighContrast ? "black" : "lightgrey",
         boxSizing: "border-box",
         width: isBiggerFont ? "98%" : "49%",
         // minWidth: "50%",
@@ -60,7 +63,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
           sx={{
             padding: "0px 15px",
             fontWeight:"bold",
-            color: "white",
+            color: isHighContrast ? "white" : "black",
             textAlign: "center",
             fontSize: isBiggerFont ? "30px" : "inherit"
           }}
