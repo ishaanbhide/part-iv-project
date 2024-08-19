@@ -41,7 +41,7 @@ const questions: Question[] = [
   },
   {
     id: 4,
-    question: "Would you like a bigger font?",
+    question: "Would you like a bigger display?",
     options: ["Yes", "No"]
   },
   // Add more questions as needed

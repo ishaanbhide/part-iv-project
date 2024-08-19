@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { NewsItem } from "../models/NewsItem";
 import { useContext } from "react";
 import { SelectedNewsContext } from "../contexts/SelectedNewsContext";
+import { useQuiz } from "../contexts/QuizContext";
 
 type NewsCardProps = {
   newsMarker: NewsItem;
@@ -10,6 +11,7 @@ type NewsCardProps = {
 
 export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
   const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
+  const {answers, setAnswers} = useQuiz() 
 
   const handleSelectedNewsCard = () => {
     if (newsMarker.id == selectedNews?.id) {
@@ -19,6 +21,8 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
       setReadMoreClicked(true);
     }
   };
+
+  const isBiggerFont = answers[4] === "Yes";
 
   return (
     <Box
@@ -31,18 +35,18 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         // backgroundColor: "secondary.main",
         backgroundColor:"black",
         boxSizing: "border-box",
+        width: isBiggerFont ? "98%" : "49%",
         // minWidth: "50%",
-        width: "49%",
         // border: "3px #ffffff solid",
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
         borderRadius: "0.8rem",
-        minHeight: "450px",
+        minHeight: isBiggerFont ? "650px" : "450px",
         justifyContent: "space-evenly"
       }}
     >
       <img
-        style={{ width: "auto", maxHeight: "300px", objectFit: "contain" }}
+        style={{ width: "auto", maxHeight: isBiggerFont ? "450px" : "300px", objectFit: "contain" }}
         src={newsMarker.image}
       />
       <Box
@@ -52,12 +56,13 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
           paddingTop: "8px",
         }}
       >
-        <Typography variant="h2" 
+        <Typography variant={isBiggerFont ? "h1" : "h2"}
           sx={{
             padding: "0px 15px",
             fontWeight:"bold",
             color: "white",
-            textAlign: "center"
+            textAlign: "center",
+            fontSize: isBiggerFont ? "30px" : "inherit"
           }}
         >{newsMarker.title}</Typography>
       </Box>
