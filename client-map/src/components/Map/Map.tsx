@@ -17,6 +17,7 @@ import { getMapAreaDisasterNews } from "../../api/news";
 import { mapNewsArticles } from "../../utils/mapNewsArticles";
 import { SelectedNewsContext } from "../../contexts/SelectedNewsContext";
 import HomeIcon from "@mui/icons-material/Home";
+import SearchBar from "./MapComponents/SearchBar";
 
 type MapPropsType = {
     news: NewsItem[][];
@@ -205,9 +206,9 @@ export function Map({ news, setNews }: MapPropsType) {
 
                             if (
                                 map?.getCenter()?.toJSON()!.lat.toFixed(5) ==
-                                    userLocation?.lat.toFixed(5) &&
+                                userLocation?.lat.toFixed(5) &&
                                 map?.getCenter()?.toJSON()!.lng.toFixed(5) ==
-                                    userLocation?.lng.toFixed(5)
+                                userLocation?.lng.toFixed(5)
                             ) {
                                 fetchInitialDisasterNews(
                                     map?.getBounds()?.toJSON(),
@@ -215,6 +216,13 @@ export function Map({ news, setNews }: MapPropsType) {
                             }
                         }}
                     >
+                        <SearchBar onSearch={(location) => {
+                            if (map) {
+                                map.panTo(location);
+                                updateCenter(location);
+                                updateZoom(20)
+                            }
+                        }} />
                         <UserLocationMarker />
 
                         {news.map((markerArray) => {
