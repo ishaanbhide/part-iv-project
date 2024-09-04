@@ -357,7 +357,7 @@ export default function App() {
   <Box sx={{ 
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     gap: '20px',
     padding: '20px',
     }}>

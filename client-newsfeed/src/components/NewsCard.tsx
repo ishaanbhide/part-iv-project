@@ -37,7 +37,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         padding: "10px",
         backgroundColor: isHighContrast ? "black" : undefined,
         boxSizing: "border-box",
-        width: isBiggerFont ? "80%" : "49%",
+        width: isBiggerFont ? "65%" : "49%",
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
         borderRadius: "0.8rem",
