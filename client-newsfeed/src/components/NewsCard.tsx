@@ -11,7 +11,7 @@ type NewsCardProps = {
 
 export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
   const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
-  const {answers, setAnswers} = useQuiz() 
+  const { answers, setAnswers } = useQuiz()
 
   const handleSelectedNewsCard = () => {
     if (newsMarker.id == selectedNews?.id) {
@@ -35,21 +35,22 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         display: "flex",
         flexDirection: "column",
         padding: "10px",
-        // backgroundColor: "secondary.main",
-        backgroundColor: isHighContrast ? "black" : "lightgrey",
+        backgroundColor: isHighContrast ? "black" : undefined,
         boxSizing: "border-box",
-        width: isBiggerFont ? "98%" : "49%",
-        // minWidth: "50%",
-        // border: "3px #ffffff solid",
+        width: isBiggerFont ? "80%" : "49%",
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
         borderRadius: "0.8rem",
         minHeight: isBiggerFont ? "650px" : "450px",
-        justifyContent: "space-evenly"
+        justifyContent: "space-evenly",
       }}
     >
       <img
-        style={{ width: "auto", maxHeight: isBiggerFont ? "450px" : "300px", objectFit: "contain" }}
+        style={{
+          width: "100%",
+          maxHeight: isHighContrast ? (isBiggerFont ? "450px" : "300px") : undefined,
+          objectFit: "contain",
+        }}
         src={newsMarker.image}
       />
       <Box
@@ -59,15 +60,18 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
           paddingTop: "8px",
         }}
       >
-        <Typography variant={isBiggerFont ? "h1" : "h2"}
+        <Typography
+          variant={isBiggerFont ? "h1" : "h2"}
           sx={{
             padding: "0px 15px",
-            fontWeight:"bold",
+            fontWeight: "bold",
             color: isHighContrast ? "white" : "black",
             textAlign: "center",
-            fontSize: isBiggerFont ? "30px" : "inherit"
+            fontSize: isBiggerFont ? "30px" : "inherit",
           }}
-        >{newsMarker.title}</Typography>
+        >
+          {newsMarker.title}
+        </Typography>
       </Box>
     </Box>
   );
