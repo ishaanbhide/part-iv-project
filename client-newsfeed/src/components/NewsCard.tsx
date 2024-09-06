@@ -11,10 +11,10 @@ type NewsCardProps = {
 
 export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
   const { selectedNews, updateSelectedNews } = useContext(SelectedNewsContext);
-  const { answers, setAnswers } = useQuiz()
+  const { answers } = useQuiz();
 
   const handleSelectedNewsCard = () => {
-    if (newsMarker.id == selectedNews?.id) {
+    if (newsMarker.id === selectedNews?.id) {
       updateSelectedNews(null);
     } else {
       updateSelectedNews(newsMarker);
@@ -24,8 +24,6 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
 
   const isBiggerFont = answers[4] === "Yes";
   const isHighContrast = answers[1] === "Yes";
-
-  console.log(answers[1])
 
   return (
     <Box
@@ -37,11 +35,14 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         padding: "10px",
         backgroundColor: isHighContrast ? "black" : undefined,
         boxSizing: "border-box",
-        width: isBiggerFont ? "65%" : "49%",
+        width: {
+          s: "85%", // For smaller devices
+          md: isBiggerFont ? "65%" : "49%", // For larger devices
+        },
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
         borderRadius: "0.8rem",
-        minHeight: isBiggerFont ? "650px" : "450px",
+        // minHeight: isBiggerFont ? "650px" : "450px",
         justifyContent: "space-evenly",
       }}
     >
@@ -52,6 +53,7 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
           objectFit: "contain",
         }}
         src={newsMarker.image}
+        alt={newsMarker.title}
       />
       <Box
         sx={{
