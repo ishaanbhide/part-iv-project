@@ -19,7 +19,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
     });
   }
 
-  const { answers, setAnswers } = useQuiz();
+  const { answers } = useQuiz();
   const isBiggerFont = answers[4] === "Yes";
 
   return (
@@ -28,7 +28,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        overflow: "hidden",
+        overflow: "auto",
       }}
     >
       <Box
@@ -47,21 +47,25 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
       </Box>
       <Box
         sx={{
-          flexGrow: 1, 
-          overflow: "auto", 
+          flexGrow: 1,
           padding: "8px 16px 16px 16px",
           boxSizing: "border-box",
           width: "70%",
           margin: "0 auto",
+          "@media (max-width: 600px)": {
+            width: "90%",
+          },
         }}
       >
         {newsMarker && (
           <>
-            <Typography variant="h1" sx={{textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit"}}>{newsMarker.title}</Typography>
-            <Typography variant="h4" paddingTop="3px" sx={{textAlign: "center", paddingBottom: "10px"}}>
+            <Typography variant="h1" sx={{ textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit" }}>
+              {newsMarker.title}
+            </Typography>
+            <Typography variant="h4" paddingTop="3px" sx={{ textAlign: "center", paddingBottom: "10px" }}>
               {newsMarker.source}
             </Typography>
-            <Typography paragraph paddingTop="6px" sx={{fontSize: isBiggerFont ? "20px" : "inherit"}}>
+            <Typography paragraph paddingTop="6px" paddingBottom="20px" sx={{ fontSize: isBiggerFont ? "20px" : "inherit" }}>
               {newsMarker.description}
             </Typography>
             <Typography variant="h3" paddingTop="6px" color={"#6b6b6b"}>
