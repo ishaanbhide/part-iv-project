@@ -28,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const handleSearch = async () => {
     if (query.trim()) {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=AIzaSyBVMfNn5ls36xpl3z_2CL19GD__JwkZR1M`
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&key=REACT_APP_GOOGLE_MAPS_API_KEY`
       );
       const data = await response.json();
 
