@@ -12,6 +12,7 @@ const CircleMarkerWithText: React.FC<CircleMarkerWithTextProps> = ({
     text,
 }) => {
     const { updateZoom, updateCenter } = useContext(CenterContext);
+    console.log(position)
 
     function handleClusterClick() {
         updateCenter(position);

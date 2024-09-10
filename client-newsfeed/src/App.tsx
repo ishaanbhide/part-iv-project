@@ -16,6 +16,7 @@ import { getUserLocation } from "./utils/getUserLocation";
 import { NewsPage } from "./components/NewsPage";
 import { SelectedNewsContext } from "./contexts/SelectedNewsContext";
 import { TailSpin } from "react-loader-spinner";
+import QuizModal from "./components/QuizModal";
 
 export default function App() {
   const { userLocation } = useContext(CenterContext);
@@ -152,7 +153,7 @@ export default function App() {
         pageRef={pageRef}
         firstArticle={firstArticle}
       />
-
+  
       <Box
         sx={{
           background: "white",
@@ -167,11 +168,10 @@ export default function App() {
       >
         <NewsPage newsMarker={selectedNews} />
       </Box>
-
+  
       <Box
         sx={{
-          display: isMobile ? "flex" : "grid",
-          gridTemplateColumns: "auto auto auto",
+          display: "flex",
           flexDirection: "column",
           gap: "8px",
           height: "calc(100vh - 70px)",
@@ -185,12 +185,16 @@ export default function App() {
         }}
         ref={pageRef}
       >
-        <TextField
-          id="filled-basic"
-          label="Search"
-          onChange={handleSearchChange}
-        />
-
+        <Box sx={{ display: "flex", alignItems: "center", gap: "16px", mb: 2 }}>
+          <QuizModal />
+          <TextField
+            id="filled-basic"
+            label="Search"
+            onChange={handleSearchChange}
+            sx={{ flexGrow: 1 }}
+          />
+        </Box>
+  
         <Box>
           <Button
             variant="contained"
@@ -203,7 +207,7 @@ export default function App() {
           >
             Northland
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -217,7 +221,7 @@ export default function App() {
           >
             Auckland
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -229,7 +233,7 @@ export default function App() {
           >
             Waikato
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -241,7 +245,7 @@ export default function App() {
           >
             Bay of Plenty
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -253,7 +257,7 @@ export default function App() {
           >
             Gisborne
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -265,7 +269,7 @@ export default function App() {
           >
             Hawke's Bay
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -277,7 +281,7 @@ export default function App() {
           >
             Taranaki
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -291,7 +295,7 @@ export default function App() {
           >
             Wellington
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -303,7 +307,7 @@ export default function App() {
           >
             Nelson
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -315,7 +319,7 @@ export default function App() {
           >
             Canterbury
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -327,7 +331,7 @@ export default function App() {
           >
             Otago
           </Button>
-
+  
           <Button
             variant="contained"
             size="small"
@@ -340,23 +344,31 @@ export default function App() {
             West Coast
           </Button>
         </Box>
-
+  
         <Typography
           sx={{ color: "gray", fontWeight: "100", textAlign: "center" }}
         >
           NEAR YOU
         </Typography>
-
+  
         {news.length > 0 ? (
-          searchResults.map((marker) => {
-            return (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "20px",
+              padding: "20px",
+            }}
+          >
+            {searchResults.map((marker) => (
               <NewsCard
                 key={marker.id}
                 newsMarker={marker}
                 setReadMoreClicked={setReadMoreClicked}
               />
-            );
-          })
+            ))}
+          </Box>
         ) : (
           <Box>
             <TailSpin

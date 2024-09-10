@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { NewsItem } from "../models/NewsItem";
+import { useQuiz } from "../contexts/QuizContext";
 
 type NewsCardProps = {
   newsMarker: NewsItem | null;
@@ -18,27 +19,53 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
     });
   }
 
+  const { answers } = useQuiz();
+  const isBiggerFont = answers[4] === "Yes";
+
   return (
-    <Box>
-      <img
-        style={{ width: "100%", height: "200px", objectFit: "cover" }}
-        src={newsMarker?.image}
-      />
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        overflow: "auto",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
+          justifyContent: "center",
+          padding: "20px 0",
+          flexShrink: 0,
+        }}
+      >
+        <img
+          style={{ width: "auto", height: isBiggerFont ? "300px" : "400px", objectFit: "contain" }}
+          src={newsMarker?.image}
+          alt={newsMarker?.title || "News image"}
+        />
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
           padding: "8px 16px 16px 16px",
           boxSizing: "border-box",
+          width: "70%",
+          margin: "0 auto",
+          "@media (max-width: 600px)": {
+            width: "90%",
+          },
         }}
       >
         {newsMarker && (
           <>
-            <Typography variant="h2">{newsMarker.title}</Typography>
-            <Typography variant="h4" paddingTop="3px">
+            <Typography variant="h1" sx={{ textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit" }}>
+              {newsMarker.title}
+            </Typography>
+            <Typography variant="h4" paddingTop="3px" sx={{ textAlign: "center", paddingBottom: "10px" }}>
               {newsMarker.source}
             </Typography>
-            <Typography paragraph paddingTop="6px">
+            <Typography paragraph paddingTop="6px" paddingBottom="20px" sx={{ fontSize: isBiggerFont ? "20px" : "inherit" }}>
               {newsMarker.description}
             </Typography>
             <Typography variant="h3" paddingTop="6px" color={"#6b6b6b"}>
