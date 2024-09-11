@@ -35,7 +35,7 @@ const questions: Question[] = [
   },
   {
     id: 3,
-    question: "Would you like audio confirmation within the application?",
+    question: "Would you like audio confirmation with your text input?",
     options: ["Yes", "No"]
   },
   {
