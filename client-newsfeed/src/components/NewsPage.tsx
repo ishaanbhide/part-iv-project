@@ -38,6 +38,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
           padding: "20px 0",
           flexShrink: 0,
         }}
+        aria-label="News image container"
       >
         <img
           style={{ width: "auto", height: isBiggerFont ? "300px" : "400px", objectFit: "contain" }}
@@ -56,19 +57,40 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
             width: "90%",
           },
         }}
+        aria-label="News content"
       >
         {newsMarker && (
           <>
-            <Typography variant="h1" sx={{ textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit" }}>
+            <Typography
+              variant="h1"
+              sx={{ textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit" }}
+              aria-label={`Title: ${newsMarker.title}`}
+            >
               {newsMarker.title}
             </Typography>
-            <Typography variant="h4" paddingTop="3px" sx={{ textAlign: "center", paddingBottom: "10px" }}>
+            <Typography
+              variant="h4"
+              paddingTop="3px"
+              sx={{ textAlign: "center", paddingBottom: "10px" }}
+              aria-label={`Source: ${newsMarker.source}`}
+            >
               {newsMarker.source}
             </Typography>
-            <Typography paragraph paddingTop="6px" paddingBottom="20px" sx={{ fontSize: isBiggerFont ? "20px" : "inherit" }}>
+            <Typography
+              paragraph
+              paddingTop="6px"
+              paddingBottom="20px"
+              sx={{ fontSize: isBiggerFont ? "20px" : "inherit" }}
+              aria-label="Description"
+            >
               {newsMarker.description}
             </Typography>
-            <Typography variant="h3" paddingTop="6px" color={"#6b6b6b"}>
+            <Typography
+              variant="h3"
+              paddingTop="6px"
+              color={"#6b6b6b"}
+              aria-label={`Published on: ${parseStringDate(newsMarker.createdAt)}`}
+            >
               {parseStringDate(newsMarker.createdAt)}
             </Typography>
           </>

@@ -30,7 +30,7 @@ const questions: Question[] = [
   },
   {
     id: 2,
-    question: "Would you like a simpler version (less buttons and pages) of the application?",
+    question: "Would you like recommended step by step instructions?",
     options: ["Yes", "No"]
   },
   {
@@ -65,7 +65,7 @@ const QuizModal: React.FC = () => {
 
   return (
     <>
-      <Button onClick={handleOpen}>Take the quiz</Button>
+      <Button onClick={handleOpen} aria-label="Open quiz modal">Take the quiz</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -108,7 +108,7 @@ const QuizModal: React.FC = () => {
                     <FormControlLabel 
                       key={index} 
                       value={option} 
-                      control={<Radio />} 
+                      control={<Radio aria-label={option} />} 
                       label={option} 
                     />
                   ))}
@@ -117,7 +117,7 @@ const QuizModal: React.FC = () => {
             ))}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleClose} variant="contained">Close</Button>
+            <Button onClick={handleClose} variant="contained" aria-label="Close quiz modal">Close</Button>
           </Box>
         </Box>
       </Modal>

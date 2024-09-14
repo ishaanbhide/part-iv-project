@@ -1,8 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import { Box, IconButton, Typography, Badge } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Badge, Box, IconButton, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { NewsItem } from "../../models/NewsItem";
 
@@ -44,6 +45,10 @@ export function NavigationBar({
     toggleDrawer(true);
   };
 
+  const handleBackClick = () => {
+    setReadMoreClicked(!readMoreClicked);
+  };
+
   return (
     <Box
       sx={{
@@ -60,7 +65,7 @@ export function NavigationBar({
       }}
     >
       {readMoreClicked ? (
-        <IconButton onClick={() => setReadMoreClicked(!readMoreClicked)}>
+        <IconButton onClick={handleBackClick} aria-label="Go back">
           <ArrowBackIcon fontSize="large" sx={{ color: "white" }} />
         </IconButton>
       ) : (
@@ -75,15 +80,20 @@ export function NavigationBar({
             gap: "10px",
             cursor: "pointer",
           }}
+          onClick={handleHomeClick}
+          aria-label="Home"
         >
-          <img src="./logo.png" style={{ height: "100%" }} />
+          <img src="./logo.png" alt="GeoHub Logo" style={{ height: "100%" }} />
           <Typography variant="h1" color="white">
             GEOHUB
           </Typography>
         </Box>
       )}
 
-      <IconButton onClick={handleNotificationClick}>
+      <IconButton
+        onClick={handleNotificationClick}
+        aria-label={`Notifications (${notificationCount} new)`}
+      >
         <Badge badgeContent={notificationCount} color="error">
           <NotificationsIcon fontSize="large" sx={{ color: "white" }} />
         </Badge>
