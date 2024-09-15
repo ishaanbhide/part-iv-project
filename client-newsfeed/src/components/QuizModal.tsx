@@ -11,6 +11,7 @@ import {
   FormLabel
 } from '@mui/material';
 import { useQuiz } from '../contexts/QuizContext';
+import TuneIcon from '@mui/icons-material/Tune';
 
 interface Question {
   id: number;
@@ -65,7 +66,13 @@ const QuizModal: React.FC = () => {
 
   return (
     <>
-      <Button onClick={handleOpen} aria-label="Open quiz modal">Take the quiz</Button>
+      {/* <Button onClick={handleOpen} aria-label="Open quiz modal">Take the quiz</Button> */}
+      <Button 
+      onClick={handleOpen} 
+      aria-label="Open quiz modal"
+      startIcon={<TuneIcon />}
+    >
+    </Button>
       <Modal
         open={open}
         onClose={handleClose}

@@ -21,14 +21,16 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
 
   const { answers } = useQuiz();
   const isBiggerFont = answers[4] === "Yes";
+  const isHighContrast = answers[1] === "Yes";
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        height: "92vh",
         overflow: "auto",
+        backgroundColor: isHighContrast ? "black" : "#FFF8E7",
       }}
     >
       <Box
@@ -63,7 +65,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
           <>
             <Typography
               variant="h1"
-              sx={{ textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit" }}
+              sx={{ textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit", color: isHighContrast ? "white" : "black" }}
               aria-label={`Title: ${newsMarker.title}`}
             >
               {newsMarker.title}
@@ -71,7 +73,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
             <Typography
               variant="h4"
               paddingTop="3px"
-              sx={{ textAlign: "center", paddingBottom: "10px" }}
+              sx={{ textAlign: "center", paddingBottom: "10px", color: isHighContrast ? "white" : "black" }}
               aria-label={`Source: ${newsMarker.source}`}
             >
               {newsMarker.source}
@@ -79,8 +81,8 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
             <Typography
               paragraph
               paddingTop="6px"
-              paddingBottom="20px"
-              sx={{ fontSize: isBiggerFont ? "20px" : "inherit" }}
+              paddingBottom="40px"
+              sx={{ fontSize: isBiggerFont ? "20px" : "inherit", color: isHighContrast ? "white" : "black" }}
               aria-label="Description"
             >
               {newsMarker.description}

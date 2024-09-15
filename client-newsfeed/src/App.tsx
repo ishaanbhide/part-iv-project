@@ -20,6 +20,8 @@ import { SelectedNewsContext } from "./contexts/SelectedNewsContext";
 import { TailSpin } from "react-loader-spinner";
 import { useQuiz } from "./contexts/QuizContext";
 import QuizModal from "./components/QuizModal";
+import MapIcon from '@mui/icons-material/Map';
+import AccessibleSearchBar from "./components/AccessibleSearch";
 
 export default function App() {
   const { userLocation } = useContext(CenterContext);
@@ -36,7 +38,9 @@ export default function App() {
 
   const { answers } = useQuiz();
   const isVoiceAssist = answers[3];
-  console.log(isVoiceAssist)
+  const isHighContrast = answers[1] === "Yes";
+  const isBiggerFont = answers[2] === "Yes";
+  console.log(isHighContrast)
 
   useEffect(() => {
     async function fetchUserLocation() {
@@ -151,6 +155,29 @@ export default function App() {
     setSearchResults(tempSearchResults);
   };
 
+  const [boxStyle, setBoxStyle] = useState({});
+
+  useEffect(() => {
+    setBoxStyle({
+      display: "flex",
+      flexDirection: "column",
+      gap: "8px",
+      height: "calc(100vh - 70px)",
+      width: "100%",
+      padding: "16px",
+      overflow: "auto",
+      boxSizing: "border-box",
+      position: "fixed",
+      top: "70px",
+      backgroundColor: isHighContrast ? "white" : "#FFF8E7",
+      alignItems: !news.length ? "center" : "unset",
+    });
+  }, [isHighContrast, news.length]);
+
+  function handleMapOpen(): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <Box className="App">
       <NavigationBar
@@ -177,22 +204,10 @@ export default function App() {
       </Box>
 
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          height: "calc(100vh - 70px)",
-          width: "100%",
-          padding: "16px",
-          overflow: "auto",
-          boxSizing: "border-box",
-          position: "fixed",
-          top: "70px",
-          alignItems: !news.length ? "center" : "unset",
-        }}
+        style={boxStyle}
         ref={pageRef}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: "16px", mb: 2 }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center", gap: "16px", mb: 2 }}>
           <QuizModal />
 
           {isVoiceAssist === "Yes" ? (<SpeakingTextField
@@ -208,7 +223,19 @@ export default function App() {
           />
           )}
 
-        </Box>
+          <Button
+            startIcon={<MapIcon />}
+            onClick={handleMapOpen}
+          >
+          </Button>
+
+        </Box> */}
+        <AccessibleSearchBar 
+  isBiggerFont={isBiggerFont} 
+  isVoiceAssist={isVoiceAssist} 
+  handleSearchChange={handleSearchChange} 
+  handleMapOpen={handleMapOpen}
+/>
 
         <Box>
           <Button
