@@ -39,7 +39,7 @@ export default function App() {
   const { answers } = useQuiz();
   const isVoiceAssist = answers[3];
   const isHighContrast = answers[1] === "Yes";
-  const isBiggerFont = answers[2] === "Yes";
+  const isBiggerFont = answers[4] === "Yes";
   console.log(isHighContrast)
 
   useEffect(() => {
@@ -233,6 +233,7 @@ export default function App() {
         <AccessibleSearchBar 
   isBiggerFont={isBiggerFont} 
   isVoiceAssist={isVoiceAssist} 
+  isHighContrast={isHighContrast}
   handleSearchChange={handleSearchChange} 
   handleMapOpen={handleMapOpen}
 />

@@ -46,15 +46,20 @@ const questions: Question[] = [
   },
 ];
 
-const QuizModal: React.FC = () => {
-  const [open, setOpen] = useState<boolean>(false);
+interface QuizModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const QuizModal: React.FC<QuizModalProps> = ({ open, onClose }) => {
+  // const [open, setOpen] = useState<boolean>(false);
   const { answers, setAnswers } = useQuiz();
 
-  const handleOpen = (): void => setOpen(true);
-  const handleClose = (): void => {
-    setOpen(false);
-    console.log(answers);
-  };
+  // const handleOpen = (): void => setOpen(true);
+  // const handleClose = (): void => {
+  //   setOpen(false);
+  //   console.log(answers);
+  // };
 
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: number): void => {
     setAnswers(prevAnswers => ({
@@ -67,15 +72,15 @@ const QuizModal: React.FC = () => {
   return (
     <>
       {/* <Button onClick={handleOpen} aria-label="Open quiz modal">Take the quiz</Button> */}
-      <Button 
+      {/* <Button 
       onClick={handleOpen} 
       aria-label="Open quiz modal"
       startIcon={<TuneIcon />}
     >
-    </Button>
+    </Button> */}
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         aria-labelledby="quiz-modal-title"
         aria-describedby="quiz-modal-description"
         BackdropProps={{
@@ -124,7 +129,7 @@ const QuizModal: React.FC = () => {
             ))}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleClose} variant="contained" aria-label="Close quiz modal">Close</Button>
+            <Button onClick={onClose} variant="contained" aria-label="Close quiz modal">Close</Button>
           </Box>
         </Box>
       </Modal>

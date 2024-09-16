@@ -78,7 +78,7 @@
 
 // export default AccessibleSearchBar;
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, TextField, Button } from '@mui/material';
 import MapIcon from '@mui/icons-material/Map';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -88,16 +88,22 @@ import SpeakingTextField from './SpeakingTextField';
 interface AccessibleSearchBarProps {
   isBiggerFont: boolean;
   isVoiceAssist: string;
+  isHighContrast: boolean;
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleMapOpen: () => void;
 }
 
 const AccessibleSearchBar: React.FC<AccessibleSearchBarProps> = ({ 
   isBiggerFont, 
-  isVoiceAssist, 
+  isVoiceAssist,
+  isHighContrast, 
   handleSearchChange, 
   handleMapOpen 
 }) => {
+  const [quizModalOpen, setQuizModalOpen] = useState<boolean>(false);
+
+  console.log("inside accessiblesearch " + isBiggerFont)
+
   const iconSize = isBiggerFont ? 'large' : 'medium';
   const fontSize = isBiggerFont ? '1.2rem' : '1rem';
   const padding = isBiggerFont ? '12px' : '8px';
@@ -121,6 +127,14 @@ const AccessibleSearchBar: React.FC<AccessibleSearchBarProps> = ({
     },
   };
 
+  const handleQuizModalOpen = () => {
+    setQuizModalOpen(true);
+  };
+
+  const handleQuizModalClose = () => {
+    setQuizModalOpen(false);
+  };
+
   return (
     <Box 
       sx={{ 
@@ -128,13 +142,13 @@ const AccessibleSearchBar: React.FC<AccessibleSearchBarProps> = ({
         alignItems: "center", 
         gap: isBiggerFont ? "24px" : "16px", 
         mb: isBiggerFont ? 3 : 2,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: isHighContrast ? "white" : "#FFF8E7",
         padding: isBiggerFont ? '16px' : '8px',
         borderRadius: '8px',
       }}
     >
       <Button
-        onClick={() => {}} // Add your QuizModal open handler here
+        onClick={handleQuizModalOpen}
         aria-label="Open quiz modal"
         sx={buttonStyle}
       >
@@ -164,6 +178,8 @@ const AccessibleSearchBar: React.FC<AccessibleSearchBarProps> = ({
       >
         <MapIcon fontSize={iconSize} />
       </Button>
+
+      <QuizModal open={quizModalOpen} onClose={handleQuizModalClose} />
     </Box>
   );
 };
