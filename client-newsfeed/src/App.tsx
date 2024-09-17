@@ -238,7 +238,13 @@ export default function App() {
   handleMapOpen={handleMapOpen}
 />
 
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        >
           <Button
             variant="contained"
             size="small"
