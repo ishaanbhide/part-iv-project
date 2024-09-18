@@ -252,6 +252,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Northland
@@ -265,6 +266,7 @@ export default function App() {
                 selectedLocation == "Auckland" ? "#193a8c" : "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
             onClick={handleAucklandClicked}
           >
@@ -278,6 +280,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Waikato
@@ -290,6 +293,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Bay of Plenty
@@ -302,6 +306,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Gisborne
@@ -314,6 +319,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Hawke's Bay
@@ -326,6 +332,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Taranaki
@@ -339,6 +346,7 @@ export default function App() {
                 selectedLocation == "Wellington" ? "#193a8c" : "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
             onClick={handleWellingtonClicked}
           >
@@ -352,6 +360,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Nelson
@@ -364,6 +373,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Canterbury
@@ -376,6 +386,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Otago
@@ -388,6 +399,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             West Coast
