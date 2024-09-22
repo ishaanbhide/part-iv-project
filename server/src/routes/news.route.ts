@@ -1,7 +1,18 @@
 import express, { Request, Response } from "express";
 import { News } from "../models";
+import News1 from "../models/news1.model";
 
 const router = express.Router();
+
+router.get("/testing", async (req: Request, res: Response) => {
+    try {
+        const newsData = await News1.find().limit(10);
+        res.json(newsData);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 router.get("/", async (req: Request, res: Response) => {
     try {
