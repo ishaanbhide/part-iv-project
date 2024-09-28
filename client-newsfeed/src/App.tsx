@@ -230,13 +230,13 @@ export default function App() {
           </Button>
 
         </Box> */}
-        <AccessibleSearchBar 
-  isBiggerFont={isBiggerFont} 
-  isVoiceAssist={isVoiceAssist} 
-  isHighContrast={isHighContrast}
-  handleSearchChange={handleSearchChange} 
-  handleMapOpen={handleMapOpen}
-/>
+        <AccessibleSearchBar
+          isBiggerFont={isBiggerFont}
+          isVoiceAssist={isVoiceAssist}
+          isHighContrast={isHighContrast}
+          handleSearchChange={handleSearchChange}
+          handleMapOpen={handleMapOpen}
+        />
 
         <Box
           sx={{

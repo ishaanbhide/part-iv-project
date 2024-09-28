@@ -24,6 +24,46 @@ router.get("/", async (req: Request, res: Response) => {
     }
 });
 
+router.get("/near-news", async (req: Request, res: Response) => {
+    const { longitude, latitude, proximity } = req.query;
+
+    if (!longitude || !latitude) {
+        res.status(400).send("Invalid query parameters");
+        return;
+    }
+
+    const lng = parseFloat(longitude as string);
+    const lat = parseFloat(latitude as string);
+
+    if (lng < -180 || lng > 180 || lat < -90 || lat > 90) {
+        res.status(400).send("Longitude or latitude out of bounds");
+        return;
+    }
+
+    console.log(lng + " ," + lat + " ," + proximity);
+
+    try {
+        const news = await News1.aggregate([
+            {
+                $geoNear: {
+                    near: {
+                        type: "Point",
+                        coordinates: [lng, lat]
+                    },
+                    distanceField: "distance",
+                    maxDistance: parseInt(proximity as string) || 10000,
+                    spherical: true
+                }
+            }
+        ]);
+
+        res.json(news);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 router.get("/near", async (req: Request, res: Response) => {
     const { longitude, latitude, proximity } = req.query;
 

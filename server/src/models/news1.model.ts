@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface ILocationCoord {
     type: string;
-    coordinates: number[];
+    coordinates: number[][];
 }
 
 export interface INews1 extends Document {
@@ -20,17 +20,17 @@ export interface INews1 extends Document {
     headline: string;
     articles: string[];
     images: string[];
-    location_coords: ILocationCoord[];
+    location_coords: ILocationCoord;   
 }
 
 const LocationCoordSchema: Schema = new mongoose.Schema({
     type: {
         type: String,
-        enum: ["Point"],
+        enum: ["MultiPoint"],
         required: true,
     },
     coordinates: {
-        type: [Number],
+        type: [[Number]], // Array of arrays for MultiPoint
         required: true,
     },
 });
@@ -51,9 +51,12 @@ const News1Schema: Schema = new Schema(
         headline: { type: String, required: true },
         articles: { type: [String], required: true },
         images: { type: [String], required: true },
-        location_coords: { type: [LocationCoordSchema], required: true },
+        // location_coords: { type: [LocationCoordSchema], required: true },
+        location_coords: { type: LocationCoordSchema, required: true }, 
     },
     { timestamps: true }
 );
+
+News1Schema.index({ location_coords: '2dsphere' });
 
 export default mongoose.model<INews1>("News1", News1Schema);
