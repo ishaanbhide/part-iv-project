@@ -73,7 +73,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
               {newsMarker.title}
             </Typography>
             <Typography
-              variant="h3"
+              variant="h2"
               paddingTop="3px"
               sx={{ textAlign: "center", paddingBottom: "10px", color: isHighContrast ? "white" : "black" }}
               aria-label={`Source: ${newsMarker.source}`}
@@ -81,25 +81,16 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
               Last updated: {newsMarker.lastUpdated}
             </Typography>
             <Typography
-              variant="h3"
+              variant="h2"
               paddingTop="3px"
               sx={{ textAlign: "center", paddingBottom: "10px", color: isHighContrast ? "white" : "black" }}
               aria-label={`Current Status: ${newsMarker.endDate}`}
             >
-              Curren Status: {newsMarker.endDate}
+              Current Status: {newsMarker.endDate}
             </Typography>
-            {/* <Typography
-              paragraph
-              paddingTop="6px"
-              paddingBottom="40px"
-              sx={{ fontSize: isBiggerFont ? "20px" : "inherit", color: isHighContrast ? "white" : "black" }}
-              aria-label="Description"
-            >
-              {newsMarker.description}
-            </Typography> */}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
               {newsMarker.summary.map((item, index) => (
-                <Card key={index} sx={{ backgroundColor: "#f2df79" }}> {/* A more contrasting color */}
+                <Card key={index} sx={{ backgroundColor: isHighContrast ? "#323332": "#f2df79" }}> {/* A more contrasting color */}
                   <CardContent>
                     <Typography sx={{ fontSize: isBiggerFont ? "20px" : "inherit", color: isHighContrast ? "white" : "black" }}
               aria-label="Description">
@@ -109,6 +100,29 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
                 </Card>
               ))}
             </Box>
+            {isSteps &&(
+              <div>
+              <Typography
+              variant="h2"
+              sx={{ textAlign: "center", paddingBottom: "10px", fontSize: isBiggerFont ? "30px" : "inherit", color: isHighContrast ? "white" : "black" }}
+              aria-label={`Title: ${newsMarker.title}`}
+            >
+              Recommended steps
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
+              {newsMarker.recActions.map((item, index) => (
+                <Card key={index} sx={{ backgroundColor: isHighContrast ? "#323332": "#f0e68c" }}> {/* A more contrasting color */}
+                  <CardContent>
+                    <Typography sx={{ fontSize: isBiggerFont ? "20px" : "inherit", color: isHighContrast ? "white" : "black" }}
+              aria-label="Description">
+                      {item}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+            </div>
+            )}
             <Typography
               variant="h3"
               paddingTop="6px"
