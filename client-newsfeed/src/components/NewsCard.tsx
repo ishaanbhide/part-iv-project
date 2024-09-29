@@ -4,9 +4,10 @@ import { NewsItem } from "../models/NewsItem";
 import { useContext } from "react";
 import { SelectedNewsContext } from "../contexts/SelectedNewsContext";
 import { useQuiz } from "../contexts/QuizContext";
+import { NewNewsItem } from '../models/NewNewsItem';
 
 type NewsCardProps = {
-  newsMarker: NewsItem;
+  newsMarker: NewNewsItem;
   setReadMoreClicked: (clicked: boolean) => void;
 };
 

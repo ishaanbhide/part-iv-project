@@ -6,13 +6,14 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useContext } from "react";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { NewsItem } from "../../models/NewsItem";
+import { NewNewsItem } from '../../models/NewNewsItem';
 
 type NavigationBarPropsType = {
-  news: NewsItem[];
+  news: NewNewsItem[];
   readMoreClicked: boolean;
   setReadMoreClicked: React.Dispatch<React.SetStateAction<boolean>>;
   pageRef: React.MutableRefObject<null>;
-  firstArticle: NewsItem | null;
+  firstArticle: NewNewsItem | null;
 };
 
 export function NavigationBar({

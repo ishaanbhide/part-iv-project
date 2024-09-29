@@ -1,9 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import { NewsItem } from "../models/NewsItem";
 import { useQuiz } from "../contexts/QuizContext";
+import { NewNewsItem } from "../models/NewNewsItem";
 
 type NewsCardProps = {
-  newsMarker: NewsItem | null;
+  newsMarker: NewNewsItem | null;
 };
 
 export function NewsPage({ newsMarker }: NewsCardProps) {
@@ -91,9 +92,9 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
               variant="h3"
               paddingTop="6px"
               color={"#6b6b6b"}
-              aria-label={`Published on: ${parseStringDate(newsMarker.createdAt)}`}
+              aria-label={`Current Status: ${parseStringDate(newsMarker.endDate)}`}
             >
-              {parseStringDate(newsMarker.createdAt)}
+              {parseStringDate(newsMarker.endDate)}
             </Typography>
           </>
         )}

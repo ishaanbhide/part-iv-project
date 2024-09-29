@@ -1,7 +1,7 @@
 import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 import { CenterContext } from "./contexts/CenterContext";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
-import { getNearbyDisasterNews } from "./api/news";
+import { get, getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
 import {
   Box,
@@ -22,13 +22,14 @@ import { useQuiz } from "./contexts/QuizContext";
 import QuizModal from "./components/QuizModal";
 import MapIcon from '@mui/icons-material/Map';
 import AccessibleSearchBar from "./components/AccessibleSearch";
+import { NewNewsItem } from "./models/NewNewsItem";
 
 export default function App() {
   const { userLocation } = useContext(CenterContext);
-  const [news, setNews] = useState<NewsItem[]>([]);
+  const [news, setNews] = useState<NewNewsItem[]>([]);
   const [readMoreClicked, setReadMoreClicked] = useState<boolean>(false);
-  const [firstArticle, setFirstArticle] = useState<NewsItem | null>(null);
-  const [searchResults, setSearchResults] = useState<NewsItem[]>([]);
+  const [firstArticle, setFirstArticle] = useState<NewNewsItem | null>(null);
+  const [searchResults, setSearchResults] = useState<NewNewsItem[]>([]);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { updateUserLocation } = useContext(CenterContext);
   const { selectedNews } = useContext(SelectedNewsContext);
@@ -58,7 +59,7 @@ export default function App() {
         50000
       );
 
-      const modifiedNews: NewsItem[] = wellingtonNews.map((news: any) => {
+      const modifiedNews: NewNewsItem[] = wellingtonNews.map((news: any) => {
         return {
           id: news._id,
           title: news.title,
@@ -82,29 +83,65 @@ export default function App() {
     }
   };
 
-  const handleAucklandClicked = async () => {
+  // const handleAucklandClicked = async () => {
+  //   if (selectedLocation !== "Auckland") {
+  //     const aucklandNews = await getNearbyDisasterNews(
+  //       -36.8509,
+  //       174.7645,
+  //       50000
+  //     );
+
+  //     const modifiedNews: NewsItem[] = aucklandNews.map((news: any) => {
+  //       return {
+  //         id: news._id,
+  //         title: news.title,
+  //         description: news.body,
+  //         source: news.source,
+  //         image: news.image,
+  //         location: {
+  //           lat: news.location.coordinates[1],
+  //           lng: news.location.coordinates[0],
+  //         },
+  //         createdAt: news.createdAt,
+  //       };
+  //     });
+
+  //     setNews(modifiedNews);
+  //     setSearchResults(modifiedNews);
+  //     setSelectedLocation("Auckland");
+  //   } else {
+  //     setSelectedLocation("");
+  //     setRefresh(!refresh);
+  //   }
+  // };
+
+  const testHandleAucklandClicked = async () => {
     if (selectedLocation !== "Auckland") {
-      const aucklandNews = await getNearbyDisasterNews(
+      const aucklandNews = await get(
         -36.8509,
         174.7645,
         50000
       );
 
-      const modifiedNews: NewsItem[] = aucklandNews.map((news: any) => {
+      console.log(aucklandNews);
+
+      const modifiedNews: NewNewsItem[] = aucklandNews.map((news: any) => {
         return {
           id: news._id,
-          title: news.title,
-          description: news.body,
-          source: news.source,
-          image: news.image,
-          location: {
-            lat: news.location.coordinates[1],
-            lng: news.location.coordinates[0],
-          },
-          createdAt: news.createdAt,
+          title: news.headline,
+          summary: news.summary.summary_of_event_paragraphs,
+          description: news.summary.summary_of_event,
+          source: news.articles[0],
+          image: news.images[0],
+          severity : news.summary.severity,
+          location: news.summary.locations,
+          endDate: news.summary.end_date,
+          startDate: news.summary.start_date,
+          recActions: news.summary.recommended_actions,
         };
       });
 
+      console.log(modifiedNews)
       setNews(modifiedNews);
       setSearchResults(modifiedNews);
       setSelectedLocation("Auckland");
@@ -122,7 +159,7 @@ export default function App() {
         10000
       );
 
-      const modifiedNews: NewsItem[] = disasterNews.map((news: any) => {
+      const modifiedNews: NewNewsItem[] = disasterNews.map((news: any) => {
         return {
           id: news._id,
           title: news.title,
@@ -146,12 +183,29 @@ export default function App() {
     }
   }, [userLocation, refresh]);
 
+  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const tempSearchResults: NewNewsItem[] = news.filter(
+  //     (n: NewNewsItem) =>
+  //       n.title.toLowerCase().includes(e.target.value) ||
+  //       n.description.toLowerCase().includes(e.target.value)
+  //   );
+  //   setSearchResults(tempSearchResults);
+  // };
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const tempSearchResults: NewsItem[] = news.filter(
-      (n: NewsItem) =>
-        n.title.toLowerCase().includes(e.target.value) ||
-        n.description.toLowerCase().includes(e.target.value)
-    );
+    const searchTerm = e.target.value.toLowerCase();
+  
+    const tempSearchResults: NewNewsItem[] = news.filter((n: NewNewsItem) => {
+      const inTitle = n.title.toLowerCase().includes(searchTerm);
+      const inLocation = n.location.some((loc: string) => 
+        loc.toLowerCase().includes(searchTerm)
+      );
+      const inCategories = n.categories.some((cat: string) => 
+        cat.toLowerCase().includes(searchTerm)
+      );
+  
+      return inTitle || inLocation || inCategories;
+    });
+  
     setSearchResults(tempSearchResults);
   };
 
@@ -268,7 +322,7 @@ export default function App() {
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
             }}
-            onClick={handleAucklandClicked}
+            onClick={testHandleAucklandClicked}
           >
             Auckland
           </Button>
