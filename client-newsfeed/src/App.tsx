@@ -132,6 +132,7 @@ export default function App() {
           summary: news.summary.summary_of_event_paragraphs,
           description: news.summary.summary_of_event,
           source: news.articles[0],
+          lastUpdated: news.summary.last_updated,
           image: news.images[0],
           severity : news.summary.severity,
           location: news.summary.locations,

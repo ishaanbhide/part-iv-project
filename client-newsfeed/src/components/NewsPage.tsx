@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import { NewsItem } from "../models/NewsItem";
 import { useQuiz } from "../contexts/QuizContext";
 import { NewNewsItem } from "../models/NewNewsItem";
@@ -23,6 +23,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
   const { answers } = useQuiz();
   const isBiggerFont = answers[4] === "Yes";
   const isHighContrast = answers[1] === "Yes";
+  const isSteps = answers[2] === "Yes";
 
   return (
     <Box
@@ -72,14 +73,22 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
               {newsMarker.title}
             </Typography>
             <Typography
-              variant="h4"
+              variant="h3"
               paddingTop="3px"
               sx={{ textAlign: "center", paddingBottom: "10px", color: isHighContrast ? "white" : "black" }}
               aria-label={`Source: ${newsMarker.source}`}
             >
-              {newsMarker.source}
+              Last updated: {newsMarker.lastUpdated}
             </Typography>
             <Typography
+              variant="h3"
+              paddingTop="3px"
+              sx={{ textAlign: "center", paddingBottom: "10px", color: isHighContrast ? "white" : "black" }}
+              aria-label={`Current Status: ${newsMarker.endDate}`}
+            >
+              Curren Status: {newsMarker.endDate}
+            </Typography>
+            {/* <Typography
               paragraph
               paddingTop="6px"
               paddingBottom="40px"
@@ -87,14 +96,26 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
               aria-label="Description"
             >
               {newsMarker.description}
-            </Typography>
+            </Typography> */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
+              {newsMarker.summary.map((item, index) => (
+                <Card key={index} sx={{ backgroundColor: "#f2df79" }}> {/* A more contrasting color */}
+                  <CardContent>
+                    <Typography sx={{ fontSize: isBiggerFont ? "20px" : "inherit", color: isHighContrast ? "white" : "black" }}
+              aria-label="Description">
+                      {item}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
             <Typography
               variant="h3"
               paddingTop="6px"
               color={"#6b6b6b"}
-              aria-label={`Current Status: ${parseStringDate(newsMarker.endDate)}`}
+              aria-label={newsMarker.source}
             >
-              {parseStringDate(newsMarker.endDate)}
+              {newsMarker.source}
             </Typography>
           </>
         )}

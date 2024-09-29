@@ -13,4 +13,5 @@ export interface NewNewsItem {
     image: string,
     source: string,
     location: string[],
+    lastUpdated: string,
 }
