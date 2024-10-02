@@ -39,3 +39,12 @@ export async function get(
     console.error(error);
   }
 }
+
+export async function allData() {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/news/testing`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}

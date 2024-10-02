@@ -1,7 +1,7 @@
 import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 import { CenterContext } from "./contexts/CenterContext";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
-import { get, getNearbyDisasterNews } from "./api/news";
+import { allData, get, getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
 import {
   Box,
@@ -154,35 +154,46 @@ export default function App() {
 
   useEffect(() => {
     async function fetchDisasterNews() {
-      const disasterNews = await getNearbyDisasterNews(
-        userLocation!.lat,
-        userLocation!.lng,
-        10000
-      );
+      let disasterNews;
+      if(userLocation){
+        disasterNews = await get(
+          userLocation!.lat,
+          userLocation!.lng,
+          10000
+        );
+      }
+      else{
+        console.log("this is hit")
+        disasterNews = await allData()
+      }
 
       const modifiedNews: NewNewsItem[] = disasterNews.map((news: any) => {
         return {
           id: news._id,
-          title: news.title,
-          description: news.body,
-          source: news.source,
-          image: news.image,
-          location: {
-            lat: news.location.coordinates[1],
-            lng: news.location.coordinates[0],
-          },
-          createdAt: news.createdAt,
+          title: news.headline,
+          summary: news.summary.summary_of_event_paragraphs,
+          description: news.summary.summary_of_event,
+          source: news.articles[0],
+          lastUpdated: news.summary.last_updated,
+          image: news.images[0],
+          severity : news.summary.severity,
+          location: news.summary.locations,
+          endDate: news.summary.end_date,
+          startDate: news.summary.start_date,
+          recActions: news.summary.recommended_actions,
         };
       });
+
+      console.log(modifiedNews)
       setNews(modifiedNews);
       setSearchResults(modifiedNews);
       setFirstArticle(modifiedNews[0]);
     }
-
-    if (userLocation) {
       fetchDisasterNews();
-    }
+
   }, [userLocation, refresh]);
+
+  console.log(userLocation)
 
   // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   //   const tempSearchResults: NewNewsItem[] = news.filter(
