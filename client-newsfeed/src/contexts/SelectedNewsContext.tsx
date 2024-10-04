@@ -1,9 +1,10 @@
 import { createContext, useState } from "react";
 import { NewsItem } from "../models/NewsItem";
+import { NewNewsItem } from "../models/NewNewsItem";
 
 type SelectedNewsContextType = {
-  selectedNews: NewsItem | null;
-  updateSelectedNews: (newsMarker: NewsItem | null) => void;
+  selectedNews: NewNewsItem | null;
+  updateSelectedNews: (newsMarker: NewNewsItem | null) => void;
 };
 
 export const SelectedNewsContext = createContext<SelectedNewsContextType>({
@@ -18,9 +19,9 @@ type SelectedNewsProviderProps = {
 export const SelectedNewsProvider: React.FC<SelectedNewsProviderProps> = ({
   children,
 }) => {
-  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [selectedNews, setSelectedNews] = useState<NewNewsItem | null>(null);
 
-  const updateSelectedNews = (newsMarker: NewsItem | null) => {
+  const updateSelectedNews = (newsMarker: NewNewsItem | null) => {
     setSelectedNews(newsMarker);
   };
 

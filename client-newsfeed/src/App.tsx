@@ -1,7 +1,7 @@
 import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 import { CenterContext } from "./contexts/CenterContext";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
-import { getNearbyDisasterNews } from "./api/news";
+import { allData, get, getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
 import {
   Box,
@@ -14,21 +14,34 @@ import { NewsCard } from "./components/NewsCard";
 import { Coordinates } from "./models/Coordinates";
 import { getUserLocation } from "./utils/getUserLocation";
 import { NewsPage } from "./components/NewsPage";
+// import { SpeakingTextField } from "./components/SpeakingTextField"
+import SpeakingTextField from "./components/SpeakingTextField"
 import { SelectedNewsContext } from "./contexts/SelectedNewsContext";
 import { TailSpin } from "react-loader-spinner";
+import { useQuiz } from "./contexts/QuizContext";
+import QuizModal from "./components/QuizModal";
+import MapIcon from '@mui/icons-material/Map';
+import AccessibleSearchBar from "./components/AccessibleSearch";
+import { NewNewsItem } from "./models/NewNewsItem";
 
 export default function App() {
   const { userLocation } = useContext(CenterContext);
-  const [news, setNews] = useState<NewsItem[]>([]);
+  const [news, setNews] = useState<NewNewsItem[]>([]);
   const [readMoreClicked, setReadMoreClicked] = useState<boolean>(false);
-  const [firstArticle, setFirstArticle] = useState<NewsItem | null>(null);
-  const [searchResults, setSearchResults] = useState<NewsItem[]>([]);
+  const [firstArticle, setFirstArticle] = useState<NewNewsItem | null>(null);
+  const [searchResults, setSearchResults] = useState<NewNewsItem[]>([]);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { updateUserLocation } = useContext(CenterContext);
   const { selectedNews } = useContext(SelectedNewsContext);
   const pageRef = useRef(null);
   const [selectedLocation, setSelectedLocation] = useState<String>("");
   const [refresh, setRefresh] = useState(false);
+
+  const { answers } = useQuiz();
+  const isVoiceAssist = answers[3];
+  const isHighContrast = answers[1] === "Yes";
+  const isBiggerFont = answers[4] === "Yes";
+  console.log(isHighContrast)
 
   useEffect(() => {
     async function fetchUserLocation() {
@@ -46,7 +59,7 @@ export default function App() {
         50000
       );
 
-      const modifiedNews: NewsItem[] = wellingtonNews.map((news: any) => {
+      const modifiedNews: NewNewsItem[] = wellingtonNews.map((news: any) => {
         return {
           id: news._id,
           title: news.title,
@@ -70,29 +83,66 @@ export default function App() {
     }
   };
 
-  const handleAucklandClicked = async () => {
+  // const handleAucklandClicked = async () => {
+  //   if (selectedLocation !== "Auckland") {
+  //     const aucklandNews = await getNearbyDisasterNews(
+  //       -36.8509,
+  //       174.7645,
+  //       50000
+  //     );
+
+  //     const modifiedNews: NewsItem[] = aucklandNews.map((news: any) => {
+  //       return {
+  //         id: news._id,
+  //         title: news.title,
+  //         description: news.body,
+  //         source: news.source,
+  //         image: news.image,
+  //         location: {
+  //           lat: news.location.coordinates[1],
+  //           lng: news.location.coordinates[0],
+  //         },
+  //         createdAt: news.createdAt,
+  //       };
+  //     });
+
+  //     setNews(modifiedNews);
+  //     setSearchResults(modifiedNews);
+  //     setSelectedLocation("Auckland");
+  //   } else {
+  //     setSelectedLocation("");
+  //     setRefresh(!refresh);
+  //   }
+  // };
+
+  const testHandleAucklandClicked = async () => {
     if (selectedLocation !== "Auckland") {
-      const aucklandNews = await getNearbyDisasterNews(
+      const aucklandNews = await get(
         -36.8509,
         174.7645,
         50000
       );
 
-      const modifiedNews: NewsItem[] = aucklandNews.map((news: any) => {
+      console.log(aucklandNews);
+
+      const modifiedNews: NewNewsItem[] = aucklandNews.map((news: any) => {
         return {
           id: news._id,
-          title: news.title,
-          description: news.body,
-          source: news.source,
-          image: news.image,
-          location: {
-            lat: news.location.coordinates[1],
-            lng: news.location.coordinates[0],
-          },
-          createdAt: news.createdAt,
+          title: news.headline,
+          summary: news.summary.summary_of_event_paragraphs,
+          description: news.summary.summary_of_event,
+          source: news.articles[0],
+          lastUpdated: news.summary.last_updated,
+          image: news.images[0],
+          severity : news.summary.severity,
+          location: news.summary.locations,
+          endDate: news.summary.end_date,
+          startDate: news.summary.start_date,
+          recActions: news.summary.recommended_actions,
         };
       });
 
+      console.log(modifiedNews)
       setNews(modifiedNews);
       setSearchResults(modifiedNews);
       setSelectedLocation("Auckland");
@@ -104,44 +154,95 @@ export default function App() {
 
   useEffect(() => {
     async function fetchDisasterNews() {
-      const disasterNews = await getNearbyDisasterNews(
-        userLocation!.lat,
-        userLocation!.lng,
-        10000
-      );
+      let disasterNews;
+      if(userLocation){
+        disasterNews = await get(
+          userLocation!.lat,
+          userLocation!.lng,
+          10000
+        );
+      }
+      else{
+        console.log("this is hit")
+        disasterNews = await allData()
+      }
 
-      const modifiedNews: NewsItem[] = disasterNews.map((news: any) => {
+      const modifiedNews: NewNewsItem[] = disasterNews.map((news: any) => {
         return {
           id: news._id,
-          title: news.title,
-          description: news.body,
-          source: news.source,
-          image: news.image,
-          location: {
-            lat: news.location.coordinates[1],
-            lng: news.location.coordinates[0],
-          },
-          createdAt: news.createdAt,
+          title: news.headline,
+          summary: news.summary.summary_of_event_paragraphs,
+          description: news.summary.summary_of_event,
+          source: news.articles[0],
+          lastUpdated: news.summary.last_updated,
+          image: news.images[0],
+          severity : news.summary.severity,
+          location: news.summary.locations,
+          endDate: news.summary.end_date,
+          startDate: news.summary.start_date,
+          recActions: news.summary.recommended_actions,
         };
       });
+
+      console.log(modifiedNews)
       setNews(modifiedNews);
       setSearchResults(modifiedNews);
       setFirstArticle(modifiedNews[0]);
     }
-
-    if (userLocation) {
       fetchDisasterNews();
-    }
+
   }, [userLocation, refresh]);
 
+  console.log(userLocation)
+
+  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const tempSearchResults: NewNewsItem[] = news.filter(
+  //     (n: NewNewsItem) =>
+  //       n.title.toLowerCase().includes(e.target.value) ||
+  //       n.description.toLowerCase().includes(e.target.value)
+  //   );
+  //   setSearchResults(tempSearchResults);
+  // };
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const tempSearchResults: NewsItem[] = news.filter(
-      (n: NewsItem) =>
-        n.title.toLowerCase().includes(e.target.value) ||
-        n.description.toLowerCase().includes(e.target.value)
-    );
+    const searchTerm = e.target.value.toLowerCase();
+  
+    const tempSearchResults: NewNewsItem[] = news.filter((n: NewNewsItem) => {
+      const inTitle = n.title.toLowerCase().includes(searchTerm);
+      const inLocation = n.location.some((loc: string) => 
+        loc.toLowerCase().includes(searchTerm)
+      );
+      const inCategories = n.categories.some((cat: string) => 
+        cat.toLowerCase().includes(searchTerm)
+      );
+  
+      return inTitle || inLocation || inCategories;
+    });
+  
     setSearchResults(tempSearchResults);
   };
+
+  const [boxStyle, setBoxStyle] = useState({});
+
+  useEffect(() => {
+    setBoxStyle({
+      display: "flex",
+      flexDirection: "column",
+      gap: "8px",
+      height: "calc(100vh - 70px)",
+      width: "100%",
+      padding: "16px",
+      overflow: "auto",
+      boxSizing: "border-box",
+      position: "fixed",
+      top: "70px",
+      backgroundColor: isHighContrast ? "white" : "#FFF8E7",
+      alignItems: !news.length ? "center" : "unset",
+    });
+  }, [isHighContrast, news.length]);
+
+  function handleMapOpen(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <Box className="App">
@@ -169,29 +270,47 @@ export default function App() {
       </Box>
 
       <Box
-        sx={{
-          display: isMobile ? "flex" : "grid",
-          gridTemplateColumns: "auto auto auto",
-          flexDirection: "column",
-          gap: "8px",
-          height: "calc(100vh - 70px)",
-          width: "100%",
-          padding: "16px",
-          overflow: "auto",
-          boxSizing: "border-box",
-          position: "fixed",
-          top: "70px",
-          alignItems: !news.length ? "center" : "unset",
-        }}
+        style={boxStyle}
         ref={pageRef}
       >
-        <TextField
-          id="filled-basic"
-          label="Search"
-          onChange={handleSearchChange}
+        {/* <Box sx={{ display: "flex", alignItems: "center", gap: "16px", mb: 2 }}>
+          <QuizModal />
+
+          {isVoiceAssist === "Yes" ? (<SpeakingTextField
+            id="filled-basic"
+            label="Search"
+            onChange={handleSearchChange}
+            sx={{ flexGrow: 1 }}
+          />) : (<TextField
+            id="filled-basic"
+            label="Search"
+            onChange={handleSearchChange}
+            sx={{ flexGrow: 1 }}
+          />
+          )}
+
+          <Button
+            startIcon={<MapIcon />}
+            onClick={handleMapOpen}
+          >
+          </Button>
+
+        </Box> */}
+        <AccessibleSearchBar
+          isBiggerFont={isBiggerFont}
+          isVoiceAssist={isVoiceAssist}
+          isHighContrast={isHighContrast}
+          handleSearchChange={handleSearchChange}
+          handleMapOpen={handleMapOpen}
         />
 
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        >
           <Button
             variant="contained"
             size="small"
@@ -199,6 +318,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Northland
@@ -212,8 +332,9 @@ export default function App() {
                 selectedLocation == "Auckland" ? "#193a8c" : "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
-            onClick={handleAucklandClicked}
+            onClick={testHandleAucklandClicked}
           >
             Auckland
           </Button>
@@ -225,6 +346,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Waikato
@@ -237,6 +359,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Bay of Plenty
@@ -249,6 +372,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Gisborne
@@ -261,6 +385,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Hawke's Bay
@@ -273,6 +398,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Taranaki
@@ -286,6 +412,7 @@ export default function App() {
                 selectedLocation == "Wellington" ? "#193a8c" : "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
             onClick={handleWellingtonClicked}
           >
@@ -299,6 +426,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Nelson
@@ -311,6 +439,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Canterbury
@@ -323,6 +452,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             Otago
@@ -335,6 +465,7 @@ export default function App() {
               backgroundColor: "#333333",
               marginBottom: "5px",
               marginRight: "5px",
+              fontSize: isBiggerFont ? "20px" : "14px"
             }}
           >
             West Coast
@@ -348,15 +479,23 @@ export default function App() {
         </Typography>
 
         {news.length > 0 ? (
-          searchResults.map((marker) => {
-            return (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "20px",
+              padding: "20px",
+            }}
+          >
+            {searchResults.map((marker) => (
               <NewsCard
                 key={marker.id}
                 newsMarker={marker}
                 setReadMoreClicked={setReadMoreClicked}
               />
-            );
-          })
+            ))}
+          </Box>
         ) : (
           <Box>
             <TailSpin
