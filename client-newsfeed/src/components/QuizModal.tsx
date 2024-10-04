@@ -11,6 +11,7 @@ import {
   FormLabel
 } from '@mui/material';
 import { useQuiz } from '../contexts/QuizContext';
+import TuneIcon from '@mui/icons-material/Tune';
 
 interface Question {
   id: number;
@@ -30,12 +31,12 @@ const questions: Question[] = [
   },
   {
     id: 2,
-    question: "Would you like a simpler version (less buttons and pages) of the application?",
+    question: "Would you like recommended step by step instructions?",
     options: ["Yes", "No"]
   },
   {
     id: 3,
-    question: "Would you like audio confirmation within the application?",
+    question: "Would you like audio confirmation with your text input?",
     options: ["Yes", "No"]
   },
   {
@@ -45,15 +46,20 @@ const questions: Question[] = [
   },
 ];
 
-const QuizModal: React.FC = () => {
-  const [open, setOpen] = useState<boolean>(false);
+interface QuizModalProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+const QuizModal: React.FC<QuizModalProps> = ({ open, onClose }) => {
+  // const [open, setOpen] = useState<boolean>(false);
   const { answers, setAnswers } = useQuiz();
 
-  const handleOpen = (): void => setOpen(true);
-  const handleClose = (): void => {
-    setOpen(false);
-    console.log(answers);
-  };
+  // const handleOpen = (): void => setOpen(true);
+  // const handleClose = (): void => {
+  //   setOpen(false);
+  //   console.log(answers);
+  // };
 
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>, questionId: number): void => {
     setAnswers(prevAnswers => ({
@@ -65,10 +71,16 @@ const QuizModal: React.FC = () => {
 
   return (
     <>
-      <Button onClick={handleOpen}>Take the quiz</Button>
+      {/* <Button onClick={handleOpen} aria-label="Open quiz modal">Take the quiz</Button> */}
+      {/* <Button 
+      onClick={handleOpen} 
+      aria-label="Open quiz modal"
+      startIcon={<TuneIcon />}
+    >
+    </Button> */}
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         aria-labelledby="quiz-modal-title"
         aria-describedby="quiz-modal-description"
         BackdropProps={{
@@ -108,7 +120,7 @@ const QuizModal: React.FC = () => {
                     <FormControlLabel 
                       key={index} 
                       value={option} 
-                      control={<Radio />} 
+                      control={<Radio aria-label={option} />} 
                       label={option} 
                     />
                   ))}
@@ -117,7 +129,7 @@ const QuizModal: React.FC = () => {
             ))}
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button onClick={handleClose} variant="contained">Close</Button>
+            <Button onClick={onClose} variant="contained" aria-label="Close quiz modal">Close</Button>
           </Box>
         </Box>
       </Modal>

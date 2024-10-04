@@ -1,11 +1,13 @@
+import React, { useState } from 'react';
 import { Box, Typography } from "@mui/material";
 import { NewsItem } from "../models/NewsItem";
 import { useContext } from "react";
 import { SelectedNewsContext } from "../contexts/SelectedNewsContext";
 import { useQuiz } from "../contexts/QuizContext";
+import { NewNewsItem } from '../models/NewNewsItem';
 
 type NewsCardProps = {
-  newsMarker: NewsItem;
+  newsMarker: NewNewsItem;
   setReadMoreClicked: (clicked: boolean) => void;
 };
 
@@ -36,15 +38,17 @@ export function NewsCard({ newsMarker, setReadMoreClicked }: NewsCardProps) {
         backgroundColor: isHighContrast ? "black" : undefined,
         boxSizing: "border-box",
         width: {
-          s: "85%", // For smaller devices
-          md: isBiggerFont ? "65%" : "49%", // For larger devices
+          s: "85%",
+          md: isBiggerFont ? "65%" : "49%",
         },
         transition: "border 0.1s ease-in-out",
         cursor: "pointer",
         borderRadius: "0.8rem",
-        // minHeight: isBiggerFont ? "650px" : "450px",
         justifyContent: "space-evenly",
       }}
+      role="button"
+      tabIndex={0}
+      aria-label={`Read more about ${newsMarker.title}`}
     >
       <img
         style={{
