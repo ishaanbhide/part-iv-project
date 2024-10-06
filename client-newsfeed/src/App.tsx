@@ -211,11 +211,13 @@ export default function App() {
       const inLocation = n.location.some((loc: string) => 
         loc.toLowerCase().includes(searchTerm)
       );
-      const inCategories = n.categories.some((cat: string) => 
-        cat.toLowerCase().includes(searchTerm)
-      );
+      console.log(n)
+      // const inCategories = n.severity.some((cat: string) => 
+      //   cat.toLowerCase().includes(searchTerm)
+      // );
+      const inSeverity = n.severity.toLowerCase().includes(searchTerm);
   
-      return inTitle || inLocation || inCategories;
+      return inTitle || inLocation || inSeverity;
     });
   
     setSearchResults(tempSearchResults);
