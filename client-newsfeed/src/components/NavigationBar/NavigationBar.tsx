@@ -66,7 +66,7 @@ export function NavigationBar({
   };
 
   function handleMapOpen(event: any): void {
-    throw new Error('Function not implemented.');
+    window.open("http://localhost:8001", "_blank"); 
   }
 
   return (
