@@ -60,7 +60,7 @@ export default function App() {
       });
       setSearchResults(tempSearchResults);
     } else {
-      setSearchResults(news);
+      setSearchResults(searchResults);
     }
   }
 
@@ -203,6 +203,8 @@ export default function App() {
   
       return inTitle || inLocation || inSeverity;
     });
+
+    console.log(tempSearchResults)
   
     setSearchResults(tempSearchResults);
   };
