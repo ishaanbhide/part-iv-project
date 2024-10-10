@@ -235,7 +235,7 @@ export default function App() {
       boxSizing: "border-box",
       position: "fixed",
       top: "70px",
-      backgroundColor: isHighContrast ? "white" : "#FFF8E7",
+      backgroundColor: isHighContrast ? "white" : "#F4F6FC",
       alignItems: !news.length ? "center" : "unset",
     });
   }, [isHighContrast, news.length]);
@@ -315,7 +315,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -329,7 +329,7 @@ export default function App() {
             size="small"
             sx={{
               backgroundColor:
-                selectedLocation == "Auckland" ? "#193a8c" : "#333333",
+                selectedLocation == "Auckland" ? "#193a8c" : "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -343,7 +343,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -356,7 +356,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -369,7 +369,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -382,7 +382,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -395,7 +395,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -409,7 +409,7 @@ export default function App() {
             size="small"
             sx={{
               backgroundColor:
-                selectedLocation == "Wellington" ? "#193a8c" : "#333333",
+                selectedLocation == "Wellington" ? "#193a8c" : "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -423,7 +423,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -436,7 +436,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -449,7 +449,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
@@ -462,7 +462,7 @@ export default function App() {
             variant="contained"
             size="small"
             sx={{
-              backgroundColor: "#333333",
+              backgroundColor: "#00026E",
               marginBottom: "5px",
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
