@@ -105,7 +105,7 @@ export default function App() {
     }
   };
 
-  const testHandleAucklandClicked = async () => {
+  const testAucklandClicked = async () => {
     if (selectedLocation !== "Auckland") {
       const aucklandNews = await get(
         -36.8509,
@@ -301,7 +301,7 @@ export default function App() {
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
             }}
-            onClick={testHandleAucklandClicked}
+            onClick={testAucklandClicked}
           >
             Auckland
           </Button>
