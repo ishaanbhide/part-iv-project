@@ -1,6 +1,6 @@
 .map {
-    height: 25svh;
-    width: 100%;
+    height: 100vh; /* Full height */
+    width: 100%; /* Deduct the width of the sidebar */
     box-sizing: border-box;
     transition: height 0.3s ease-in-out;
     display: flex;
