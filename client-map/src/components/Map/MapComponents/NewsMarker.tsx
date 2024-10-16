@@ -22,27 +22,49 @@ export function NewsMarker({ newsMarker }: NewsMarkerProps) {
         !isDrawerOpen && updateCenter(newsMarker.location);
         !isDrawerOpen && updateLoading(true);
 
-        console.log(newsMarker.location)
+        console.log(newsMarker.location);
 
-        
-        const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1Ijoid291eTQ0OCIsImEiOiJja2RrdzJjcWowMncyMzJxaTFqeGV2ZHhpIn0.YKQ7KO8v1Yqm3AkhqVPcPw';
+        const MAPBOX_ACCESS_TOKEN =
+            "pk.eyJ1Ijoid291eTQ0OCIsImEiOiJja2RrdzJjcWowMncyMzJxaTFqeGV2ZHhpIn0.YKQ7KO8v1Yqm3AkhqVPcPw";
 
         try {
             const { lng, lat } = newsMarker.location;
-            const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_ACCESS_TOKEN}&types=place,locality,neighborhood`);
+            const response = await fetch(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_ACCESS_TOKEN}&types=place,locality,neighborhood`,
+            );
             const data = await response.json();
-            const suburb = data.features[0]?.text || 'Unknown location';
+            const suburb = data.features[0]?.text || "Unknown location";
             const speech = new SpeechSynthesisUtterance(suburb);
             window.speechSynthesis.speak(speech);
-
         } catch (error) {
-            console.error('Error getting or speaking location:', error);
+            console.error("Error getting or speaking location:", error);
         } finally {
             updateLoading(false);
         }
     };
 
     const isSelected = selectedNews?.id === newsMarker.id;
+
+    // Determine marker color based on severity unless selected, then black
+    let markerColour;
+    if (isSelected) {
+        markerColour = "#000000"; // Black when selected
+    } else {
+        switch (newsMarker.severity) {
+            case "Low":
+                markerColour = "#00FF00"; // Green for low severity
+                break;
+            case "Medium":
+                markerColour = "#FFFF00"; // Yellow for medium severity
+                break;
+            case "High":
+                markerColour = "#FF0000"; // Red for high severity
+                break;
+            default:
+                markerColour = "#f7726d"; // Default color if no severity is a light red
+                break;
+        }
+    }
 
     return (
         <MarkerF
