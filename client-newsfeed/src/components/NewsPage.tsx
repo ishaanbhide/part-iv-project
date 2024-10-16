@@ -32,7 +32,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
         flexDirection: "column",
         height: "92vh",
         overflow: "auto",
-        backgroundColor: isHighContrast ? "black" : "#FFF8E7",
+        backgroundColor: isHighContrast ? "black" : "#F4F6FC",
       }}
     >
       <Box
@@ -90,7 +90,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
               {newsMarker.summary.map((item, index) => (
-                <Card key={index} sx={{ backgroundColor: isHighContrast ? "#323332": "#f2df79" }}> {/* A more contrasting color */}
+                <Card key={index} sx={{ backgroundColor: isHighContrast ? "#323332": "#89ACDB" }}> {/* A more contrasting color */}
                   <CardContent>
                     <Typography sx={{ fontSize: isBiggerFont ? "20px" : "inherit", color: isHighContrast ? "white" : "black" }}
               aria-label="Description">
@@ -111,7 +111,7 @@ export function NewsPage({ newsMarker }: NewsCardProps) {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px' }}>
               {newsMarker.recActions.map((item, index) => (
-                <Card key={index} sx={{ backgroundColor: isHighContrast ? "#323332": "#f0e68c" }}> {/* A more contrasting color */}
+                <Card key={index} sx={{ backgroundColor: isHighContrast ? "#323332": "#89ACDB" }}> {/* A more contrasting color */}
                   <CardContent>
                     <Typography sx={{ fontSize: isBiggerFont ? "20px" : "inherit", color: isHighContrast ? "white" : "black" }}
               aria-label="Description">

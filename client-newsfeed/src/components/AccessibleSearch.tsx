@@ -112,7 +112,7 @@ const AccessibleSearchBar: React.FC<AccessibleSearchBarProps> = ({
     backgroundColor: '#000000',
     color: '#FFFFFF',
     '&:hover': {
-      backgroundColor: '#333333',
+      backgroundColor: '#00026E',
     },
     padding: padding,
   };
@@ -142,7 +142,7 @@ const AccessibleSearchBar: React.FC<AccessibleSearchBarProps> = ({
         alignItems: "center", 
         gap: isBiggerFont ? "24px" : "16px", 
         mb: isBiggerFont ? 3 : 2,
-        backgroundColor: isHighContrast ? "white" : "#FFF8E7",
+        backgroundColor: isHighContrast ? "white" : "#F4F6FC",
         padding: isBiggerFont ? '16px' : '8px',
         borderRadius: '8px',
       }}
