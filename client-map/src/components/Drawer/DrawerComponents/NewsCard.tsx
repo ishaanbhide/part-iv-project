@@ -1,8 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import ReadMoreIcon from "@mui/icons-material/ReadMore";
 import { NewsItem } from "../../../models/NewsItem";
 import { useContext } from "react";
-import { CenterContext } from "../../../contexts/CenterContext";
 import { SelectedNewsContext } from "../../../contexts/SelectedNewsContext";
 
 type NewsCardProps = {
@@ -16,60 +14,57 @@ export function NewsCard({
     setReadMoreClicked,
     idMap,
 }: NewsCardProps) {
-    const { selectedNews, updateSelectedNews } =
-        useContext(SelectedNewsContext);
+    const { updateSelectedNews } = useContext(SelectedNewsContext);
 
-    const handleSelectedNewsCard = () => {
-        if (newsMarker.id == idMap.get(selectedNews?.id!)) {
-            updateSelectedNews(null);
-        } else {
-            updateSelectedNews(newsMarker);
-        }
-    };
-
-    const handleReadMoreClick = (event: React.MouseEvent<SVGSVGElement>) => {
-        event.stopPropagation(); // Stop the event from propagating to the parent container
-        updateSelectedNews(newsMarker);
-        setReadMoreClicked(true);
+    const handleCardClick = () => {
+        updateSelectedNews(newsMarker); // Select the news
+        setReadMoreClicked(true); // Trigger the "read more" action
     };
 
     return (
         <Box
-            onClick={handleSelectedNewsCard}
+            onClick={handleCardClick} // Make entire card clickable
             id={newsMarker.id}
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "10px",
-                backgroundColor: "secondary.main",
-                boxSizing: "border-box",
-                width: "100%",
-                border:
-                    idMap.get(selectedNews?.id!) == newsMarker.id
-                        ? "3px #000000 solid"
-                        : "3px #ffffff solid",
-                transition: "border 0.1s ease-in-out",
+                padding: "16px",
+                backgroundColor: "#ffffff",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                borderRadius: "12px",
                 cursor: "pointer",
-                borderRadius: "0.8rem",
+                "&:hover": {
+                    transform: "scale(1.02)",
+                    boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
+                },
+                marginBottom: "16px",
             }}
         >
             <img
-                style={{ width: "100%", height: "200px", objectFit: "cover" }}
+                style={{
+                    width: "100%",
+                    height: "140px",
+                    objectFit: "cover",
+                    borderRadius: "8px",
+                    marginBottom: "12px",
+                }}
                 src={newsMarker.image}
             />
-            <Box
+            <Typography
+                variant="h6"
                 sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    paddingTop: "8px",
+                    fontWeight: "bold",
+                    lineHeight: "1.2",
+                    fontSize: "1.1rem",
+                    marginBottom: "8px",
                 }}
             >
-                <Typography variant="h2">{newsMarker.title}</Typography>
-                <ReadMoreIcon
-                    onClick={handleReadMoreClick}
-                    sx={{ marginLeft: "auto" }}
-                />
-            </Box>
+                {newsMarker.title.substring(0, 80)}... 
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#6b6b6b" }}>
+                {newsMarker.description.substring(0, 80)}...
+            </Typography>
         </Box>
     );
 }

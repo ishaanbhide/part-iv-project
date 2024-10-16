@@ -468,7 +468,7 @@ export default function App() {
             {/* <TailSpin
               height="80"
               width="80"
-              color="#000000"
+              color="#00026E"
               ariaLabel="tail-spin-loading"
               radius="1"
             /> */}
