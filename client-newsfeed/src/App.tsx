@@ -1,6 +1,6 @@
 import { NavigationBar } from "./components/NavigationBar/NavigationBar";
 import { CenterContext } from "./contexts/CenterContext";
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { allData, get, getNearbyDisasterNews } from "./api/news";
 import { NewsItem } from "./models/NewsItem";
 import {
@@ -36,6 +36,7 @@ export default function App() {
   const pageRef = useRef(null);
   const [selectedLocation, setSelectedLocation] = useState<String>("");
   const [refresh, setRefresh] = useState(false);
+  const [severity, setSeverity] = useState<string>('All');
 
   const { answers } = useQuiz();
   const isVoiceAssist = answers[3];
@@ -51,71 +52,60 @@ export default function App() {
     fetchUserLocation();
   }, []);
 
+  const filterNewsBySeverity = () => {
+    if (severity !== "All") {
+      console.log(searchResults)
+      const tempSearchResults: NewNewsItem[] = searchResults.filter((n: NewNewsItem) => {
+        return n.severity === severity;
+      });
+      setSearchResults(tempSearchResults);
+    } else {
+      setSearchResults(searchResults);
+    }
+  }
+
+  useEffect(() => {
+    filterNewsBySeverity();
+  }, [severity, searchResults]);
+
   const handleWellingtonClicked = async () => {
-    if (selectedLocation !== "Wellington") {
-      const wellingtonNews = await getNearbyDisasterNews(
+    if (selectedLocation !== "Auckland") {
+      const aucklandNews = await get(
         -41.2924,
         174.7787,
         50000
       );
 
-      const modifiedNews: NewNewsItem[] = wellingtonNews.map((news: any) => {
+      console.log(aucklandNews);
+
+      const modifiedNews: NewNewsItem[] = aucklandNews.map((news: any) => {
         return {
           id: news._id,
-          title: news.title,
-          description: news.body,
-          source: news.source,
-          image: news.image,
-          location: {
-            lat: news.location.coordinates[1],
-            lng: news.location.coordinates[0],
-          },
-          createdAt: news.createdAt,
+          title: news.headline,
+          summary: news.summary.summary_of_event_paragraphs,
+          description: news.summary.summary_of_event,
+          source: news.articles[0],
+          lastUpdated: news.summary.last_updated,
+          image: news.images[0],
+          severity : news.summary.severity,
+          location: news.summary.locations,
+          endDate: news.summary.end_date,
+          startDate: news.summary.start_date,
+          recActions: news.summary.recommended_actions,
         };
       });
 
+      console.log(modifiedNews)
       setNews(modifiedNews);
       setSearchResults(modifiedNews);
-      setSelectedLocation("Wellington");
+      setSelectedLocation("Auckland");
     } else {
       setSelectedLocation("");
       setRefresh(!refresh);
     }
   };
 
-  // const handleAucklandClicked = async () => {
-  //   if (selectedLocation !== "Auckland") {
-  //     const aucklandNews = await getNearbyDisasterNews(
-  //       -36.8509,
-  //       174.7645,
-  //       50000
-  //     );
-
-  //     const modifiedNews: NewsItem[] = aucklandNews.map((news: any) => {
-  //       return {
-  //         id: news._id,
-  //         title: news.title,
-  //         description: news.body,
-  //         source: news.source,
-  //         image: news.image,
-  //         location: {
-  //           lat: news.location.coordinates[1],
-  //           lng: news.location.coordinates[0],
-  //         },
-  //         createdAt: news.createdAt,
-  //       };
-  //     });
-
-  //     setNews(modifiedNews);
-  //     setSearchResults(modifiedNews);
-  //     setSelectedLocation("Auckland");
-  //   } else {
-  //     setSelectedLocation("");
-  //     setRefresh(!refresh);
-  //   }
-  // };
-
-  const testHandleAucklandClicked = async () => {
+  const testAucklandClicked = async () => {
     if (selectedLocation !== "Auckland") {
       const aucklandNews = await get(
         -36.8509,
@@ -144,6 +134,8 @@ export default function App() {
 
       console.log(modifiedNews)
       setNews(modifiedNews);
+      console.log(news)
+      console.log("CHANGED HERE")
       setSearchResults(modifiedNews);
       setSelectedLocation("Auckland");
     } else {
@@ -195,14 +187,6 @@ export default function App() {
 
   console.log(userLocation)
 
-  // const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const tempSearchResults: NewNewsItem[] = news.filter(
-  //     (n: NewNewsItem) =>
-  //       n.title.toLowerCase().includes(e.target.value) ||
-  //       n.description.toLowerCase().includes(e.target.value)
-  //   );
-  //   setSearchResults(tempSearchResults);
-  // };
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const searchTerm = e.target.value.toLowerCase();
   
@@ -211,12 +195,16 @@ export default function App() {
       const inLocation = n.location.some((loc: string) => 
         loc.toLowerCase().includes(searchTerm)
       );
-      const inCategories = n.categories.some((cat: string) => 
-        cat.toLowerCase().includes(searchTerm)
-      );
+      console.log(n)
+      // const inCategories = n.severity.some((cat: string) => 
+      //   cat.toLowerCase().includes(searchTerm)
+      // );
+      const inSeverity = n.severity.toLowerCase().includes(searchTerm);
   
-      return inTitle || inLocation || inCategories;
+      return inTitle || inLocation || inSeverity;
     });
+
+    console.log(tempSearchResults)
   
     setSearchResults(tempSearchResults);
   };
@@ -273,35 +261,14 @@ export default function App() {
         style={boxStyle}
         ref={pageRef}
       >
-        {/* <Box sx={{ display: "flex", alignItems: "center", gap: "16px", mb: 2 }}>
-          <QuizModal />
-
-          {isVoiceAssist === "Yes" ? (<SpeakingTextField
-            id="filled-basic"
-            label="Search"
-            onChange={handleSearchChange}
-            sx={{ flexGrow: 1 }}
-          />) : (<TextField
-            id="filled-basic"
-            label="Search"
-            onChange={handleSearchChange}
-            sx={{ flexGrow: 1 }}
-          />
-          )}
-
-          <Button
-            startIcon={<MapIcon />}
-            onClick={handleMapOpen}
-          >
-          </Button>
-
-        </Box> */}
         <AccessibleSearchBar
           isBiggerFont={isBiggerFont}
           isVoiceAssist={isVoiceAssist}
           isHighContrast={isHighContrast}
           handleSearchChange={handleSearchChange}
           handleMapOpen={handleMapOpen}
+          severity={severity}
+          setSeverity={setSeverity}
         />
 
         <Box
@@ -334,7 +301,7 @@ export default function App() {
               marginRight: "5px",
               fontSize: isBiggerFont ? "20px" : "14px"
             }}
-            onClick={testHandleAucklandClicked}
+            onClick={testAucklandClicked}
           >
             Auckland
           </Button>
@@ -498,13 +465,14 @@ export default function App() {
           </Box>
         ) : (
           <Box>
-            <TailSpin
+            {/* <TailSpin
               height="80"
               width="80"
               color="#00026E"
               ariaLabel="tail-spin-loading"
               radius="1"
-            />
+            /> */}
+            <h1>No disasters reported!</h1>
           </Box>
         )}
       </Box>
