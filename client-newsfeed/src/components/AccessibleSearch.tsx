@@ -109,7 +109,7 @@ const AccessibleSearchBar: React.FC<AccessibleSearchBarProps> = ({
   const padding = isBiggerFont ? '12px' : '8px';
 
   const buttonStyle = {
-    backgroundColor: '#000000',
+    backgroundColor: '#00026E',
     color: '#FFFFFF',
     '&:hover': {
       backgroundColor: '#333333',

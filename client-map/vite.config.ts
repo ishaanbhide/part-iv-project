@@ -13,7 +13,7 @@ export default defineConfig({
                 short_name: "Geohub",
                 start_url: "/",
                 display: "standalone",
-                background_color: "#000000",
+                background_color: "#00026E",
                 theme_color: "#000000",
                 description: "Part IV Project Disaster News App.",
                 icons: [

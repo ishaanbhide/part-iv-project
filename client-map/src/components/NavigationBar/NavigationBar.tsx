@@ -10,6 +10,7 @@ type NavigationBarPropsType = {
     news: NewsItem[][];
 };
 
+
 export function NavigationBar({ news }: NavigationBarPropsType) {
     const { toggleDrawer } = useContext(DrawerContext);
     const { updateSelectedNews } = useContext(SelectedNewsContext);
@@ -38,7 +39,7 @@ export function NavigationBar({ news }: NavigationBarPropsType) {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "primary.main",
+                backgroundColor: "#00026E",
                 padding: "8px",
                 height: "70px",
                 width: "100%",
@@ -47,17 +48,14 @@ export function NavigationBar({ news }: NavigationBarPropsType) {
         >
             <Box
                 sx={{
-                    height: "100%",
-                    padding: "8px",
-                    paddingLeft: "6px",
-                    boxSizing: "border-box",
                     display: "flex",
+                    justifyContent: "center", // Centering the content horizontally
                     alignItems: "center",
+                    height: "100%",
                     gap: "10px",
-                    cursor: "pointer",
                 }}
             >
-                <img src="./logo.png" style={{ height: "100%" }} />
+                <img src="./logo.png" style={{ height: "100%",}} />
                 <Typography variant="h1" color="white">
                     GEOHUB
                 </Typography>

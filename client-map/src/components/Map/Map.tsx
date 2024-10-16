@@ -103,6 +103,8 @@ export function Map({ news, setNews }: MapPropsType) {
                 position: "relative",
                 display: "flex",
                 justifyContent: "center",
+                width: "calc(100% - 330px)", // Adjust the width to leave space for the sidebar
+                marginLeft: "330px",         // Push the map to the right by the sidebar width
             }}
         >
             {loading && !mapLoading && (
@@ -146,7 +148,7 @@ export function Map({ news, setNews }: MapPropsType) {
             >
                 <Box
                     sx={{
-                        backgroundColor: "#000000",
+                        backgroundColor: "#00026E",
                         opacity: "85%",
                         borderRadius: "100%",
                         boxShadow: "0px 2px 14px -3px rgba(0,0,0,0.75)",
